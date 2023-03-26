@@ -1,6 +1,13 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../../stores/user.js'
+
 const router = useRouter()
+const userStore = useUserStore()
+
+const logout = () => {
+    if (userStore.logout()) router.push({ name: 'Login' })
+}
 </script>
 
 <template>
@@ -37,7 +44,7 @@ const router = useRouter()
                             <div class="d-flex align-items-center">
                                 <img src="../../assets/profile.jpg" alt="Profile Picture" class="avatar">
                                 <div class="ms-2 text-dark align-items-center">
-                                    <span class="mb-0 font-small text-gray-900" style="font-weight:600;">Alberto Ramusino</span>
+                                    <span class="mb-0 font-small text-gray-900" style="font-weight:600;" v-if="userStore.user">{{ userStore.user.name }}</span>
                                 </div>
                             </div>
                         </a>
@@ -46,7 +53,7 @@ const router = useRouter()
                             <li> <a class="dropdown-item" href="#">Settings</a> </li>
                             <li> <a class="dropdown-item" href="#">Support</a> </li>
                             <li> <hr class="dropdown-divider"/> </li>
-                            <li> <a class="dropdown-item" href="#">Logout</a> </li>
+                            <li> <a class="dropdown-item" href="#"  @click.prevent="logout">Logout</a> </li>
                         </ul>
                     </li>
                 </ul>

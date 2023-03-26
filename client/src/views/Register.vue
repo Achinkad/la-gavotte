@@ -1,9 +1,41 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount } from 'vue'
+import { ref, inject, onBeforeUnmount, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfigStore } from '../stores/config.js'
 
+const router = useRouter()
 const configStore = useConfigStore()
+const axios = inject('axios')
+const api_url = inject("api_url")
+
+const user = ref({
+    name: '',
+    email: '',
+    password: '',
+    confirmpassword: ''
+})
+
+const emit = defineEmits(['register'])
+
+const saveUser = () => {
+    let formData = new FormData()
+
+    formData.append('name', user.value.name)
+    formData.append('email', user.value.email)
+    formData.append('password', user.value.password)
+    formData.append('confirmpassword', user.value.confirmpassword)
+
+    axios.post(api_url + '/api/users', formData)
+        .then((response) => {
+            user.value = response.data.data
+            router.back()
+        })
+}
+
+const register = () => {
+    saveUser()
+    emit('register')
+}
 
 onBeforeMount(() => {
     configStore.showNavbar = false
@@ -38,28 +70,28 @@ onBeforeUnmount(() => {
                                     <label for="inputName" class="form-label">Name <span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="inputName" placeholder="Enter your name"
-                                        required>
+                                        required v-model="user.name">
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="inputUsername" class="form-label">Email Address <span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="inputUsername"
-                                        placeholder="Enter your email" required>
+                                        placeholder="Enter your email" required v-model="user.email">
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="inputPassword" class="form-label">Password <span
                                             class="text-danger">*</span></label>
                                     <input type="password" class="form-control" id="inputPassword"
-                                        placeholder="Enter your password" required>
+                                        placeholder="Enter your password" required v-model="user.password">
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="inputConfirmPassword" class="form-label">Confirm Password <span
                                             class="text-danger">*</span></label>
                                     <input type="password" class="form-control" id="inputConfirmPassword"
-                                        placeholder="Confirm your password" required>
+                                        placeholder="Confirm your password" required v-model="user.confirmpassword">
                                 </div>
                                 <div class="mb-3 d-flex justify-content-center">
-                                    <button type="button" class="btn btn-primary px-3">Sign Up</button>
+                                    <button type="button" class="btn btn-primary px-3" @click="register">Sign Up</button>
                                 </div>
                             </form>
                         </div>

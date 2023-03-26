@@ -1,9 +1,28 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount } from 'vue'
+import { ref, onBeforeUnmount, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user.js'
 import { useConfigStore } from '../stores/config.js'
 
+const router = useRouter()
+const userStore = useUserStore()
 const configStore = useConfigStore()
+
+const credentials = ref({
+    username: '',
+    password: ''
+})
+
+const emit = defineEmits(['login'])
+
+const login = async () => {
+    if (await userStore.login(credentials.value)) {
+        emit('login')
+        router.push({ name: "Dashboard" })
+    } else {
+        credentials.value.password = ''
+    }
+}
 
 onBeforeMount(() => {
     configStore.showNavbar = false
@@ -33,19 +52,19 @@ onBeforeUnmount(() => {
                                 <p class="text-muted">Enter your email address and password to access the application.
                                 </p>
                             </div>
-                            <form class="row g-3 needs-validation" novalidate>
+                            <form class="row g-3 needs-validation" novalidate @submit.prevent="login">
                                 <div class="mb-3">
                                     <label for="inputUsername" class="form-label">E-Mail</label>
                                     <input type="text" class="form-control" id="inputUsername"
-                                    placeholder="Enter your email" required>
+                                    placeholder="Enter your email" required v-model="credentials.username">
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputPassword" class="form-label">Password</label>
                                     <input type="password" class="form-control" id="inputPassword"
-                                    placeholder="Enter your password" required>
+                                    placeholder="Enter your password" required v-model="credentials.password">
                                 </div>
                                 <div class="mb-3 text-center">
-                                    <button type="button" class="btn px-3">Log In</button>
+                                    <button type="button" class="btn px-3" @click="login">Log In</button>
                                 </div>
                             </form>
                         </div>

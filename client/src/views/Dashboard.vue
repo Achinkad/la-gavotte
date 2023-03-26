@@ -1,13 +1,15 @@
 <script setup>
+import { useUserStore } from '../stores/user.js'
 
+const userStore = useUserStore()
 </script>
 
 <template>
-    <div class="row">
+    <div class="row" v-if="userStore.user">
         <div class="col-12">
             <div class="p-title-box mt-4">
                 <div>
-                    <h2 class="p-title">Welcome back, Alberto Ramusino!</h2>
+                    <h2 class="p-title">Welcome back, {{ userStore.user.name }}!</h2>
                     <p style="margin-top:13px;">Web analytics dashboard for all your Mikrotik devices.</p>
                 </div>
             </div>
