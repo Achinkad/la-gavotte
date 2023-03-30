@@ -10,6 +10,11 @@ const router = createRouter({
             component: () => import('../views/Dashboard.vue')
         },
         {
+            path: '/router',
+            name: 'Router',
+            component: () => import('../views/Router.vue')
+        },
+        {
             path: '/login',
             name: 'Login',
             component: () => import('../views/Login.vue')
@@ -42,8 +47,6 @@ router.beforeEach(async (to, from, next) => {
         }
         next()
     }
-
-    next()
 })
 
 export default router

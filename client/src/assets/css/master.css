@@ -21,6 +21,10 @@ main {
     padding: 70px 12px 65px;
 }
 
+h2 {
+    font-size: 1.125rem !important;
+}
+
 h5 {
     font-size: .9375rem !important;
 }

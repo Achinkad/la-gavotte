@@ -5,12 +5,11 @@ const userStore = useUserStore()
 </script>
 
 <template>
-    <div class="row" v-if="userStore.user">
+    <div class="row">
         <div class="col-12">
             <div class="p-title-box mt-4">
                 <div>
-                    <h2 class="p-title">Welcome back, {{ userStore.user.name }}!</h2>
-                    <p style="margin-top:13px;">Web analytics dashboard for all your Mikrotik devices.</p>
+                    <h2 class="p-title">Dashboard</h2>
                 </div>
             </div>
         </div>
@@ -100,9 +99,9 @@ const userStore = useUserStore()
 }
 
 .card-icon {
-    color: #f0bc74;
+    color: #727cf5;
     font-size: 16px;
-    background-color: rgba(255, 240, 155, 0.25);
+    background-color: rgba(114,124,245,.25);
     height: 40px;
     width: 40px;
     text-align: center;

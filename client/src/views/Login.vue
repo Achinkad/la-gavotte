@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
 }
 
 .card-header {
-    background-color: #1f2937;
+    background-color: #313a46;
     color: #fff !important;
     font-weight: 800;
     font-size: 1.5rem;
@@ -140,7 +140,7 @@ input::placeholder {
 }
 
 button[type="button"] {
-    background-color: #1f2937;
+    background-color: #313a46;
     color: #fff;
     border-radius: 0.15rem;
     border: 1px #727cf5;
@@ -150,7 +150,7 @@ button[type="button"] {
 
 button[type="button"]:focus {
     color: #fff;
-    background-color: #1f2937;
+    background-color: #313a46;
     opacity: .9;
     box-shadow: 0 0 0 .15rem rgba(135, 144, 247, 0.5);
 }

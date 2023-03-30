@@ -27,14 +27,7 @@ const logout = () => {
 
         <div class="d-flex justify-content-between w-100">
             <div class="d-flex align-items-center">
-                <form class="navbar-search form-inline">
-                    <div class="input-group input-group-merge search-bar">
-                        <span class="input-group-text">
-                            <i class="bi bi-search"></i>
-                        </span>
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                </form>
+                <!-- TODO: Add burger button -->
             </div>
 
             <div class="collapse navbar-collapse justify-content-end">
@@ -44,7 +37,7 @@ const logout = () => {
                             <div class="d-flex align-items-center">
                                 <img src="../../assets/profile.jpg" alt="Profile Picture" class="avatar">
                                 <div class="ms-2 text-dark align-items-center">
-                                    <span class="mb-0 font-small text-gray-900" style="font-weight:600;" v-if="userStore.user">{{ userStore.user.name }}</span>
+                                    <span class="mb-0 font-small" style="font-weight:500;" v-if="userStore.user">{{ userStore.user.name }}</span>
                                 </div>
                             </div>
                         </a>
@@ -95,8 +88,8 @@ const logout = () => {
     top: 0;
     right: 0;
     z-index: 1000;
-    /* box-shadow: 0 0 35px 0 rgba(154, 161, 171, .15) !important;
-    background-color: #fff; */
+    box-shadow: 0 0 35px 0 rgba(154, 161, 171, .15) !important;
+    background-color: #fff;
 }
 
 .navbar-brand {
