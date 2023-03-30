@@ -24,30 +24,110 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <!-- <router-link class="nav-link" :class="{
-                        active: $route.name === 'Interfaces'
-                    }" :to="{ name: 'Interfaces' }">
-                    <i class="bi bi-router"></i>
-                    Interfaces
-                </router-link> -->
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed">
-                    <i class="bi bi-router"></i>
-                    Wireless
-                    <span class="menu-arrow">
-                        <i class="bi bi-chevron-right"></i>
-                    </span>
-                </a>
-                <!-- <router-link class="nav-link" :class="{
-                active: $route.name === 'Interfaces'
-            }" :to="{ name: 'Interfaces' }">
-        </router-link> -->
-    </li>
-</ul>
-</div>
-</nav>
-</div>
+                        <router-link class="nav-link" :class="{
+                            active: $route.name === 'Interfaces'
+                            }" :to="{ name: 'Interfaces' }">
+                            <i class="bi bi-hdd-stack" style="position:relative;bottom:1px;"></i>
+                            Interfaces
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarIP" aria-expanded="false" aria-controls="sidebarIP">
+                            <i class="bi bi-router"></i> IP
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarIP">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'Addresses'
+                                        }" :to="{ name: 'Addresses' }">
+                                        Addresses
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'Routes'
+                                        }" :to="{ name: 'Routes' }">
+                                        Routes
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'DHCP'
+                                        }" :to="{ name: 'DHCP' }">
+                                        DHCP Server
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'Firewall'
+                                        }" :to="{ name: 'Firewall' }">
+                                        Firewall
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :class="{
+                            active: $route.name === 'Bridge'
+                            }" :to="{ name: 'Bridge' }">
+                            <i class="bi bi-tv" style="position:relative;bottom:1px;"></i>
+                            Bridge
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :class="{
+                            active: $route.name === 'Wireless'
+                            }" :to="{ name: 'Wireless' }">
+                            <i class="bi bi-wifi" style="position:relative;bottom:1px;"></i>
+                            Wireless
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRouting" aria-expanded="false" aria-controls="sidebarRouting">
+                            <i class="bi bi-arrow-left-right"></i> Routing
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarRouting">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'BGP'
+                                        }" :to="{ name: 'BGP' }">
+                                        BGP
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'OSPF'
+                                        }" :to="{ name: 'OSPF' }">
+                                        OSPF
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'RIP'
+                                        }" :to="{ name: 'RIP' }">
+                                        RIP
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :class="{
+                            active: $route.name === 'VPN'
+                            }" :to="{ name: 'VPN' }">
+                            <i class="bi bi-incognito" style="position:relative;bottom:1px;"></i>
+                            VPN
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
 </template>
 
 <style scoped>
@@ -87,13 +167,13 @@ const router = useRouter()
 }
 
 .nav-link:hover {
-    color: #f2f4f6;
-    background-color: #374151;
+    color: #fff !important;
+    /* background-color: #374151; */
     border-radius: 5px;
 }
 
 .nav-link:hover>svg {
-    fill: #f2f4f6;
+    fill: #fff;
 }
 
 ul {
@@ -120,14 +200,20 @@ ul> :first-child {
     padding: 13px 20px;
     font-size: .9375rem;
     position: relative;
-    color: rgba(255, 255, 255, 0.7);
+    color: #8391a2;
     font-weight: 500;
+}
+
+.nav-link:focus,
+.nav-link:active {
+    color: #fff !important;
+    text-decoration: none;
 }
 
 .sidebar .nav-link.active,
 .sidebar .nav-link.active svg {
     color: #fff;
-    font-weight: 700;
+    font-weight: 600;
     fill: #fff !important;
 }
 
@@ -180,6 +266,11 @@ svg {
     transform: translate(0,0);
 }
 
+#sidebarMenu .nav-item > a[aria-expanded="true"] > span.menu-arrow {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
 .bi-chevron-right {
     font-size: .875rem !important;
     font-weight: 700 !important;
@@ -187,9 +278,35 @@ svg {
     line-height: 0 !important;
     bottom: 3px;
     position: relative;
+    display: inline;
+    width: 1rem !important;
+    height: 1rem !important;
 }
 
 .nav-item:hover {
     cursor: pointer !important;
+}
+
+.side-nav-second-level li a {
+    padding: 10px 30px 8px 54px;
+    display: block;
+    position: relative;
+    -webkit-transition: all .4s;
+    transition: all .4s;
+    font-size: .89rem;
+    text-decoration: none;
+    color: #8391a2;
+}
+
+.side-nav-second-level li a:hover {
+    color: #fff;
+}
+
+ul.side-nav-second-level {
+    padding: 0 !important;
+}
+
+ul.side-nav-second-level li {
+    padding: 0 !important;
 }
 </style>
