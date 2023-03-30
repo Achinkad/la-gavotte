@@ -5,8 +5,8 @@ import { useConfigStore } from '../stores/config.js'
 
 const router = useRouter()
 const configStore = useConfigStore()
-const axios = inject('axios')
-const api_url = inject("api_url")
+const axiosApi = inject('axiosApi')
+const apiUrl = inject('apiUrl')
 
 const user = ref({
     name: '',
@@ -25,7 +25,7 @@ const saveUser = () => {
     formData.append('password', user.value.password)
     formData.append('confirmpassword', user.value.confirmpassword)
 
-    axios.post(api_url + '/api/users', formData)
+    axiosApi.post(apiUrl + '/api/users', formData)
         .then((response) => {
             user.value = response.data.data
             router.back()

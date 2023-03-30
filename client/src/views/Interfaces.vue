@@ -1,5 +1,8 @@
 <script setup>
-// Write your script here
+import { inject } from 'vue'
+
+const axiosRouter = inject('axiosRouter')
+const routerUrl = inject('routerUrl')
 </script>
 
 <template>
