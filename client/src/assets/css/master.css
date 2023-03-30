@@ -163,6 +163,21 @@ h3 {
     padding: 1.5rem;
 }
 
+table {
+    font-size: 0.9rem !important;
+    padding: 1.5rem !important;
+}
+
+thead tr th {
+    padding: .95rem .95rem !important;
+    color: #1f2937 !important;
+}
+
+tbody tr td {
+    padding: .5rem .95rem !important;
+    color: #374151 !important;
+}
+
 @media (max-width: 767.98px) {
     .navbar {
         left: 0 !important;
