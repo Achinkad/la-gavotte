@@ -56,12 +56,15 @@ const userStore = useUserStore();
         >
           <h4 class="header-title">Routers</h4>
 
-          <button
-            class="btn btn-xs btn-primary"
-            @click="updateStatus(order_item, 'P')"
-          >
-            <i class="bi bi-plus-lg"></i>
-          </button>
+         <!-- Small modal -->
+        <button type="button" class="btn btn-primary">
+                        <router-link class="nav-link" :class="{
+                            active: $route.name === 'AddRouter'
+                            }" :to="{ name: 'AddRouter' }">
+                            <i class="bi bi-plus-lg"></i>
+                        </router-link></button>
+
+        
         </div>
 
         <div class="card-body pt-0">
@@ -104,6 +107,8 @@ const userStore = useUserStore();
       </div>
     </div>
   </div>
+  
+
 </template>
 
 <style scoped>
