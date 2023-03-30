@@ -10,9 +10,59 @@ const router = createRouter({
             component: () => import('../views/Dashboard.vue')
         },
         {
-            path: '/router',
-            name: 'Router',
-            component: () => import('../views/Router.vue')
+            path: '/interfaces',
+            name: 'Interfaces',
+            component: () => import('../views/Interfaces.vue')
+        },
+        {
+            path: '/bridge',
+            name: 'Bridge',
+            component: () => import('../views/Bridge.vue')
+        },
+        {
+            path: '/ip/addresses',
+            name: 'Addresses',
+            component: () => import('../views/IP/Addresses.vue')
+        },
+        {
+            path: '/ip/routes',
+            name: 'Routes',
+            component: () => import('../views/IP/Routes.vue')
+        },
+        {
+            path: '/ip/dhcp',
+            name: 'DHCP',
+            component: () => import('../views/IP/DHCP.vue')
+        },
+        {
+            path: '/ip/firewall',
+            name: 'Firewall',
+            component: () => import('../views/IP/Firewall.vue')
+        },
+        {
+            path: '/wireless',
+            name: 'Wireless',
+            component: () => import('../views/Wireless.vue')
+        },
+        {
+            path: '/routing/bgp',
+            name: 'BGP',
+            component: () => import('../views/Routing/BGP.vue')
+        },
+        {
+            path: '/routing/ospf',
+            name: 'OSPF',
+            component: () => import('../views/Routing/OSPF.vue')
+        },
+        {
+            path: '/routing/rip',
+            name: 'RIP',
+            component: () => import('../views/Routing/RIP.vue')
+        },
+        {
+            path: '/vpn',
+            name: 'VPN',
+            component: () => import('../views/VPN.vue')
         },
         {
             path: '/login',

@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+
+* {
+    font-family: 'Nunito', sans-serif !important;
+}
+
 body {
     overflow-x: hidden !important;
     overflow-y: auto !important;
@@ -129,6 +135,32 @@ h3 {
 
 .shadow {
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06) !important;
+}
+
+.card {
+    border: none;
+    margin-bottom: 24px;
+    box-shadow: 0 0 35px 0 rgba(154, 161, 171, .15) !important;
+    border-radius: 3px;
+}
+
+.card-header {
+    margin-top: 0;
+    background-color: #fff;
+    border: 0;
+    margin-bottom: 0;
+    padding: 1.5rem;
+}
+
+.card-header .header-title {
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    font-size: .9rem;
+    margin-top: 0;
+}
+
+.card-body {
+    padding: 1.5rem;
 }
 
 @media (max-width: 767.98px) {
