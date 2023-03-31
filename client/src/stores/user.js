@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('user', () => {
     const axiosApi = inject('axiosApi')
-    
+
     const user = ref(null)
 
     const userId = computed(() => {

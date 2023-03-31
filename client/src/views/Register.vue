@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
                                 <p class="text-muted">Don't have an account? Create your account, it takes less than a
                                     minute.</p>
                             </div>
-                            <form class="row g-3 needs-validation" novalidate @submit.prevent="login">
+                            <form class="row g-3 needs-validation" novalidate @submit.prevent="register">
                                 <div class="mb-3 col-md-6">
                                     <label for="inputName" class="form-label">Name <span
                                             class="text-danger">*</span></label>

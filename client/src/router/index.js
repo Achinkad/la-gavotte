@@ -65,6 +65,11 @@ const router = createRouter({
             component: () => import('../views/VPN.vue')
         },
         {
+            path: '/routers',
+            name: 'Routers',
+            component: () => import('../views/Routers.vue')
+        },
+        {
             path: '/login',
             name: 'Login',
             component: () => import('../views/Login.vue')
@@ -73,11 +78,6 @@ const router = createRouter({
             path: '/register',
             name: 'Register',
             component: () => import('../views/Register.vue')
-        },
-        {
-            path: '/router/add',
-            name: 'AddRouter',
-            component: () => import('../views/Router/AddRouter.vue')
         }
     ]
 })

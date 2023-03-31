@@ -1,7 +1,7 @@
 <script setup>
-import { useUserStore } from "../stores/user.js";
+import { useUserStore } from "../stores/user.js"
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 </script>
 
 <template>
@@ -58,13 +58,13 @@ const userStore = useUserStore();
 
          <!-- Small modal -->
         <button type="button" class="btn btn-primary">
-                        <router-link class="nav-link" :class="{
-                            active: $route.name === 'AddRouter'
-                            }" :to="{ name: 'AddRouter' }">
-                            <i class="bi bi-plus-lg"></i>
-                        </router-link></button>
+            <router-link class="nav-link" :class="{
+                active: $route.name === 'Routers'
+                }" :to="{ name: 'Routers' }">
+                <i class="bi bi-plus-lg"></i>
+            </router-link></button>
 
-        
+
         </div>
 
         <div class="card-body pt-0">
@@ -107,7 +107,7 @@ const userStore = useUserStore();
       </div>
     </div>
   </div>
-  
+
 
 </template>
 
