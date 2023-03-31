@@ -1,4 +1,5 @@
 import { inject } from 'vue'
+import { Buffer } from 'buffer'
 import { defineStore } from 'pinia'
 
 export const useRouterStore = defineStore('router', () => {

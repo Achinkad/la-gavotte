@@ -20,11 +20,11 @@ const saveRouter = () => {
     formData.append('username', router.value.username)
     formData.append('password', router.value.password)
 
-    axiosRouter.post('interface', formData).then((response) => {
+    axiosRouter.post('login', formData).then((response) => {
         routerStore.saveAuthToken(router.value.username, router.value.password)
         console.log(response.data.data)
     }).catch((error) => {
-        console.log(error, error.response.status)
+        console.log(error)
     })
 }
 

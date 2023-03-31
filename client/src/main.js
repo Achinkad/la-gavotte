@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import https from 'https'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -36,6 +37,12 @@ app.provide(
             'Content-type': 'application/json',
             'Content-Encoding': 'gzip',
         },
+        httpsAgent: new https.Agent({
+            // cert: fs.readFileSync('../certificates/client.crt'),
+            // key: fs.readFileSync('../certificates/client.key'),
+            // ca: fs.readFileSync('../certificates/cert_export_ServerCA.crt')
+            rejectUnauthorized: false
+        })
     })
 )
 app.provide('routerUrl', routerUrl)
