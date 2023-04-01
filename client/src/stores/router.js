@@ -1,15 +1,30 @@
 import { inject } from 'vue'
-import { Buffer } from 'buffer'
 import { defineStore } from 'pinia'
 
 export const useRouterStore = defineStore('router', () => {
-    const axiosRouter = inject('axiosRouter')
+    const axiosApi = inject('axiosApi')
 
-    const saveAuthToken = ((username, password) => {
-        const authToken = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-        axiosApi.defaults.headers.common.Authorization = `Basic ${authToken}`
+    const saveAuthToken = ((authToken) => {
+        axiosApi.defaults.headers.common.AuthorizationRouter = authToken
         sessionStorage.setItem('routerAuthToken', authToken)
     })
 
-    return saveAuthToken
+    const loadToken = (() => {
+        let token = sessionStorage.getItem('routerAuthToken')
+
+        if (token) {
+            axiosApi.defaults.headers.common.AuthorizationRouter = token
+            return true
+        }
+        
+        clearToken()
+        return false
+    })
+
+    const clearToken = (() => {
+        delete axiosApi.defaults.headers.common.AuthorizationRouter
+        sessionStorage.removeItem('routerAuthToken')
+    })
+
+    return { saveAuthToken, loadToken, clearToken }
 })
