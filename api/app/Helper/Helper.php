@@ -2,19 +2,33 @@
 
 namespace App\Helper;
 
-use Illuminate\Support\Facades\Storage;
+use GuzzleHttp\Client;
+use App\Models\Router;
 
 class Helper
 {
-    public static function routerTokenVerification(String $givenToken)
+    // Decodes a given base64 enconded string
+    public static function authorizationDecode(String $token) : Array
     {
-        $authValues = null;
+        return explode(":", base64_decode($token));
+    }
 
-        if (Storage::disk('private')->exists('router-auth.json')) {
-            $authValues = Storage::disk('private')->get('router-auth.json');
-            $authValues = json_decode($authValues);
-        }
+    // Creates a new HTTP client and sends a request
+    public static function httpClient(Router $router, String $optionalArg = null)
+    {
+        $client = new Client();
 
-        return $authValues->token === $givenToken ? $authValues : abort(403);
+        $credentials = Helper::authorizationDecode($router->authorization);
+
+        $headers = [
+            'auth' => [$credentials[0], $credentials[1]],
+            'verify' => false
+        ];
+
+        $url = 'https://' . $router->ip_address . '/rest/login';
+
+        $response = $client->request('POST', $url, $headers);
+
+        return $response;
     }
 }

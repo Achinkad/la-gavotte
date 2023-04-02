@@ -25,4 +25,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function router() {
+        return $this->belongsToMany(Router::class, 'router_user', 'user_id', 'router_id')
+            ->withPivot('router_id', 'user_id');
+    }
 }

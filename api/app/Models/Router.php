@@ -9,16 +9,15 @@ class Router extends Model
 {
     use HasFactory;
 
-    protected $table = 'routers';
-    protected $primaryKey = 'id';
-
     protected $fillable = [
-        'router_ssid',
+        'ssid',
         'ip_address',
-        'mac_address'
+        'mac_address',
+        'authorization'
     ];
 
     public function user() {
-        return $this->belongsToMany(User::class, 'user_id')->withTrashed();
+        return $this->belongsToMany(User::class, 'router_user', 'router_id', 'user_id')
+            ->withPivot('router_id', 'user_id');
     }
 }

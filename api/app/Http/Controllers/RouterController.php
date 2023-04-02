@@ -3,57 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Helper\Helper;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\Router;
+use App\Http\Requests\StoreRouterRequest;
 
 class RouterController extends Controller
 {
-    public function authRouter(Request $request)
+    public function store(StoreRouterRequest $request)
     {
-        $client = new Client();
+        DB::transaction(function () use ($request) {
+            $router = new Router;
+            $router->fill($request->validated());
 
-        $givenAddress = $request->input('ip');
-        $givenUsername = $request->input('username');
-        $givenPassword = $request->input('password');
+            $response = Helper::httpClient($router);
 
-        // Headers
-        $headers = [
-            'auth' => [$givenUsername, $givenPassword],
-            'verify' => false
-        ];
+            if ($response->getStatusCode() != 200) {
+                return response()->json($response->getBody(), $response->getStatusCode());
+            }
 
-        // URL builder
-        $url = 'https://' . $givenAddress . '/rest/login';
+            $router->save();
 
-        // Request build
-        $response = $client->request('POST', $url, $headers);
+            $currentUser = auth()->guard('api')->user();
+            $currentUser->router()->attach($router->id);
+        });
 
-        // JSON decode string
-        $data = json_decode($response->getBody()->getContents());
-
-        // Get token
-        $token = $data->ret;
-
-        // JSON auth builder
-        $routerAutherization = array(
-            "username" => $givenUsername,
-            "password" => $givenPassword,
-            "address" => $givenAddress,
-            "token" => $token
-        );
-
-        // Save JSON auth in a private storage
-        Storage::disk('private')->put('router-auth.json', json_encode($routerAutherization));
-
-        // Response builder
-        $responseData = [
-            'message' => 'Authentication OK',
-            'code' => 200,
-            'token' => $token
-        ];
-
-        return response()->json($responseData, 200);
+        return response()->json("OK", 200);
     }
 
     public function showInterfaces(Request $request)
@@ -65,7 +41,7 @@ class RouterController extends Controller
 
         // Headers
         $headers = [
-            'auth' => [$credentials->username, $credentials->password],
+            'Authorization' => [$credentials->username, $credentials->password],
             'verify' => false
         ];
 

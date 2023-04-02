@@ -11,7 +11,8 @@ Route::resource('users', UserController::class);
 Route::get('user', [UserController::class, 'showUserLoggedIn'])->middleware('auth:api');
 
 /* --- [API Routes] -> Router --- */
-Route::post('routers/login', [RouterController::class, 'authRouter']);
+Route::resource('routers', RouterController::class);
+// Route::post('routers/login', [RouterController::class, 'authRouter']);
 Route::get('routers/interfaces', [RouterController::class, 'showInterfaces']);
 
 /* --- [API Routes] -> Auth --- */

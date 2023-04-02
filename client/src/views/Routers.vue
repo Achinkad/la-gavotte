@@ -16,13 +16,12 @@ const router = ref({
 const registerRouter = () => {
     let formData = new FormData()
 
-    formData.append('ip', router.value.ip)
-    formData.append('username', router.value.username)
-    formData.append('password', router.value.password)
+    formData.append('ip_address', router.value.ip)
+    formData.append('authorization', btoa(router.value.username + ':' + router.value.password))
 
-    axiosApi.post('routers/login', formData).then((response) => {
-        routerStore.saveAuthToken(response.data.token)
-        notyf.success('A new connection with a router has been established.')
+    axiosApi.post('routers', formData).then((response) => {
+        // routerStore.saveAuthToken(response.data.token)
+        notyf.success('A new router has been added.')
     }).catch((error) => {
         notyf.error('Oops, an error has occurred.')
     })
