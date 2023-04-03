@@ -11,7 +11,9 @@ class RouterResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ip_address' => $this->ip_address
+            'identity' => $this->identity,
+            'ip_address' => $this->ip_address,
+            'mac_address' => $this->mac_address
         ];
     }
 }

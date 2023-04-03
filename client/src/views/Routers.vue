@@ -59,16 +59,16 @@ onBeforeMount(() => {
                                 <thead class="table-light">
                                     <tr>
                                         <th>#ID</th>
-                                        <th>Router SSID</th>
+                                        <th>Identity</th>
                                         <th>IP Address</th>
                                         <th>MAC Address</th>
-                                        <th class="text-center" style="width: 20%">Details</th>
+                                        <th class="text-center" style="width: 20%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="router in routers" :key="router.id">
                                         <td class="align-middle">#{{ router.id }}</td>
-                                        <td>BERTOLO</td>
+                                        <td>{{ router.identity }}</td>
                                         <td>{{ router.ip_address }}</td>
                                         <td>C4:AD:34:9F:52:8A</td>
                                         <td class="text-center">

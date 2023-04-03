@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('routers', function (Blueprint $table) {
             $table->id();
-            $table->string('ssid')->nullable();
+            $table->string('identity')->nullable();
             $table->string('ip_address');
             $table->string('mac_address')->nullable();
             $table->string('authorization'); // Base64 username:password
