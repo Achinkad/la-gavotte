@@ -21,5 +21,11 @@ export const useRouterStore = defineStore('router', () => {
         })
     })
 
-    return { registerRouter, getRouters }
+    const showInterfaces = () => {
+        axiosApi.get('routers/interfaces').then((response) => {
+            router.value = response.data
+        })
+    }
+
+    return { registerRouter, getRouters, showInterfaces }
 })

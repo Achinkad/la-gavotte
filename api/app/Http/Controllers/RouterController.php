@@ -11,6 +11,8 @@ use App\Http\Requests\StoreRouterRequest;
 
 class RouterController extends Controller
 {
+
+    
     public function store(StoreRouterRequest $request)
     {
         DB::transaction(function () use ($request) {
