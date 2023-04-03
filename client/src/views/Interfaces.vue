@@ -1,15 +1,17 @@
 <script setup>
-import { inject,onBeforeMount,ref } from 'vue'
+import { inject,onBeforeMount,ref,computed } from 'vue'
 import { useRouterStore } from "../stores/router.js"
 
 const routerStore = useRouterStore()
 const axiosRouter = inject('axiosRouter')
 const routerUrl = inject('routerUrl')
-const routers=ref([])
+
+
+const loadRouters = (() => { routerStore.loadRouters() })
+const routers = computed(() => { return routerStore.getRouters() })
 
 onBeforeMount(() => {
-   routers.value=routerStore.getRouters()
-   console.log(routers)
+   loadRouters()
 })
 
 </script>
@@ -19,7 +21,7 @@ onBeforeMount(() => {
         <div class="col-12">
             <div class="p-title-box mt-4">
                 <div>
-                    <h2 class="p-title">Interfaces</h2>
+                    <h2 class="p-title">Interfaces{{routers}}</h2>
                 </div>
             </div>
         </div>
@@ -34,26 +36,36 @@ onBeforeMount(() => {
                
                 <div class="card-body pt-0">
                     <p>Lorem ipsum.</p>
-                    <select class="custom-select custom-select-lg ">
+                <select class="custom-select custom-select-lg ">
                     <option selected>All</option>
                     <option value="1"></option>
                 </select>
+                <select class="custom-select custom-select-lg ">
+                    <option selected>Type</option>
+                    <option value="1"></option>
+                </select>
+
                  <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>#ID</th>
-                                        <th>Router SSID</th>
-                                        <th>IP Address</th>
-                                        <th>MAC Address</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Actual MTU</th>
+                                        <th>L2 MTU</th>
+                                        <th>TX</th>
+                                        <th>RX</th>
                                         <th class="text-center" style="width: 20%">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="align-middle">#1</td>
-                                        <td>BERTOLO</td>
-                                        <td>192.168.10.10</td>
-                                        <td>C4:AD:34:9F:52:8A</td>
+                                   
+                                        <td>a</td>
+                                        <td>a</td>
+                                        <td>a</td>
+                                        <td>a</td>
+                                        <td>a</td>
+                                        <td>a</td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
                                                 <button class="btn btn-xs btn-light" title="View">
