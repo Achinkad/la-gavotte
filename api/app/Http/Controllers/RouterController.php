@@ -23,12 +23,23 @@ class RouterController extends Controller
             $router = new Router;
             $router->fill($request->validated());
 
-            $response = Helper::httpClient($router, '/login');
+            $response = Helper::httpClient($router, 'POST', 'login');
 
+            // Check if credentials are correct
             if ($response->getStatusCode() != 200) {
                 return response()->json($response->getBody(), $response->getStatusCode());
                 die();
             }
+
+            // Get identity of the router
+            $identity = Helper::httpClient($router, 'GET','system/identity');
+            if ($response->getStatusCode() != 200) die();
+            $router->identity = json_decode($identity->getBody()->getContents())->name;
+
+            // Get MAC address of the router
+            $macAddress = Helper::httpClient($router, 'GET','interface?name=ether1');
+            if ($response->getStatusCode() != 200) die();
+            $router->mac_address = json_decode($macAddress->getBody()->getContents())[0]->{'mac-address'};
 
             $router->save();
 

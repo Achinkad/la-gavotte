@@ -14,7 +14,7 @@ class Helper
     }
 
     // Creates a new HTTP client and sends a request
-    public static function httpClient(Router $router, String $restPath, String $optionalArg = null)
+    public static function httpClient(Router $router, String $httpAction, String $restPath, String $optionalArg = null)
     {
         $client = new Client();
 
@@ -27,7 +27,7 @@ class Helper
 
         $url = 'https://' . $router->ip_address . '/rest/' . $restPath;
 
-        $response = $client->request('POST', $url, $headers);
+        $response = $client->request($httpAction, $url, $headers);
 
         return $response;
     }
