@@ -8,14 +8,18 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Router;
 use App\Http\Requests\StoreRouterRequest;
+use App\Http\Resources\RouterResource;
 
 class RouterController extends Controller
 {
+    public function index()
+    {
+        return RouterResource::collection(Router::all());
+    }
 
-    
     public function store(StoreRouterRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        $newRouter = DB::transaction(function () use ($request) {
             $router = new Router;
             $router->fill($request->validated());
 
@@ -30,9 +34,11 @@ class RouterController extends Controller
 
             $currentUser = auth()->guard('api')->user();
             $currentUser->router()->attach($router->id);
+
+            return $router;
         });
 
-        return response()->json("OK", 200);
+        return new RouterResource($newRouter);
     }
 
     public function showInterfaces(Request $request)

@@ -1,11 +1,14 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject, computed, onBeforeMount } from 'vue'
 import { useRouterStore } from '../stores/router.js'
 
 const axiosApi = inject('axiosApi')
 const notyf = inject('notyf')
 
 const routerStore = useRouterStore()
+
+const loadRouters = (() => { routerStore.loadRouters() })
+const routers = computed(() => { return routerStore.getRouters() })
 
 const router = ref({
     ip_address: null,
@@ -26,11 +29,10 @@ const registerRouter = () => {
     }
 }
 
-const showInterfaces = () => {
-    axiosApi.get('routers/interfaces').then((response) => {
-        console.log(response.data)
-    })
-}
+// Get All Routers
+onBeforeMount(() => {
+    loadRouters()
+})
 </script>
 
 <template>
@@ -63,10 +65,10 @@ const showInterfaces = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="align-middle">#1</td>
+                                    <tr v-for="router in routers" :key="router.id">
+                                        <td class="align-middle">#{{ router.id }}</td>
                                         <td>BERTOLO</td>
-                                        <td>192.168.10.10</td>
+                                        <td>{{ router.ip_address }}</td>
                                         <td>C4:AD:34:9F:52:8A</td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
@@ -78,35 +80,6 @@ const showInterfaces = () => {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card card-h-100">
-                    <div class="d-flex card-header justify-content-between align-items-center">
-                        <h4 class="header-title">Show interfaces</h4>
-                    </div>
-                    <div class="card-body pt-0">
-                        <form class="row g-3 needs-validation" novalidate @submit.prevent="showInterfaces">
-                            <div class="col-6">
-                                <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="username" placeholder="Enter username"
-                                v-model="router.username" required>
-                            </div>
-                            <div class="col-6">
-                                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" id="password"
-                                placeholder="Enter password" v-model="router.password" required>
-                            </div>
-                            <div class="col-12 mt-4 d-flex justify-content-end">
-                                <div class="px-1">
-                                    <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
-                                </div>
-                                <div class="px-1">
-                                    <button type="submit" class="btn btn-primary">Show interfaces</button>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
