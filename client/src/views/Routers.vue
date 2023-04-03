@@ -8,7 +8,7 @@ const notyf = inject('notyf')
 const routerStore = useRouterStore()
 
 const router = ref({
-    ip: null,
+    ip_address: null,
     username: null,
     password: null
 })
@@ -16,15 +16,14 @@ const router = ref({
 const registerRouter = () => {
     let formData = new FormData()
 
-    formData.append('ip_address', router.value.ip)
+    formData.append('ip_address', router.value.ip_address)
     formData.append('authorization', btoa(router.value.username + ':' + router.value.password))
 
-    axiosApi.post('routers', formData).then((response) => {
-        // routerStore.saveAuthToken(response.data.token)
+    if (routerStore.registerRouter(formData)) {
         notyf.success('A new router has been added.')
-    }).catch((error) => {
+    } else {
         notyf.error('Oops, an error has occurred.')
-    })
+    }
 }
 
 const showInterfaces = () => {
@@ -121,10 +120,10 @@ const showInterfaces = () => {
             <div class="card-body pt-0">
                 <form class="row g-3 needs-validation" novalidate @submit.prevent="registerRouter">
                     <div class="col-12">
-                        <label for="ip" class="form-label">IP Address <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="ip" placeholder="Enter an IP Address"
+                        <label for="ip_address" class="form-label">IP Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="ip_address" placeholder="Enter an IP Address"
                         pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5]).){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"
-                        v-model="router.ip" required>
+                        v-model="router.ip_address" required>
                     </div>
                     <div class="col-6">
                         <label for="username" class="form-label">Username <span class="text-danger">*</span></label>

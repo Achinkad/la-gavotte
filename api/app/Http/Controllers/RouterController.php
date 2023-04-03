@@ -21,6 +21,7 @@ class RouterController extends Controller
 
             if ($response->getStatusCode() != 200) {
                 return response()->json($response->getBody(), $response->getStatusCode());
+                die();
             }
 
             $router->save();
@@ -34,9 +35,6 @@ class RouterController extends Controller
 
     public function showInterfaces(Request $request)
     {
-        $clientToken = $request->header('AuthorizationRouter'); // Client token in header request
-        $credentials = Helper::routerTokenVerification($clientToken); // Token verification w/credentials return
-
         $client = new Client();
 
         // Headers
