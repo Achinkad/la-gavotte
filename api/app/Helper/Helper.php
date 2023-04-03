@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use GuzzleHttp\Client;
 use App\Models\Router;
+use GuzzleHttp\Psr7\Response;
 
 class Helper
 {
@@ -30,5 +31,11 @@ class Helper
         $response = $client->request($httpAction, $url, $headers);
 
         return $response;
+    }
+
+    // Decode JSON response from router API
+    public static function decodeResponse(Response $response)
+    {
+        return json_decode($response->getBody()->getContents());
     }
 }

@@ -91,16 +91,13 @@ h3 {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 75px;
 }
 
 .p-title-box .p-title-right {
     float: right;
-}
-
-.p-title-box .p-title-right h6 {
-    font-size: 16px;
-    font-weight: 400;
+    margin-top: 19px;
 }
 
 .footer {
@@ -167,6 +164,10 @@ tbody tr td {
     color: #374151 !important;
 }
 
+td {
+    word-wrap: break-word;
+}
+
 .form-control {
     display: block;
     width: 100%;
@@ -186,6 +187,31 @@ tbody tr td {
     transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+
+.form-select {
+    display: block;
+    width: 100%;
+    padding: .45rem 2.7rem .45rem .9rem;
+    -moz-padding-start: calc(.9rem - 3px);
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6c757d;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%238b96a0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right .9rem center;
+    background-size: 14px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .form-label {
