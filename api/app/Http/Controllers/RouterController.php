@@ -41,22 +41,5 @@ class RouterController extends Controller
         return new RouterResource($newRouter);
     }
 
-    public function showInterfaces(Request $request)
-    {
-        $client = new Client();
-
-        // Headers
-        $headers = [
-            'Authorization' => [$credentials->username, $credentials->password],
-            'verify' => false
-        ];
-
-        // URL builder
-        $url = 'https://' . $credentials->address . '/rest/interface';
-
-        // Request build
-        $response = $client->request('GET', $url, $headers);
-
-        return $response->getBody()->getContents();
-    }
+    
 }

@@ -21,7 +21,7 @@ onBeforeMount(() => {
         <div class="col-12">
             <div class="p-title-box mt-4">
                 <div>
-                    <h2 class="p-title">Interfaces{{routers}}</h2>
+                    <h2 class="p-title">Interfaces</h2>
                 </div>
             </div>
         </div>
