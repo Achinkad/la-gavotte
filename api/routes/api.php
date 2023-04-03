@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RouterController;
+use App\Http\Controllers\WirelessController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -13,8 +14,9 @@ Route::get('user', [UserController::class, 'showUserLoggedIn'])->middleware('aut
 
 /* --- [API Routes] -> Router --- */
 Route::resource('routers', RouterController::class);
-// Route::post('routers/login', [RouterController::class, 'authRouter']);
-Route::get('routers/interfaces', [InterfaceController::class, 'showInterfaces']);
+
+/* --- [API Routes] -> Wireless --- */
+Route::put('wireless/security-profiles', [WirelessController::class, 'createSecurityProfile']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);
