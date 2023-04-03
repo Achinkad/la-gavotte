@@ -7,6 +7,7 @@ export const useRouterStore = defineStore('router', () => {
 
     // Array of routers
     const routers = ref([])
+    
 
     async function registerRouter(data) {
         await axiosApi.post('routers', data).then((response) => {
@@ -27,15 +28,10 @@ export const useRouterStore = defineStore('router', () => {
         return routers.value
     })
 
-    const showInterfaces = () => {
-        axiosApi.get('routers/interfaces').then((response) => {
-            router.value = response.data
-        })
-    }
 
     return {
         registerRouter,
         getRouters,
         loadRouters
-   , showInterfaces }
+    }
 })

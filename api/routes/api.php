@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RouterController;
 
@@ -13,7 +14,7 @@ Route::get('user', [UserController::class, 'showUserLoggedIn'])->middleware('aut
 /* --- [API Routes] -> Router --- */
 Route::resource('routers', RouterController::class);
 // Route::post('routers/login', [RouterController::class, 'authRouter']);
-Route::get('routers/interfaces', [RouterController::class, 'showInterfaces']);
+Route::get('routers/interfaces', [InterfaceController::class, 'showInterfaces']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);

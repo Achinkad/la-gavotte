@@ -1,17 +1,29 @@
 <script setup>
-import { inject,onBeforeMount,ref,computed } from 'vue'
+import { inject,onBeforeMount,ref,computed,watch } from 'vue'
+import { useInterfaceStore } from "../stores/interface.js"
 import { useRouterStore } from "../stores/router.js"
 
 const routerStore = useRouterStore()
+const interfaceStore = useInterfaceStore()
+
 const axiosRouter = inject('axiosRouter')
 const routerUrl = inject('routerUrl')
 
 
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
+const loadInterfaces = (() => { interfaceStore.loadInterfaces() })
+const interfaces = computed(() => { return interfaceStore.getInterfaces() })
+
+var router_interfaces = ref("all")
+watch(router_interfaces, () => {
+    loadInterfaces()
+    console.log(router_interfaces.value)
+})
 
 onBeforeMount(() => {
    loadRouters()
+   loadInterfaces()
 })
 
 </script>
@@ -36,9 +48,9 @@ onBeforeMount(() => {
                
                 <div class="card-body pt-0">
                     <p>Lorem ipsum.</p>
-                <select class="custom-select custom-select-lg ">
-                    <option selected>All</option>
-                    <option value="1"></option>
+                <select class="custom-select custom-select-lg" v-model="router_interfaces">
+                    <option value="all" selected>All</option>
+                    <option :value="router.ip_address" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
                 </select>
                 <select class="custom-select custom-select-lg ">
                     <option selected>Type</option>
@@ -59,7 +71,6 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                   
                                         <td>a</td>
                                         <td>a</td>
                                         <td>a</td>
