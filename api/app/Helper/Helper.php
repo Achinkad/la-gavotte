@@ -14,7 +14,7 @@ class Helper
     }
 
     // Creates a new HTTP client and sends a request
-    public static function httpClient(Router $router, String $httpAction, String $restPath, String $optionalArg = null)
+    public static function httpClient(String $httpAction, String $restPath, Router $router, String $optionalArg = null)
     {
         $client = new Client();
 

@@ -23,7 +23,7 @@ class RouterController extends Controller
             $router = new Router;
             $router->fill($request->validated());
 
-            $response = Helper::httpClient($router, 'POST', 'login');
+            $response = Helper::httpClient('POST', 'login', $router);
 
             // Check if credentials are correct
             if ($response->getStatusCode() != 200) {
@@ -32,12 +32,12 @@ class RouterController extends Controller
             }
 
             // Get identity of the router
-            $identity = Helper::httpClient($router, 'GET','system/identity');
+            $identity = Helper::httpClient('GET','system/identity', $router);
             if ($response->getStatusCode() != 200) die();
             $router->identity = json_decode($identity->getBody()->getContents())->name;
 
             // Get MAC address of the router
-            $macAddress = Helper::httpClient($router, 'GET','interface?name=ether1');
+            $macAddress = Helper::httpClient('GET','interface?name=ether1', $router);
             if ($response->getStatusCode() != 200) die();
             $router->mac_address = json_decode($macAddress->getBody()->getContents())[0]->{'mac-address'};
 
@@ -50,24 +50,5 @@ class RouterController extends Controller
         });
 
         return new RouterResource($newRouter);
-    }
-
-    public function showInterfaces(Request $request)
-    {
-        $client = new Client();
-
-        // Headers
-        $headers = [
-            'Authorization' => [$credentials->username, $credentials->password],
-            'verify' => false
-        ];
-
-        // URL builder
-        $url = 'https://' . $credentials->address . '/rest/interface';
-
-        // Request build
-        $response = $client->request('GET', $url, $headers);
-
-        return $response->getBody()->getContents();
     }
 }
