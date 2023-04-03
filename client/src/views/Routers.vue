@@ -23,6 +23,7 @@ const registerRouter = () => {
     formData.append('authorization', btoa(router.value.username + ':' + router.value.password))
 
     if (routerStore.registerRouter(formData)) {
+        loadRouters()
         notyf.success('A new router has been added.')
     } else {
         notyf.error('Oops, an error has occurred.')
