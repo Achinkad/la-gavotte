@@ -17,6 +17,10 @@ class RouterController extends Controller
         return RouterResource::collection(Router::all());
     }
 
+    public function show(){
+        return true;
+    }
+
     public function store(StoreRouterRequest $request)
     {
         $newRouter = DB::transaction(function () use ($request) {
