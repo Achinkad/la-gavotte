@@ -1,40 +1,59 @@
 <script setup>
 import { ref, watch, computed, inject, onBeforeMount } from 'vue'
-import { useRouterStore } from '../stores/router.js'
+import { useRouter } from 'vue-router'
+
+import { useRouterStore } from '../../stores/router.js'
+import { useWirelessStore } from '../../stores/wireless.js'
 
 const axiosApi = inject('axiosApi')
+const notyf = inject('notyf')
 
+const router = useRouter()
 const routerStore = useRouterStore()
+const wirelessStore = useWirelessStore()
 
 const routerIdentification = ref("-")
-const securityProfiles = ref([])
-const wirelessNetworks = ref([])
 
+// Routers
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
 
+// Wireless Networks
+const loadWirelessNetworks = ((data) => { wirelessStore.loadWirelessNetworks(data) })
+const wirelessNetworks = computed(() => { return wirelessStore.getWirelessNetworks() })
+
+// Security Profiles
+const loadSecurityProfiles = ((data) => { wirelessStore.loadSecurityProfiles(data) })
+const securityProfiles = computed(() => { return wirelessStore.getSecurityProfiles() })
+
+// Toogle Disabled Wireless Networks
+const toogleDisabled = ((wirelessNetwork) => {
+    let body = {
+        router: routerIdentification.value,
+        disabled: wirelessNetwork.disabled
+    }
+
+    axiosApi.patch('wireless/' + wirelessNetwork['.id'], { body }).then((response) => {
+        notyf.success('The wireless network was activated with success.')
+        loadWirelessNetworks({ id: body.router })
+    }).catch((error) => {
+        notyf.error('Oops, an error has occurred.')
+    })
+})
+
+const showWirelessNetwork = (networkId) => { router.push({ name: "WirelessNetwork", params: { id: networkId } }) }
+
+// Load Routers
 onBeforeMount(() => {
     loadRouters()
 })
 
+// Load Wireless Networks & Security Profiles
 watch(routerIdentification, () => {
-    let options = { id: routerIdentification.value }
+    let data = { id: routerIdentification.value }
 
-    axiosApi.get('wireless/security-profiles/', {
-        params: options
-    }).then((response) => {
-        securityProfiles.value = response.data
-    }).catch((error) => {
-        console.log(error)
-    })
-
-    axiosApi.get('wireless', {
-        params: options
-    }).then((response) => {
-        wirelessNetworks.value = response.data
-    }).catch((error) => {
-        console.log(error)
-    })
+    loadWirelessNetworks(data)
+    loadSecurityProfiles(data)
 })
 </script>
 
@@ -48,7 +67,7 @@ watch(routerIdentification, () => {
                         <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
                     </select>
                 </div>
-                <h2 class="p-title">Wireless</h2>
+                <h2 class="p-title">Wireless &amp; Security Profiles</h2>
             </div>
         </div>
     </div>
@@ -68,7 +87,7 @@ watch(routerIdentification, () => {
                                         <th>Name</th>
                                         <th>SSID</th>
                                         <th>Security profile</th>
-                                        <th>Running</th>
+                                        <th class="text-center">Activated</th>
                                         <th class="text-center" style="width: 20%">Actions</th>
                                     </tr>
                                 </thead>
@@ -76,16 +95,25 @@ watch(routerIdentification, () => {
                                     <tr v-if="wirelessNetworks.length == 0">
                                         <td colspan="6" class="text-center" style="height:55px!important;">No data available.</td>
                                     </tr>
-                                    <tr v-for="wirelessNetwork in wirelessNetworks" :key="wirelessNetwork.id">
+                                    <tr v-for="wirelessNetwork in wirelessNetworks" :key="wirelessNetwork['.id']">
                                         <td class="align-middle">#{{ wirelessNetwork['.id'].substring(1) }}</td>
                                         <td>{{ wirelessNetwork.name }}</td>
                                         <td>{{ wirelessNetwork.ssid }}</td>
                                         <td>{{ wirelessNetwork['security-profile']}}</td>
-                                        <td>{{ wirelessNetwork.running }}</td>
+                                        <td>
+                                            <div class="form-check form-switch text-center">
+                                                <div class="d-flex justify-content-center">
+                                                    <input class="form-check-input" type="checkbox" role="switch" @click="toogleDisabled(wirelessNetwork)" :checked="wirelessNetwork.disabled == 'true'">
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light" title="View">
+                                                <button class="btn btn-xs btn-light table-button" title="View" @click="showWirelessNetwork(wirelessNetwork['.id'].substring(1))">
                                                     <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-xs btn-light table-button ms-2" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -123,10 +151,11 @@ watch(routerIdentification, () => {
                                         <td class="align-middle">#{{ securityProfile['.id'].substring(1) }}</td>
                                         <td>{{ securityProfile.name }}</td>
                                         <td>{{ securityProfile.mode }}</td>
-                                        <td>{{ securityProfile['authentication-types'] }}</td>
+                                        <td v-if="securityProfile['authentication-types'].length == 0"> - </td>
+                                        <td v-else>{{ securityProfile['authentication-types'] }}</td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light" title="View">
+                                                <button class="btn btn-xs btn-light table-button" title="View">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
                                             </div>

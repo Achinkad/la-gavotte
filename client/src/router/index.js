@@ -52,7 +52,13 @@ const router = createRouter({
         {
             path: '/wireless',
             name: 'Wireless',
-            component: () => import('../views/Wireless.vue')
+            component: () => import('../views/Wireless/Wireless.vue')
+        },
+        {
+            path: '/wireless/:id',
+            name: 'WirelessNetwork',
+            component: () => import('../views/Wireless/WirelessNetwork.vue'),
+            props: (route) => ({ id: parseInt(route.params.id) }),
         },
         {
             path: '/routing/bgp',

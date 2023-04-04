@@ -88,6 +88,7 @@ const router = useRouter()
                     <li class="nav-item">
                         <router-link class="nav-link" :class="{
                             active: $route.name === 'Wireless'
+                            || $route.name === 'WirelessNetwork'
                             }" :to="{ name: 'Wireless' }">
                             <i class="bi bi-wifi" style="position:relative;bottom:1px;"></i>
                             Wireless
