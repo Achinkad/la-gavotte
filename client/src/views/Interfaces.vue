@@ -6,24 +6,30 @@ import { useRouterStore } from "../stores/router.js"
 const routerStore = useRouterStore()
 const interfaceStore = useInterfaceStore()
 
-const axiosRouter = inject('axiosRouter')
-const routerUrl = inject('routerUrl')
+const axiosApi = inject('axiosApi')
 
+var router_interfaces = ref("all")
+var type_interfaces = ref("all")
 
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
-const loadInterfaces = (() => { interfaceStore.loadInterfaces() })
+const loadInterfaces = (() => { interfaceStore.loadInterfaces(router_interfaces,type_interfaces) })
 const interfaces = computed(() => { return interfaceStore.getInterfaces() })
 
-var router_interfaces = ref("all")
+
+
 watch(router_interfaces, () => {
     loadInterfaces()
-    console.log(router_interfaces.value)
+})
+
+watch(type_interfaces, () => {
+    loadInterfaces()
 })
 
 onBeforeMount(() => {
    loadRouters()
    loadInterfaces()
+
 })
 
 </script>
@@ -42,51 +48,50 @@ onBeforeMount(() => {
         <div class="col-12">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Title here</h4>
+                    <h4 class="header-title">Connected Interfaces</h4>
                      
                 </div>
                
                 <div class="card-body pt-0">
-                    <p>Lorem ipsum.</p>
+                   
                 <select class="custom-select custom-select-lg" v-model="router_interfaces">
                     <option value="all" selected>All</option>
                     <option :value="router.ip_address" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
                 </select>
-                <select class="custom-select custom-select-lg ">
-                    <option selected>Type</option>
-                    <option value="1"></option>
-                </select>
+                <select class="custom-select custom-select-lg" v-model="type_interfaces">
+                    <option value="all" selected>All</option>
+                    <option value="ether">Ethernet</option>
+                    <option value="wlan">Wireless</option>
+                    <option value="bridge">Bridge</option>
+                    <option value="wg">Wireguard</option>
 
+                </select>
+               
                  <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>Router</th>
                                         <th>Name</th>
                                         <th>Type</th>
                                         <th>Actual MTU</th>
                                         <th>L2 MTU</th>
                                         <th>TX</th>
                                         <th>RX</th>
-                                        <th class="text-center" style="width: 20%">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light" title="View">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
+                                    <tr v-for="iface in interfaces">
+                                        <th>{{iface.router}}</th>
+                                        <td>{{iface.name}}</td>
+                                        <td>{{iface.type}}</td>
+                                        <td>{{iface['actual-mtu']}}</td>
+                                        <td>{{iface.l2mtu}}</td>
+                                        <td>{{iface['rx-byte']}} kbps</td>
+                                        <td>{{iface['tx-byte']}} kbps</td>   
                                 </tr>
                             </tbody>
-                        </table>
+                </table>
+               
                 </div>
             </div>
         </div>

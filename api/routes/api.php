@@ -13,7 +13,9 @@ Route::resource('users', UserController::class);
 Route::get('user', [UserController::class, 'showUserLoggedIn'])->middleware('auth:api');
 
 /* --- [API Routes] -> Router --- */
+Route::get('routers/interfaces', [InterfaceController::class, 'showInterfaces']);
 Route::resource('routers', RouterController::class);
+
 
 /* --- [API Routes] -> Wireless --- */
 Route::put('wireless/security-profiles', [WirelessController::class, 'createSecurityProfile']);

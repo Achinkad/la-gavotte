@@ -5,19 +5,23 @@ export const useInterfaceStore = defineStore('interface', () => {
     // Axios
     const axiosApi = inject('axiosApi')
 
-    // Array of routers
+    // Array of interfaces
     const interfaces = ref([])
     
 
-    async function loadInterfaces(type){
-        const response = await axiosApi({
-            method: "GET",
-            url: `routers/interfaces`,
-            params: {
-            type: type,
+    async function loadInterfaces(identifier,type){
+        
+        await axiosApi.get('routers/interfaces',
+        {
+            params:{
+                identifier: identifier.value,
+                type: type.value
             }
+        }).then((response) => {
+            interfaces.value = response.data;
+
         })
-        interfaces.value = response.data.data;
+       
     }
 
     const getInterfaces = (() => {
