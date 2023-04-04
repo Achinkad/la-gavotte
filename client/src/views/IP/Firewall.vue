@@ -5,14 +5,12 @@
 <template>
     <div class="row">
         <div class="col-12">
-            <div class="p-title-box mt-4">
-                <div>
-                    <h2 class="p-title">Firewall</h2>
-                </div>
+            <div class="p-title-box">
+                <h2 class="p-title">Firewall</h2>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
+    <div class="row">
         <div class="col-12">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">

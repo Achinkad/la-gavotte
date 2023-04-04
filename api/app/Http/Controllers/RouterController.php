@@ -36,14 +36,14 @@ class RouterController extends Controller
             }
 
             // Get identity of the router
-            $identity = Helper::httpClient('GET','system/identity', $router);
+            $identity = Helper::httpClient('GET', 'system/identity', $router);
             if ($response->getStatusCode() != 200) die();
-            $router->identity = json_decode($identity->getBody()->getContents())->name;
+            $router->identity = Helper::decodeResponse($identity)->name;
 
             // Get MAC address of the router
-            $macAddress = Helper::httpClient('GET','interface?name=ether1', $router);
+            $macAddress = Helper::httpClient('GET', 'interface?name=ether1', $router);
             if ($response->getStatusCode() != 200) die();
-            $router->mac_address = json_decode($macAddress->getBody()->getContents())[0]->{'mac-address'};
+            $router->mac_address = Helper::decodeResponse($macAddress)[0]->{'mac-address'};
 
             $router->save();
 
