@@ -17,6 +17,7 @@ Route::resource('routers', RouterController::class);
 /* --- [API Routes] -> Wireless --- */
 Route::get('wireless/security-profiles', [WirelessController::class, 'showSecurityProfiles']);
 Route::get('wireless', [WirelessController::class, 'showWirelessNetworks']);
+Route::patch('wireless/{id}', [WirelessController::class, 'toogleDisabledWirelessNetwork']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);

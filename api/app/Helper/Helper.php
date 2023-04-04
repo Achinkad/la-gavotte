@@ -2,9 +2,11 @@
 
 namespace App\Helper;
 
-use GuzzleHttp\Client;
 use App\Models\Router;
+
+use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Exception\RequestException;
 
 class Helper
 {
@@ -15,22 +17,33 @@ class Helper
     }
 
     // Creates a new HTTP client and sends a request
-    public static function httpClient(String $httpAction, String $restPath, Router $router, String $optionalArg = null)
+    public static function httpClient(String $httpRequestMethod, String $local, Router $router, Array $bodyContent = null)
     {
-        $client = new Client();
+        $client = new Client(['verify' => false]);
 
-        $credentials = Helper::authorizationDecode($router->authorization);
+        $completeUrl = 'https://' . $router->ip_address . '/rest/' . $local;
 
-        $headers = [
-            'auth' => [$credentials[0], $credentials[1]],
-            'verify' => false
+        $headerOptions = [
+            'Authorization' => 'Basic ' . $router->authorization,
+            'Content-Type' => 'application/json'
         ];
 
-        $url = 'https://' . $router->ip_address . '/rest/' . $restPath;
+        try {
+            if ($bodyContent) {
+                $response = $client->request($httpRequestMethod, $completeUrl, [
+                    'headers' => $headerOptions,
+                    'json' => $bodyContent
+                ]);
+            } else {
+                $response = $client->request($httpRequestMethod, $completeUrl, [
+                    'headers' => $headerOptions
+                ]);
+            }
 
-        $response = $client->request($httpAction, $url, $headers);
-
-        return $response;
+            return $response;
+        } catch (RequestException $error) {
+            return $error;
+        }
     }
 
     // Decode JSON response from router API
