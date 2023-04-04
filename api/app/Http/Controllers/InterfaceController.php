@@ -11,6 +11,8 @@ class InterfaceController extends Controller
     public function showInterfaces(Request $request)
     {
         $interfaces=[];
+        $helper = new Helper();
+
         if($request->identifier=='all'){
             $routers=Router::all();
             
@@ -24,7 +26,7 @@ class InterfaceController extends Controller
                         $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
                     }
                   
-                   foreach(json_decode($response->getBody()->getContents()) as $interface){
+                   foreach($helper->decodeResponse($response) as $interface){
                         $interface->router=$router->ip_address; #talvez seja antes de descodificar
                         array_push($interfaces,$interface);
                    }
@@ -43,7 +45,7 @@ class InterfaceController extends Controller
                 else{
                     $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
                 }
-                foreach(json_decode($response->getBody()->getContents()) as $interface){
+                foreach($helper->decodeResponse($response) as $interface){
                     $interface->router=$router->ip_address; #talvez seja antes de descodificar   
                     array_push($interfaces,$interface);
                }

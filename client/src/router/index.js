@@ -17,7 +17,17 @@ const router = createRouter({
         {
             path: '/bridge',
             name: 'Bridge',
-            component: () => import('../views/Bridge.vue')
+            component: () => import('../views/Bridge/Bridge.vue')
+        },
+        {
+            path: '/bridge/create',
+            name: 'BridgeCreate',
+            component: () => import('../views/Bridge/BridgeCreate.vue')
+        },
+        {
+            path: '/bridge/port/create',
+            name: 'PortCreate',
+            component: () => import('../views/Bridge/PortCreate.vue')
         },
         {
             path: '/ip/addresses',

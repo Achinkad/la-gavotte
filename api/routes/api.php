@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BridgeController;
 use App\Http\Controllers\RouterController;
 use App\Http\Controllers\WirelessController;
+use App\Http\Controllers\InterfaceController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -16,6 +17,11 @@ Route::get('user', [UserController::class, 'showUserLoggedIn'])->middleware('aut
 Route::get('routers/interfaces', [InterfaceController::class, 'showInterfaces']);
 Route::resource('routers', RouterController::class);
 
+/* --- [API Routes] -> Bridge --- */
+Route::get('bridges/ports', [BridgeController::class, 'showBridgePorts']);
+Route::get('bridges', [BridgeController::class, 'showBridges']);
+Route::put('bridges/ports', [BridgeController::class, 'createBridgePorts']);
+Route::put('bridges', [BridgeController::class, 'createBridges']);
 
 /* --- [API Routes] -> Wireless --- */
 Route::get('wireless/security-profiles', [WirelessController::class, 'showSecurityProfiles']);
