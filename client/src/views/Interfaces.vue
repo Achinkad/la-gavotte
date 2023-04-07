@@ -56,7 +56,7 @@ onBeforeMount(() => {
                    
                 <select class="custom-select custom-select-lg" v-model="router_interfaces">
                     <option value="all" selected>All</option>
-                    <option :value="router.ip_address" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
+                    <option :value="router.id" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
                 </select>
                 <select class="custom-select custom-select-lg" v-model="type_interfaces">
                     <option value="all" selected>All</option>

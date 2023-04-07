@@ -8,6 +8,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\RequestException;
 
+
+
+
 class Helper
 {
     // Decodes a given base64 enconded string
@@ -27,22 +30,27 @@ class Helper
             'Authorization' => 'Basic ' . $router->authorization,
             'Content-Type' => 'application/json'
         ];
+        
 
         try {
+            
             if ($bodyContent) {
                 $response = $client->request($httpRequestMethod, $completeUrl, [
                     'headers' => $headerOptions,
                     'json' => $bodyContent
                 ]);
+             
+              
             } else {
-                $response = $client->request($httpRequestMethod, $completeUrl, [
-                    'headers' => $headerOptions
-                ]);
+                
+                $response = $client->request($httpRequestMethod, $completeUrl, ['headers' => $headerOptions]);
+               
             }
-
+           
             return $response;
         } catch (RequestException $error) {
-            return $error;
+           
+           return $error;
         }
     }
 

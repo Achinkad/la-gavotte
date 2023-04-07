@@ -7,6 +7,7 @@ export const useInterfaceStore = defineStore('interface', () => {
 
     // Array of interfaces
     const interfaces = ref([])
+    const interfacesEtherWlan = ref([])
     
 
     async function loadInterfaces(identifier,type){
@@ -19,6 +20,7 @@ export const useInterfaceStore = defineStore('interface', () => {
             }
         }).then((response) => {
             interfaces.value = response.data;
+            
 
         })
        
@@ -28,9 +30,24 @@ export const useInterfaceStore = defineStore('interface', () => {
         return interfaces.value
     })
 
+    const getEtherWlanIfaces = (() => {
+        
+        interfaces.value.forEach((element,index) => {
+            
+            if(element.type=="ether" || element.type=="wlan"){
+                
+                interfacesEtherWlan.value.push(element)
+          
+            }
+        })
+        
+        return interfacesEtherWlan.value
+    })
+
 
     return {
         loadInterfaces,
-        getInterfaces
+        getInterfaces,
+        getEtherWlanIfaces
        }
 })

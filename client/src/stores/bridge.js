@@ -9,37 +9,9 @@ export const useBridgeStore = defineStore('bridge', () => {
     const bridges = ref([])
     const ports= ref([])
     
-    async function createBridges(data){
-        
-        console.log(data)
-
-        await axiosApi.put('bridges',data).then((response) => {
-            bridges.value.push(response.data.data);
-            return true;
-        }).catch((error) => {
-            return false
-        })
-       
-    }
-
-    async function createPorts(data){
-        
-        await axiosApi.put('bridges/ports',
-        {
-            params:{
-                data: data,
-            }
-        }).then((response) => {
-            ports.value.push(response.data.data);
-            return true;
-        }).catch((error) => {
-            return false
-        })
-       
-    }
 
     async function loadBridges(identifier){
-        
+      
         await axiosApi.get('bridges',
         {
             params:{
@@ -47,7 +19,7 @@ export const useBridgeStore = defineStore('bridge', () => {
             }
         }).then((response) => {
             bridges.value = response.data;
-
+           
         })
        
     }
@@ -66,6 +38,93 @@ export const useBridgeStore = defineStore('bridge', () => {
        
     }
 
+    async function createBridges(data){
+        
+
+        await axiosApi.put('bridges', data).then((response) => {
+            
+            if(response.data!=false){
+                bridges.value.push(response.data)
+
+                return "true"
+            }
+            else{
+                
+                return "false"
+            }
+                 
+            
+        }).catch((error) => {
+            console.log("error creating bridges!")
+            return "false"
+        })
+       
+    }
+
+    async function createPorts(data){
+        
+        await axiosApi.put('bridges/ports', data).then((response) => {
+            console.log(response.data)
+            if(response.data!=false){
+                ports.value.push(response.data)
+
+                return "true"
+            }
+            else{
+                
+                return "false"
+            }
+                 
+            
+        }).catch((error) => {
+            console.log("error creating ports!")
+            return "false"
+        })
+       
+    }
+
+    async function deleteBridges(bridge){
+        
+        await axiosApi.delete('bridges/'+bridge['.id'],{
+            params:{
+                bridge: bridge,
+                identity: bridge.router
+            }
+        }).then((response) => {
+           
+        let i = bridges.value.findIndex(element => element['.id'] === bridge['.id'])
+
+        if (i >= 0) bridges.value.splice(i, 1);
+            
+           return "true" 
+            
+        }).catch((error) => {
+
+            return "false"
+        })
+       
+    }
+
+    async function deletePorts(port){
+        
+        await axiosApi.delete('bridges/ports/'+port['.id'],{
+            params:{
+                port: port,
+                identity: port.router
+            }
+        }).then((response) => {
+            let i = ports.value.findIndex(element => element['.id'] === port['.id'])
+
+            if (i >= 0) ports.value.splice(i, 1);
+           return "true" 
+            
+        }).catch((error) => {
+
+            return "false"
+        })
+       
+    }
+
 
     const getBridges = (() => {
         return bridges.value
@@ -75,6 +134,9 @@ export const useBridgeStore = defineStore('bridge', () => {
         return ports.value
     })
 
+    const getNotyfValue = (() => {
+        return notyf_value.value
+    })
 
     return {
         createBridges,
@@ -82,6 +144,9 @@ export const useBridgeStore = defineStore('bridge', () => {
         loadBridges,
         loadPorts,
         getBridges,
-        getPorts
+        getPorts,
+        getNotyfValue,
+        deleteBridges,
+        deletePorts
        }
 })

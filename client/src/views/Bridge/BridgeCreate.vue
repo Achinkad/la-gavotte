@@ -2,11 +2,19 @@
 // Write your script here
 import { inject,onBeforeMount,ref,computed,watch } from 'vue'
 import { useBridgeStore } from "../../stores/bridge.js"
+import { useRouterStore } from "../../stores/router.js"
 
-
+const routerStore = useRouterStore()
 const bridgeStore = useBridgeStore()
 const axiosApi = inject('axiosApi')
 const notyf = inject('notyf')
+
+
+
+const loadRouters = (() => { routerStore.loadRouters() })
+const routers = computed(() => { return routerStore.getRouters() })
+
+const routerIdentification = ref("-")
 
 const bridge = ref({
     name: null,
@@ -20,14 +28,20 @@ const createBridge = () => {
     formData.append('name', bridge.value.name)
     formData.append('mtu', bridge.value.mtu)
     formData.append('protocol', bridge.value.protocol)
-    console.log(bridge.value.protocol)
+    formData.append('identity', routerIdentification.value)
 
+   
     if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new router has been added.')
+        notyf.success('A new Bridge has been added.')
     } else {
         notyf.error('Oops, an error has occurred.')
     }
 }
+
+onBeforeMount(() => {
+   
+    loadRouters()
+})
 
 </script>
 
@@ -53,12 +67,22 @@ const createBridge = () => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
+                       
+
                            <form class="row g-3" @submit.prevent="createBridge">
-                                <div class="col-4">
+                            <div class="col-12">
+                            <label>Select Router</label>
+                                <select class="form-select" v-model="routerIdentification">
+                                    <option value="-" selected hidden disabled>Select a router</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                </select>
+                            </div>
+                            <div v-if="routerIdentification!='-'">
+                                <div class="col-6">
                                     <label for="exampleInputEmail1">Name </label>
                                     <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name of the bridge interface" v-model="bridge.name">
                                 </div>
-                                <div class="col-4">
+                                <div class="col-6">
                                     <label for="exampleInputPassword1">MTU</label>
                                     <input type="number" class="form-control" placeholder="Password" v-model="bridge.mtu">
                                 </div>
@@ -81,7 +105,9 @@ const createBridge = () => {
                                         <label class="form-check-label" for="rstp">MSTP</label><br>
                                     </div>
                                 </div>
+                           
                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                             </form>
                         </div>
                     </div>

@@ -18,10 +18,13 @@ Route::get('routers/interfaces', [InterfaceController::class, 'showInterfaces'])
 Route::resource('routers', RouterController::class);
 
 /* --- [API Routes] -> Bridge --- */
+
 Route::get('bridges/ports', [BridgeController::class, 'showBridgePorts']);
 Route::get('bridges', [BridgeController::class, 'showBridges']);
 Route::put('bridges/ports', [BridgeController::class, 'createBridgePorts']);
 Route::put('bridges', [BridgeController::class, 'createBridges']);
+Route::delete('bridges/{id}', [BridgeController::class, 'deleteBridges']);
+Route::delete('bridges/ports/{id}', [BridgeController::class, 'deleteBridgePorts']);
 
 /* --- [API Routes] -> Wireless --- */
 Route::get('wireless/security-profiles', [WirelessController::class, 'showSecurityProfiles']);

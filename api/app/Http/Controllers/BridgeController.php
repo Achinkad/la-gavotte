@@ -6,8 +6,27 @@ use App\Helper\Helper;
 use App\Models\Router;
 use Illuminate\Http\Request;
 
+use GuzzleHttp\Exception\ClientException;
+
 class BridgeController extends Controller
 {
+    public function deleteBridges(Request $request) 
+    {
+
+        $router=Router::where('ip_address',$request->identity)->firstOrFail();
+
+        Helper::httpClient('DELETE','interface/bridge/'.$request->id,$router);
+      
+    }
+
+    public function deleteBridgePorts(Request $request) 
+    {
+
+        $router=Router::where('ip_address',$request->identity)->firstOrFail();
+
+        Helper::httpClient('DELETE','interface/bridge/port/'.$request->id,$router);
+      
+    }
 
     public function showBridges(Request $request){
        
@@ -34,7 +53,8 @@ class BridgeController extends Controller
             
         }
         else{
-            $router=Router::where('ip_address',$request->identifier_bridges)->first();
+            
+            $router=Router::where('id',$request->identifier_bridges)->firstOrFail();
 
             if($router!=[] && $request->identifier_bridges!=null){
                 
@@ -83,7 +103,7 @@ class BridgeController extends Controller
             
         }
         else{
-            $router=Router::where('ip_address',$request->identifier_ports)->first();
+            $router=Router::where('id',$request->identifier_ports)->firstOrFail();
 
             if($router!=[] && $request->identifier_ports!=null){
                 
@@ -107,7 +127,43 @@ class BridgeController extends Controller
 
     public function createBridges(Request $request){
 
+        if($request->identity=='-'){
+          return "false";
+        }
+
+        $router=Router::where('id',$request['identity'])->firstOrFail();
+        $request['protocol-mode']=$request['protocol'];
+        unset($request['protocol']);
+        unset($request['identity']);
+        if($request['name']=="null"){
+            unset($request['name']);
+        }
+       
+        $response = Helper::httpClient('PUT','interface/bridge',$router,$request->all());
         
+        return $response;
+    }
+
+    public function createBridgePorts(Request $request){
+
+        if($request->identity=='-'){
+          return "false";
+        }
+
+        $router=Router::where('id',$request['identity'])->firstOrFail();
+
+        unset($request['identity']);
+        if($request['interface']=="null"){
+            unset($request['interface']);
+        }
+        if($request['bridge']=="null"){
+            unset($request['bridge']);
+        }
+       
+        $response = Helper::httpClient('PUT','interface/bridge/port',$router,$request->all());
+
+        return $response;
+
     }
 
 }
