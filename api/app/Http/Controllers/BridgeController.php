@@ -13,7 +13,7 @@ class BridgeController extends Controller
     public function deleteBridges(Request $request) 
     {
 
-        $router=Router::where('ip_address',$request->identity)->firstOrFail();
+        $router=Router::where('id',$request->identity)->firstOrFail();
 
         Helper::httpClient('DELETE','interface/bridge/'.$request->id,$router);
       
@@ -22,9 +22,37 @@ class BridgeController extends Controller
     public function deleteBridgePorts(Request $request) 
     {
 
-        $router=Router::where('ip_address',$request->identity)->firstOrFail();
+        $router=Router::where('id',$request->identity)->firstOrFail();
 
         Helper::httpClient('DELETE','interface/bridge/port/'.$request->id,$router);
+      
+    }
+
+    public function editBridges(Request $request) 
+    {
+       
+        $router=Router::where('id',$request->router_identity)->firstOrFail();
+
+        $bridge_id=$request->bridge_identity;
+        $request['protocol-mode']=$request['protocol'];
+        unset($request['protocol']);
+        unset($request['router_identity']);
+        unset($request['bridge_identity']);
+        
+        Helper::httpClient('PATCH','interface/bridge/'.$bridge_id,$router,$request->all());
+    }
+
+    public function editBridgePorts(Request $request) 
+    {
+        
+        $router=Router::where('id',$request->router_identity)->firstOrFail();
+
+        $port_id=$request->port_identity;
+
+        unset($request['router_identity']);
+        unset($request['port_identity']);
+
+        Helper::httpClient('PATCH','interface/bridge/port/'.$port_id,$router,$request->all());
       
     }
 
@@ -43,7 +71,7 @@ class BridgeController extends Controller
                     $response = Helper::httpClient('GET','interface/bridge',$router);
 
                     foreach($helper->decodeResponse($response) as $bridge){
-                        $bridge->router=$router->ip_address; #talvez seja antes de descodificar
+                        $bridge->router=$router->id; #talvez seja antes de descodificar
                         array_push($bridges,$bridge);
                     }
 
@@ -61,7 +89,7 @@ class BridgeController extends Controller
                 $response = Helper::httpClient('GET','interface/bridge',$router);
                 
                 foreach($helper->decodeResponse($response) as $bridge){
-                    $bridge->router=$router->ip_address; #talvez seja antes de descodificar
+                    $bridge->router=$router->id; #talvez seja antes de descodificar
                     array_push($bridges,$bridge);
                 }
             }
@@ -75,7 +103,6 @@ class BridgeController extends Controller
 
         return $bridges;
     }
-
 
 
     public function showBridgePorts(Request $request){
@@ -93,7 +120,7 @@ class BridgeController extends Controller
                     $response = Helper::httpClient('GET','interface/bridge/port',$router);
 
                     foreach($helper->decodeResponse($response) as $port){
-                        $port->router=$router->ip_address; #talvez seja antes de descodificar
+                        $port->router=$router->id; #talvez seja antes de descodificar
                         array_push($ports,$port);
                     }
 
@@ -110,7 +137,7 @@ class BridgeController extends Controller
                 $response = Helper::httpClient('GET','interface/bridge/port',$router);
                 
                 foreach($helper->decodeResponse($response) as $port){
-                    $port->router=$router->ip_address; #talvez seja antes de descodificar
+                    $port->router=$router->id; #talvez seja antes de descodificar
                     array_push($ports,$port);
                 }
             }

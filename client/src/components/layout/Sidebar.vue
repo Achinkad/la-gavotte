@@ -78,12 +78,28 @@ const router = useRouter()
                         </div>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :class="{
-                            active: $route.name === 'Bridge'
-                            }" :to="{ name: 'Bridge' }">
-                            <i class="bi bi-tv" style="position:relative;bottom:1px;"></i>
-                            Bridge
-                        </router-link>
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarBridge" aria-expanded="false" aria-controls="sidebarIP">
+                            <i class="bi bi-tv"></i> Bridge
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarBridge">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'Bridges'
+                                        }" :to="{ name: 'Bridges' }">
+                                        Bridges
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'Ports'
+                                        }" :to="{ name: 'Ports' }">
+                                        Ports
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :class="{

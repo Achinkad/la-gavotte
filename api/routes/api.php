@@ -25,6 +25,8 @@ Route::put('bridges/ports', [BridgeController::class, 'createBridgePorts']);
 Route::put('bridges', [BridgeController::class, 'createBridges']);
 Route::delete('bridges/{id}', [BridgeController::class, 'deleteBridges']);
 Route::delete('bridges/ports/{id}', [BridgeController::class, 'deleteBridgePorts']);
+Route::patch('bridges/{id}', [BridgeController::class, 'editBridges']);
+Route::patch('bridges/ports/{id}', [BridgeController::class, 'editBridgePorts']);
 
 /* --- [API Routes] -> Wireless --- */
 Route::get('wireless/security-profiles', [WirelessController::class, 'showSecurityProfiles']);

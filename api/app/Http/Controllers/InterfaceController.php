@@ -31,7 +31,7 @@ class InterfaceController extends Controller
                     }
                     
                     foreach($helper->decodeResponse($response) as $interface){
-                        $interface->router=$router->ip_address; #talvez seja antes de descodificar
+                        $interface->router=$router->id; #talvez seja antes de descodificar
                         array_push($interfaces,$interface);
                     }
                     
@@ -53,7 +53,7 @@ class InterfaceController extends Controller
                 }
                 
                 foreach($helper->decodeResponse($response) as $interface){
-                    $interface->router=$router->ip_address; #talvez seja antes de descodificar   
+                    $interface->router=$router->id; #talvez seja antes de descodificar   
                     array_push($interfaces,$interface);
                }
             }

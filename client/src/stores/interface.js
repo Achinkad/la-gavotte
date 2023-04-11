@@ -11,7 +11,7 @@ export const useInterfaceStore = defineStore('interface', () => {
     
 
     async function loadInterfaces(identifier,type){
-        
+       
         await axiosApi.get('routers/interfaces',
         {
             params:{

@@ -15,9 +15,14 @@ const router = createRouter({
             component: () => import('../views/Interfaces.vue')
         },
         {
-            path: '/bridge',
-            name: 'Bridge',
+            path: '/bridges',
+            name: 'Bridges',
             component: () => import('../views/Bridge/Bridge.vue')
+        },
+        {
+            path: '/ports',
+            name: 'Ports',
+            component: () => import('../views/Bridge/Port.vue')
         },
         {
             path: '/bridge/create',
@@ -25,7 +30,7 @@ const router = createRouter({
             component: () => import('../views/Bridge/BridgeCreate.vue')
         },
         {
-            path: '/bridge/port/create',
+            path: '/port/create',
             name: 'PortCreate',
             component: () => import('../views/Bridge/PortCreate.vue')
         },

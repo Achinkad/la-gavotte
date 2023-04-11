@@ -11,7 +11,7 @@ export const useBridgeStore = defineStore('bridge', () => {
     
 
     async function loadBridges(identifier){
-      
+       
         await axiosApi.get('bridges',
         {
             params:{
@@ -23,6 +23,7 @@ export const useBridgeStore = defineStore('bridge', () => {
         })
        
     }
+
 
     async function loadPorts(identifier){
         
@@ -40,7 +41,6 @@ export const useBridgeStore = defineStore('bridge', () => {
 
     async function createBridges(data){
         
-
         await axiosApi.put('bridges', data).then((response) => {
             
             if(response.data!=false){
@@ -52,8 +52,7 @@ export const useBridgeStore = defineStore('bridge', () => {
                 
                 return "false"
             }
-                 
-            
+                   
         }).catch((error) => {
             console.log("error creating bridges!")
             return "false"
@@ -64,7 +63,7 @@ export const useBridgeStore = defineStore('bridge', () => {
     async function createPorts(data){
         
         await axiosApi.put('bridges/ports', data).then((response) => {
-            console.log(response.data)
+
             if(response.data!=false){
                 ports.value.push(response.data)
 
@@ -125,18 +124,65 @@ export const useBridgeStore = defineStore('bridge', () => {
        
     }
 
+    async function editBridges(data){
+        
+        await axiosApi.patch('bridges', data).then((response) => {
+            
+            if(response.data!=false){
+                bridges.value.push(response.data)
+
+                return "true"
+            }
+            else{
+                
+                return "false"
+            }
+                   
+        }).catch((error) => {
+            console.log("error creating bridges!")
+            return "false"
+        })
+       
+    }
+
+    async function editPorts(data){
+        
+        await axiosApi.patch('bridges/ports/'+data.get('port_identity'),data).then((response) => {
+            
+            return "true"
+                   
+        }).catch((error) => {
+            
+            return "false"
+        })
+       
+    }
+
+
+    async function editBridges(data){
+        
+        await axiosApi.patch('bridges/'+data.get('bridge_identity'),data).then((response) => {
+            
+            return "true"
+                   
+        }).catch((error) => {
+            
+            return "false"
+        })
+       
+    }
+
 
     const getBridges = (() => {
         return bridges.value
     })
 
+
     const getPorts = (() => {
         return ports.value
     })
 
-    const getNotyfValue = (() => {
-        return notyf_value.value
-    })
+
 
     return {
         createBridges,
@@ -145,8 +191,10 @@ export const useBridgeStore = defineStore('bridge', () => {
         loadPorts,
         getBridges,
         getPorts,
-        getNotyfValue,
         deleteBridges,
-        deletePorts
+        deletePorts,
+        editBridges,
+        editPorts
+
        }
 })

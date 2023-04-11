@@ -74,8 +74,8 @@ onBeforeMount(() => {
                     <div class="card card-h-100">
                         <div class="d-flex card-header justify-content-between align-items-center">
                             <div class="px-1">
-                            <router-link :to="{ name: 'Bridge'}"
-                                                    :title="`Bridge`">
+                            <router-link :to="{ name: 'Ports'}"
+                                                    :title="`Ports`">
                                 <button class="btn btn-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
                             </router-link>
                             </div>
