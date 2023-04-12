@@ -11,6 +11,8 @@ class InterfaceController extends Controller
     public function showInterfaces(Request $request)
     {
         $interfaces=[];
+        $helper = new Helper();
+
         if($request->identifier=='all'){
             $routers=Router::all();
 
@@ -18,16 +20,22 @@ class InterfaceController extends Controller
 
                 foreach($routers as $router){
                     if($request->type=='all'){
+
                         $response = Helper::httpClient('GET','interface',$router);
+
+
                     }
                     else{
                         $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
+
                     }
 
-                   foreach(json_decode($response->getBody()->getContents()) as $interface){
-                        $interface->router=$router->ip_address; #talvez seja antes de descodificar
+                    foreach($helper->decodeResponse($response) as $interface){
+                        $interface->router=$router->id; #talvez seja antes de descodificar
                         array_push($interfaces,$interface);
-                   }
+                    }
+
+
 
                 }
 
@@ -35,7 +43,7 @@ class InterfaceController extends Controller
 
         }
         else{
-            $router=Router::where('ip_address',$request->identifier)->first();
+            $router=Router::where('id',$request->identifier)->firstOrFail();
             if($router!=[] && $request->type!=null && $request->identifier!=null){
                 if($request->type=='all'){
                     $response = Helper::httpClient('GET','interface',$router);
@@ -43,8 +51,9 @@ class InterfaceController extends Controller
                 else{
                     $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
                 }
-                foreach(json_decode($response->getBody()->getContents()) as $interface){
-                    $interface->router=$router->ip_address; #talvez seja antes de descodificar
+
+                foreach($helper->decodeResponse($response) as $interface){
+                    $interface->router=$router->id; #talvez seja antes de descodificar
                     array_push($interfaces,$interface);
                }
             }

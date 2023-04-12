@@ -39,7 +39,7 @@ onBeforeMount(() => {
         <div class="col-12">
             <div class="p-title-box mt-4">
                 <div>
-                    <h2 class="p-title">Interfaces</h2>
+                    <h2 class="p-title">Interfaces </h2>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@ onBeforeMount(() => {
                    
                 <select class="custom-select custom-select-lg" v-model="router_interfaces">
                     <option value="all" selected>All</option>
-                    <option :value="router.ip_address" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
+                    <option :value="router.id" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
                 </select>
                 <select class="custom-select custom-select-lg" v-model="type_interfaces">
                     <option value="all" selected>All</option>
@@ -69,7 +69,8 @@ onBeforeMount(() => {
                
                  <table class="table table-responsive align-middle">
                                 <thead class="table-light">
-                                    <tr>
+                                    <tr class="text-center">
+                                        <th>#ID</th>
                                         <th>Router</th>
                                         <th>Name</th>
                                         <th>Type</th>
@@ -77,17 +78,25 @@ onBeforeMount(() => {
                                         <th>L2 MTU</th>
                                         <th>TX</th>
                                         <th>RX</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center">
+                                    <tr v-if="interfaces.length==0">
+                                        <td colspan="9" class="text-center" style="height:55px!important;">There are no interfaces.</td>
+                                    </tr>
                                     <tr v-for="iface in interfaces">
+                                        <th >{{iface['.id'].substring(1)}}</th>
                                         <th>{{iface.router}}</th>
                                         <td>{{iface.name}}</td>
                                         <td>{{iface.type}}</td>
                                         <td>{{iface['actual-mtu']}}</td>
                                         <td>{{iface.l2mtu}}</td>
                                         <td>{{iface['rx-byte']}} kbps</td>
-                                        <td>{{iface['tx-byte']}} kbps</td>   
+                                        <td>{{iface['tx-byte']}} kbps</td>
+
+                                        <td class="text-success" v-if="iface.disabled=='false'">Active</td>
+                                        <td class="text-danger" v-if="iface.disabled=='true'">Disabled</td>
                                 </tr>
                             </tbody>
                 </table>

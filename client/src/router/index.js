@@ -15,9 +15,24 @@ const router = createRouter({
             component: () => import('../views/Interfaces.vue')
         },
         {
-            path: '/bridge',
-            name: 'Bridge',
-            component: () => import('../views/Bridge.vue')
+            path: '/bridges',
+            name: 'Bridges',
+            component: () => import('../views/Bridge/Bridge.vue')
+        },
+        {
+            path: '/ports',
+            name: 'Ports',
+            component: () => import('../views/Bridge/Port.vue')
+        },
+        {
+            path: '/bridge/create',
+            name: 'BridgeCreate',
+            component: () => import('../views/Bridge/BridgeCreate.vue')
+        },
+        {
+            path: '/port/create',
+            name: 'PortCreate',
+            component: () => import('../views/Bridge/PortCreate.vue')
         },
         {
             path: '/ip/addresses',
