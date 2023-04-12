@@ -86,13 +86,29 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :class="{
-                            active: $route.name === 'Wireless'
-                            || $route.name === 'WirelessNetwork'
-                            }" :to="{ name: 'Wireless' }">
-                            <i class="bi bi-wifi" style="position:relative;bottom:1px;"></i>
-                            Wireless
-                        </router-link>
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarWireless" aria-expanded="false" aria-controls="sidebarWireless"
+                        :class="{ active: $route.name === 'Networks' || $route.name === 'SecurityProfiles'}">
+                                <i class="bi bi-wifi" style="position:relative;bottom:1px;"></i> Wireless
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarWireless">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'Networks'
+                                        }" :to="{ name: 'Networks' }">
+                                        Networks
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'SecurityProfiles'
+                                        }" :to="{ name: 'SecurityProfiles' }">
+                                        Security Profiles
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRouting" aria-expanded="false" aria-controls="sidebarRouting">

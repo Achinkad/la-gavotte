@@ -2,16 +2,13 @@ import { inject, ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useRouterStore = defineStore('router', () => {
-    // Axios
-    const axiosApi = inject('axiosApi')
+    const axiosApi = inject('axiosApi') // Axios
 
-    // Array of routers
-    const routers = ref([])
-    
+    const routers = ref([]) // Routers
 
     async function registerRouter(data) {
         await axiosApi.post('routers', data).then((response) => {
-            routers.value.push(response.data.data);
+            routers.value.push(response.data.data)
             return true
         }).catch((error) => {
             return false
@@ -21,18 +18,21 @@ export const useRouterStore = defineStore('router', () => {
     async function loadRouters() {
         await axiosApi.get('routers').then((response) => {
             routers.value = response.data.data
-            
         })
+    }
+
+    function getRouterById(id) {
+        return routers.value.filter(router => router.id == id)
     }
 
     const getRouters = (() => {
         return routers.value
     })
 
-
     return {
         registerRouter,
         getRouters,
-        loadRouters
+        getRouterById,
+        loadRouters,
     }
 })

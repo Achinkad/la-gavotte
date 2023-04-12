@@ -40,15 +40,14 @@ const router = createRouter({
             component: () => import('../views/IP/Firewall.vue')
         },
         {
-            path: '/wireless',
-            name: 'Wireless',
-            component: () => import('../views/Wireless/Wireless.vue')
+            path: '/wireless/networks',
+            name: 'Networks',
+            component: () => import('../views/Wireless/Networks.vue')
         },
         {
-            path: '/wireless/:id',
-            name: 'WirelessNetwork',
-            component: () => import('../views/Wireless/WirelessNetwork.vue'),
-            props: (route) => ({ id: parseInt(route.params.id) }),
+            path: '/wireless/security-profiles',
+            name: 'SecurityProfiles',
+            component: () => import('../views/Wireless/SecurityProfiles.vue')
         },
         {
             path: '/routing/bgp',

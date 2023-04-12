@@ -16,11 +16,16 @@ Route::get('user', [UserController::class, 'showUserLoggedIn'])->middleware('aut
 Route::get('routers/interfaces', [InterfaceController::class, 'showInterfaces']);
 Route::resource('routers', RouterController::class);
 
+/* --- [API Routes] -> Security Profiles --- */
+Route::post('wireless/create/security-profile', [WirelessController::class, 'createSecurityProfile']);
+Route::put('wireless/edit/security-profile/{id}', [WirelessController::class, 'editSecurityProfile']);
+Route::delete('wireless/delete/security-profile/{id}', [WirelessController::class, 'deleteSecurityProfile']);
+Route::get('wireless/security-profiles', [WirelessController::class, 'showSecurityProfiles']);
 
 /* --- [API Routes] -> Wireless --- */
-Route::get('wireless/security-profiles', [WirelessController::class, 'showSecurityProfiles']);
 Route::get('wireless', [WirelessController::class, 'showWirelessNetworks']);
-Route::patch('wireless/{id}', [WirelessController::class, 'toogleDisabledWirelessNetwork']);
+Route::patch('wireless/active/{id}', [WirelessController::class, 'toogleDisabledWirelessNetwork']);
+Route::patch('wireless/{id}', [WirelessController::class, 'editWirelessNetwork']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);
