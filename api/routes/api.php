@@ -8,6 +8,7 @@ use App\Http\Controllers\BridgeController;
 use App\Http\Controllers\RouterController;
 use App\Http\Controllers\WirelessController;
 use App\Http\Controllers\InterfaceController;
+use App\Http\Controllers\IPController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -37,6 +38,13 @@ Route::get('wireless/security-profiles', [WirelessController::class, 'showSecuri
 Route::get('wireless', [WirelessController::class, 'showWirelessNetworks']);
 Route::patch('wireless/active/{id}', [WirelessController::class, 'toogleDisabledWirelessNetwork']);
 Route::patch('wireless/{id}', [WirelessController::class, 'editWirelessNetwork']);
+
+/* --- [API Routes] -> IP Addresses --- */
+Route::get('ip/address', [IPController::class, 'getAddresses']);
+Route::post('ip/address/create', [IPController::class, 'createAddress']);
+Route::delete('ip/address/delete/{id}', [IPController::class, 'deleteAddress']);
+Route::patch('ip/address/edit/{id}', [IPController::class, 'editAddress']);
+Route::patch('ip/address/active/{id}', [IPController::class, 'toogleDisabledAddress']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);

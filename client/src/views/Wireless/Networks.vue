@@ -30,8 +30,13 @@ const toogleDisabled = ((wirelessNetwork) => {
         disabled: wirelessNetwork.disabled
     }
 
-    axiosApi.patch('wireless/active' + wirelessNetwork['.id'], { body }).then((response) => {
-        notyf.success('The wireless network was activated with success.')
+    axiosApi.patch('wireless/active/' + wirelessNetwork['.id'], body).then((response) => {
+        if (body.disabled == "true") {
+            notyf.success('The wireless network was activated with success.')
+        } else {
+            notyf.success('The wireless network was disabled with success.')
+        }
+
         loadWirelessNetworks({ id: body.router })
     }).catch((error) => {
         notyf.error('Oops, an error has occurred.')

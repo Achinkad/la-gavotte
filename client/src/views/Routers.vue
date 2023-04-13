@@ -56,11 +56,11 @@ onBeforeMount(() => {
                             <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>#ID</th>
+                                        <th style="width:10%">#ID</th>
                                         <th>Identity</th>
                                         <th>IP Address</th>
                                         <th>MAC Address</th>
-                                        <th class="text-center" style="width: 20%">Actions</th>
+                                        <th class="text-center" style="width:15%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

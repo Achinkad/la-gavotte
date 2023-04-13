@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Helper\Helper;
-
-use GuzzleHttp\Exception\TransferException;
-
 use App\Models\Router;
 
 class WirelessController extends Controller
@@ -28,9 +25,9 @@ class WirelessController extends Controller
 
     public function toogleDisabledWirelessNetwork(Request $request)
     {
-        $router = Router::where('id', $request->body['router'])->firstOrFail();
+        $router = Router::where('id', $request->router)->firstOrFail();
         $wirelessNetworkId = $request->route('id');
-        $option = $request->input('disabled') ? false : true; // Toggle Disabled
+        $option = $request->disabled == "true" ? "false" : "true"; // Toggle Disabled
         $body = array('disabled' => $option);
         $response = Helper::httpClient('PATCH', 'interface/wireless/' . $wirelessNetworkId, $router, $body);
     }
