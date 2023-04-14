@@ -50,6 +50,11 @@ const router = createRouter({
             component: () => import('../views/IP/DHCP.vue')
         },
         {
+            path: '/ip/dns',
+            name: 'DNS',
+            component: () => import('../views/IP/DNS.vue')
+        },
+        {
             path: '/ip/firewall',
             name: 'Firewall',
             component: () => import('../views/IP/Firewall.vue')
