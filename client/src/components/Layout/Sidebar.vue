@@ -178,7 +178,7 @@ const router = useRouter()
                                 </li>
                             </ul>
                         </div>
-                    
+
 
                     <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRIP" aria-expanded="false" aria-controls="sidebarRouting">
                             RIP
@@ -207,12 +207,29 @@ const router = useRouter()
                         </div>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :class="{
-                            active: $route.name === 'VPN'
-                            }" :to="{ name: 'VPN' }">
-                            <i class="bi bi-incognito" style="position:relative;bottom:1px;"></i>
-                            VPN
-                        </router-link>
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarVPN" aria-expanded="false" aria-controls="sidebarIP"
+                        :class="{ active: $route.name === 'VPNServer' || $route.name === 'VPNClient'}">
+                            <i class="bi bi-incognito" style="position:relative;bottom:1px;"></i> VPN
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarVPN">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'VPNServer'
+                                        }" :to="{ name: 'VPNServer' }">
+                                        Server
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'VPNClient'
+                                        }" :to="{ name: 'VPNClient' }">
+                                        Client
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

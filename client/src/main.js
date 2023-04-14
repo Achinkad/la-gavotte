@@ -43,6 +43,12 @@ app.provide('notyf', new Notyf({
             type: 'error',
             icon: false,
             dismissible: true
+        },
+        {
+            type: 'info',
+            background: '#727cf5',
+            icon: false,
+            dismissible: true
         }
     ]
 }))

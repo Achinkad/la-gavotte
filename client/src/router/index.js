@@ -135,9 +135,14 @@ const router = createRouter({
             component: () => import('../views/Routing/RIP/RIPTemplateCreate.vue')
         },
         {
-            path: '/vpn',
-            name: 'VPN',
-            component: () => import('../views/VPN.vue')
+            path: '/vpn/server',
+            name: 'VPNServer',
+            component: () => import('../views/VPN/Server.vue')
+        },
+        {
+            path: '/vpn/client',
+            name: 'VPNClient',
+            component: () => import('../views/VPN/Client.vue')
         },
         {
             path: '/routers',
