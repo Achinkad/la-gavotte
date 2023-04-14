@@ -71,7 +71,7 @@ const router = useRouter()
                                     <router-link class="nav-link" :class="{
                                         active: $route.name === 'Firewall'
                                         }" :to="{ name: 'Firewall' }">
-                                        Firewall
+                                        Firewall Rules
                                     </router-link>
                                 </li>
                             </ul>
@@ -124,20 +124,61 @@ const router = useRouter()
                                         BGP
                                     </router-link>
                                 </li>
+                                <li class="nav-item">
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarOSPF" aria-expanded="false" aria-controls="sidebarRouting">
+                            OSPF
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarOSPF">
+                            <ul class="side-nav-second-level">
                                 <li>
                                     <router-link class="nav-link" :class="{
-                                        active: $route.name === 'OSPF'
-                                        }" :to="{ name: 'OSPF' }">
-                                        OSPF
+                                        active: $route.name === 'OSPFInstance'
+                                        }" :to="{ name: 'OSPFInstance' }">
+                                        Instance
                                     </router-link>
                                 </li>
                                 <li>
                                     <router-link class="nav-link" :class="{
-                                        active: $route.name === 'RIP'
-                                        }" :to="{ name: 'RIP' }">
-                                        RIP
+                                        active: $route.name === 'OSPFArea'
+                                        }" :to="{ name: 'OSPFArea' }">
+                                        Area
                                     </router-link>
                                 </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'OSPFTemplate'
+                                        }" :to="{ name: 'OSPFTemplate' }">
+                                        Interface-Template
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    
+
+                    <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRIP" aria-expanded="false" aria-controls="sidebarRouting">
+                            RIP
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                    </a>
+                        <div class="collapse" id="sidebarRIP">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'RIPInstance'
+                                        }" :to="{ name: 'RIPInstance' }">
+                                        Instance
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'RIPTemplate'
+                                        }" :to="{ name: 'RIPTemplate' }">
+                                        Interface-Template
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                        </li>
                             </ul>
                         </div>
                     </li>
@@ -322,6 +363,7 @@ svg {
     text-decoration: none;
     color: #8391a2;
 }
+
 
 .side-nav-second-level li a:hover {
     color: #fff;

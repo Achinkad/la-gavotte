@@ -62,7 +62,7 @@ const toggleDisabled = () => {
         
                                <div class="col-6">
                                 <label>Select Interface</label>
-                                    <select class="form-select" :value="port.interface" required>
+                                    <select class="form-select" v-model="port.interface" required>
                                         <option value="all">All</option>
                                         <option value="dynamic">Dynamic</option>
                                         <option value="none">None</option>
@@ -72,7 +72,7 @@ const toggleDisabled = () => {
                                 </div>
                                 <div class="col-6">
                                 <label>Select Bridge</label>
-                                    <select class="form-select" :value="port.bridge" required>
+                                    <select class="form-select" v-model="port.bridge" required>
                                         <option v-for="bridge in bridges" :value="bridge.name">{{ bridge.name }}</option>
                                     </select>
                                 </div>

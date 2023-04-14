@@ -89,7 +89,7 @@ onBeforeMount(() => {
                         <div class="card-body pt-0">
                         <select class="custom-select custom-select-lg" v-model="router_bridges">
                             <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
+                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
                         </select>
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">

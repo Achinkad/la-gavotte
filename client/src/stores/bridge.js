@@ -124,27 +124,6 @@ export const useBridgeStore = defineStore('bridge', () => {
        
     }
 
-    async function editBridges(data){
-        
-        await axiosApi.patch('bridges', data).then((response) => {
-            
-            if(response.data!=false){
-                bridges.value.push(response.data)
-
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
-                   
-        }).catch((error) => {
-            console.log("error creating bridges!")
-            return "false"
-        })
-       
-    }
-
     async function editPorts(data){
         
         await axiosApi.patch('bridges/ports/'+data.get('port_identity'),data).then((response) => {
