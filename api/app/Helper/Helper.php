@@ -6,7 +6,10 @@ use App\Models\Router;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
+
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
 
 
 
@@ -31,26 +34,28 @@ class Helper
             'Content-Type' => 'application/json'
         ];
         
-
         try {
-            
+
             if ($bodyContent) {
                 $response = $client->request($httpRequestMethod, $completeUrl, [
                     'headers' => $headerOptions,
-                    'json' => $bodyContent
+                    'json' => $bodyContent,
+                    'timeout' => 3
                 ]);
-             
-              
             } else {
-                
-                $response = $client->request($httpRequestMethod, $completeUrl, ['headers' => $headerOptions]);
-               
+                $response = $client->request($httpRequestMethod, $completeUrl, [
+                    'headers' => $headerOptions,
+                    'timeout' => 3
+                ]);
             }
-           
+
             return $response;
-        } catch (RequestException $error) {
-           
-           return $error;
+        } catch (ConnectException $e) {
+            throw new \Exception("Request timeout. Please verify the router connection.", 504); // Gateway Timeout
+        } catch (RequestException $e) {
+            throw new \Exception("Request malformed. Please verify your request.", 400); // Bad Request
+        } catch (ServerException $e) {
+            throw new \Exception("Server error.", 500); // Server Error
         }
     }
 
@@ -58,5 +63,19 @@ class Helper
     public static function decodeResponse(Response $response)
     {
         return json_decode($response->getBody()->getContents());
+    }
+
+    // Associate a router to an array of objects -> For the views
+    public static function associateRouterToObject($object, $router)
+    {
+        $arrayObject = [];
+
+        foreach(Helper::decodeResponse($object) as $o) {
+            $o->routerAddress = $router->ip_address;
+            $o->routerId = $router->id;
+            array_push($arrayObject, $o);
+        }
+
+        return $arrayObject;
     }
 }

@@ -2,8 +2,8 @@
 import { RouterView } from 'vue-router'
 import { useConfigStore } from './stores/config.js'
 
-import Navbar from '@/components/layout/Navbar.vue'
-import Sidebar from '@/components/layout/Sidebar.vue'
+import Navbar from '@/components/Layout/Navbar.vue'
+import Sidebar from '@/components/Layout/Sidebar.vue'
 
 const configStore = useConfigStore()
 </script>

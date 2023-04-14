@@ -12,35 +12,35 @@ class InterfaceController extends Controller
     {
         $interfaces=[];
         $helper = new Helper();
-  
+
         if($request->identifier=='all'){
             $routers=Router::all();
-            
+
             if($routers!=[] && $request->type!=null && $request->identifier!=null){
-                
+
                 foreach($routers as $router){
                     if($request->type=='all'){
-                        
+
                         $response = Helper::httpClient('GET','interface',$router);
-                        
-                       
+
+
                     }
                     else{
                         $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
-                        
+
                     }
-                    
+
                     foreach($helper->decodeResponse($response) as $interface){
                         $interface->router=$router->id; #talvez seja antes de descodificar
                         array_push($interfaces,$interface);
                     }
-                    
-                    
+
+
 
                 }
-                
+
             }
-            
+
         }
         else{
             $router=Router::where('id',$request->identifier)->firstOrFail();
@@ -51,9 +51,9 @@ class InterfaceController extends Controller
                 else{
                     $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
                 }
-                
+
                 foreach($helper->decodeResponse($response) as $interface){
-                    $interface->router=$router->id; #talvez seja antes de descodificar   
+                    $interface->router=$router->id; #talvez seja antes de descodificar
                     array_push($interfaces,$interface);
                }
             }
@@ -64,7 +64,7 @@ class InterfaceController extends Controller
             return response()->json($response->getBody(), $response->getStatusCode());
             die();
         }*/
-        
+
         return $interfaces;
     }
 }
