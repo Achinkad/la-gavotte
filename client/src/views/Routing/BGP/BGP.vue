@@ -7,7 +7,6 @@ import { useRouter } from 'vue-router'
 const routingStore = useRoutingStore()
 const routerStore = useRouterStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 const router = useRouter()
 import BgpEdit from "./BGPEdit.vue"
 
@@ -22,15 +21,7 @@ const bgpconnections = computed(() => { return routingStore.getConnectionsBGP() 
 
 const deleteConnectionsBGP = (bgpconnection) => {
     
-
     routingStore.deleteConnectionsBGP(bgpconnection)
-
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
 }
 
 

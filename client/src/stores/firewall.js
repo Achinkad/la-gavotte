@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 export const useFirewallStore = defineStore('firewall', () => {
     // Axios
     const axiosApi = inject('axiosApi')
+    const notyf = inject('notyf') 
 
     // Array of interfaces
     const rules = ref([])
@@ -19,6 +20,8 @@ export const useFirewallStore = defineStore('firewall', () => {
         }).then((response) => {
             rules.value = response.data;
 
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -28,19 +31,12 @@ export const useFirewallStore = defineStore('firewall', () => {
         
         await axiosApi.put('firewalls', data).then((response) => {
 
-            if(response.data!=false){
-                rules.value.push(response.data)
-
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+        rules.value.push(response.data)
+        notyf.success('The firewall rule was added with success.')
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -54,15 +50,14 @@ export const useFirewallStore = defineStore('firewall', () => {
             }
         }).then((response) => {
            
+        notyf.success('The firewall rule was deleted with success.')    
+
         let i = rules.value.findIndex(element => element['.id'] === rule['.id'])
 
-        if (i >= 0) rules.value.splice(i, 1);
-            
-           return "true" 
+        if (i >= 0) rules.value.splice(i, 1)
             
         }).catch((error) => {
-
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -72,11 +67,10 @@ export const useFirewallStore = defineStore('firewall', () => {
         
         await axiosApi.put('firewalls/'+data.get('rule_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The firewall rule was edited with success.')
                    
         }).catch((error) => {
-            
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }

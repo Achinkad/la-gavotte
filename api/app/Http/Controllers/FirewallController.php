@@ -21,9 +21,11 @@ class FirewallController extends Controller
             if($routers!=[] && $request->identifier!=null){
                 
                 foreach($routers as $router){
-                   
-                    $response = Helper::httpClient('GET','ip/firewall/filter',$router);
-
+                    try{
+                        $response = Helper::httpClient('GET','ip/firewall/filter',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
                     foreach($helper->decodeResponse($response) as $rule){
                         $rule->router=$router->id; #talvez seja antes de descodificar
                         array_push($rules,$rule);
@@ -39,9 +41,12 @@ class FirewallController extends Controller
             $router=Router::where('id',$request->identifier)->firstOrFail();
 
             if($router!=[] && $request->identifier!=null){
-                
-                $response = Helper::httpClient('GET','ip/firewall/filter',$router);
-                
+                try{
+                    $response = Helper::httpClient('GET','ip/firewall/filter',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+
                 foreach($helper->decodeResponse($response) as $rule){
                     $rule->router=$router->id; #talvez seja antes de descodificar
                     array_push($rules,$rule);
@@ -49,11 +54,6 @@ class FirewallController extends Controller
             }
         }
 
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $rules;
     }
@@ -91,8 +91,11 @@ class FirewallController extends Controller
             unset($request['dst-port']);
         }
 
-
-        $response = Helper::httpClient('PUT','ip/firewall/filter',$router,$request->all());
+        try{
+            $response = Helper::httpClient('PUT','ip/firewall/filter',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
         return $response;
     }
 
@@ -126,8 +129,11 @@ class FirewallController extends Controller
 
         unset($request['router_identity']);
         unset($request['rule_identity']);
-        
-        Helper::httpClient('PUT','ip/firewall/filter/'.$rule_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','ip/firewall/filter/'.$rule_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function deleteRules(Request $request) 
@@ -135,8 +141,11 @@ class FirewallController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','ip/firewall/filter/'.$request->id,$router);
-      
+        try{
+            Helper::httpClient('DELETE','ip/firewall/filter/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
 }

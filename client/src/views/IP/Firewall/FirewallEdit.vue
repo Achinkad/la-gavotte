@@ -1,18 +1,21 @@
 <script setup>
-import { ref, watch, computed, inject } from "vue";
+import { ref, watch, computed, inject,onBeforeMount } from "vue";
 import { useFirewallStore } from "../../../stores/firewall.js"
 const notyf = inject('notyf')
 
 const firewallStore = useFirewallStore()
+
+const protocolNegation = ref(props.rule.protocol[0]=='!' ? 'true' : 'false')
 
 const props = defineProps({
     rule: {
         type: Object,
         required: true,
     }
+   
 })
 
-const protocolNegation = ref('false')
+
 
 const toggleDisabled = () => {
 
@@ -60,14 +63,20 @@ const editBridge = () => {
     formData.append('router_identity', props.rule.router)
 
    
-    if (firewallStore.editRules(formData)) {
-        notyf.success('A Rule has been edited.') 
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    firewallStore.editRules(formData)
    
-    
 }
+
+watch(() => props.rule, (newRule) => {
+  
+    
+    if(newRule.protocol!=undefined && newRule.protocol[0]=='!'){
+        protocolNegation.value='true'
+    }
+    if(newRule.protocol==undefined || newRule.protocol[0]!='!'){
+        protocolNegation.value='false'
+    }
+})
 
 
 </script>
@@ -132,11 +141,13 @@ const editBridge = () => {
                                 </div>
 
 
-                               <div class="col-12 mt-3">
-                                    
-                                    <label>Select Protocol -> !&nbsp</label>
-                                    <input type="checkbox" class="custom-control-input" @click="editProtocol()" >
+                                <div class="col-2 mt-3">
+                                    <label>Negate Protocol</label>
+                                    <input type="checkbox" class="custom-control-input" @click="editProtocol()" :checked="protocolNegation=='true'">
+                                </div>
 
+                               <div class="col-10 mt-3" v-if="protocolNegation=='false'">
+                            
                                     <select class="form-select" v-model="rule.protocol">
                                         <option value="icmp">icmp</option>
                                         <option value="igmp">igmp</option>
@@ -174,13 +185,53 @@ const editBridge = () => {
                                     </select>
                                     
                                 </div>
+
+                                  <div class="col-10 mt-3" v-if="protocolNegation=='true'">
+                            
+                                    <select class="form-select" v-model="rule.protocol">
+                                        <option value="!icmp">!icmp</option>
+                                        <option value="!igmp">!igmp</option>
+                                        <option value="!ggp">!ggp</option>
+                                        <option value="!ip-encap">!ip-encap</option>
+                                        <option value="!st">!st</option>
+                                        <option value="!tcp">!tcp</option>
+                                        <option value="!egp">!egp</option>
+                                        <option value="!pup">!pup</option>
+                                        <option value="!udp">!udp</option>
+                                        <option value="!hmp">!hmp</option>
+                                        <option value="!xns-idp">!xns-idp</option>
+                                        <option value="!rdp">!rdp</option>
+                                        <option value="!iso-tp4">!iso-tp4</option>
+                                        <option value="!dccp">!dccp</option>
+                                        <option value="!xtp">!xtp</option>
+                                        <option value="!ddp">!ddp</option>
+                                        <option value="!idpr-cmtp">!idpr-cmtp</option>
+                                        <option value="!ipv6-encap">!ipv6-encap</option>
+                                        <option value="!rsvp">!rsvp</option>
+                                        <option value="!gre">!gre</option>
+                                        <option value="!ipsec-esp">!ipsec-esp</option>
+                                        <option value="!ipsec-ah">!ipsec-ah</option>
+                                        <option value="!rspf">!rspf</option>
+                                        <option value="!vmtp">!vmtp</option>
+                                        <option value="!ospf">!ospf</option>
+                                        <option value="!ipip">!ipip</option>
+                                        <option value="!etherip">!etherip</option>
+                                        <option value="!encap">!encap</option>
+                                        <option value="!pim">!pim</option>
+                                        <option value="!vrrp">!vrrp</option>
+                                        <option value="!l2tp">!l2tp</option>
+                                        <option value="!sctp">!sctp</option>
+                                        <option value="!udp-lite">!udp-lite</option>
+                                    </select>
+                                    
+                                </div>
                                 <div class="form-check form-switch col-6">
                                     
                                     <input class="form-check-input" type="checkbox" role="switch" @click="toggleDisabled()" :checked="rule.disabled!=undefined && rule.disabled != 'false'">
                                     <label class="form-check-label" for="flexSwitchCheckDefault"> Disabled</label>
                                     
                                 </div>
- <div class="col-12 mt-4 d-flex justify-content-end">
+                            <div class="col-12 mt-4 d-flex justify-content-end">
                             <div class="px-1">
                                 <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                             </div>

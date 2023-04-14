@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 export const useRoutingStore = defineStore('routing', () => {
     // Axios
     const axiosApi = inject('axiosApi')
+    const notyf = inject('notyf') 
 
     // Array of interfaces
     const bgp_connections = ref([])
@@ -23,7 +24,8 @@ export const useRoutingStore = defineStore('routing', () => {
             }
         }).then((response) => {
             bgp_connections.value = response.data;
-
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -32,20 +34,13 @@ export const useRoutingStore = defineStore('routing', () => {
     async function createConnectionsBGP(data){
         
         await axiosApi.put('routing/bgp', data).then((response) => {
-
-            if(response.data!=false){
-                bgp_connections.value.push(response.data)
-
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+   
+            bgp_connections.value.push(response.data)
+            notyf.success('The BGP connection was created with success.') 
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -63,11 +58,11 @@ export const useRoutingStore = defineStore('routing', () => {
 
         if (i >= 0) bgp_connections.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The BGP connection was deleted with success.') 
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -77,11 +72,11 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/bgp/'+data.get('bgp_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The BGP connection was edited with success.') 
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -100,7 +95,10 @@ export const useRoutingStore = defineStore('routing', () => {
             }
         }).then((response) => {
             ospf_instances.value = response.data;
-
+            
+        }).catch((error) => {
+            
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -110,19 +108,14 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/ospf/instance', data).then((response) => {
 
-            if(response.data!=false){
-                ospf_instances.value.push(response.data)
-
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+           
+            ospf_instances.value.push(response.data)
+            notyf.success('The OSPF Instance was created with success.')
+            
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -140,11 +133,11 @@ export const useRoutingStore = defineStore('routing', () => {
 
         if (i >= 0) ospf_instances.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The OSPF Instance was deleted with success.')   
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -154,11 +147,11 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/ospf/instance/'+data.get('ospf_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The OSPF Instance was edited with success.')
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -181,6 +174,9 @@ export const useRoutingStore = defineStore('routing', () => {
         }).then((response) => {
             ospf_areas.value = response.data;
 
+        }).catch((error) => {
+            
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -190,19 +186,14 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/ospf/area', data).then((response) => {
 
-            if(response.data!=false){
-                ospf_areas.value.push(response.data)
+           
+            ospf_areas.value.push(response.data)
 
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+            notyf.success('The OSPF Area was created with success.')
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -220,11 +211,11 @@ export const useRoutingStore = defineStore('routing', () => {
 
         if (i >= 0) ospf_areas.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The OSPF Area was deleted with success.') 
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -234,11 +225,11 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/ospf/area/'+data.get('ospf_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The OSPF Area was edited with success.') 
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -260,6 +251,9 @@ export const useRoutingStore = defineStore('routing', () => {
         }).then((response) => {
             ospf_templates.value = response.data;
 
+        }).catch((error) => {
+            
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -269,19 +263,14 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/ospf/template', data).then((response) => {
 
-            if(response.data!=false){
-                ospf_templates.value.push(response.data)
+           
+            ospf_templates.value.push(response.data)
 
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+            notyf.success('The OSPF Template was created with success.') 
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -299,11 +288,11 @@ export const useRoutingStore = defineStore('routing', () => {
 
         if (i >= 0) ospf_templates.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The OSPF Template was deleted with success.') 
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -313,11 +302,11 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/ospf/template/'+data.get('ospf_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The OSPF Template was edited with success.') 
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -337,6 +326,9 @@ export const useRoutingStore = defineStore('routing', () => {
         }).then((response) => {
             rip_instances.value = response.data;
 
+        }).catch((error) => {
+            
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -346,19 +338,14 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/rip/instance', data).then((response) => {
 
-            if(response.data!=false){
-                rip_instances.value.push(response.data)
+            
+            rip_instances.value.push(response.data)
 
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+            notyf.success('The RIP Instance was created with success.')
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -376,11 +363,11 @@ export const useRoutingStore = defineStore('routing', () => {
 
         if (i >= 0) rip_instances.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The RIP Instance was deleted with success.')
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -390,11 +377,11 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/rip/instance/'+data.get('rip_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The RIP Instance was edited with success.')
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -414,6 +401,9 @@ export const useRoutingStore = defineStore('routing', () => {
         }).then((response) => {
             rip_templates.value = response.data;
 
+        }).catch((error) => {
+            
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -423,19 +413,14 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/rip/template', data).then((response) => {
 
-            if(response.data!=false){
-                rip_templates.value.push(response.data)
+            rip_templates.value.push(response.data)
 
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+            notyf.success('The RIP Template was created with success.')
+            
                    
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -453,11 +438,11 @@ export const useRoutingStore = defineStore('routing', () => {
 
         if (i >= 0) rip_templates.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The RIP Template was deleted with success.') 
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         
@@ -467,11 +452,11 @@ export const useRoutingStore = defineStore('routing', () => {
         
         await axiosApi.put('routing/rip/template/'+data.get('rip_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The RIP Template was edited with success.')
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
         

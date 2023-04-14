@@ -22,8 +22,12 @@ class RoutingController extends Controller
             if($routers!=[] && $request->identifier!=null){
                 
                 foreach($routers as $router){
-                   
+
+                try{
                     $response = Helper::httpClient('GET','routing/bgp/connection',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
 
                     foreach($helper->decodeResponse($response) as $bgp_connection){
                         $bgp_connection->router=$router->id; #talvez seja antes de descodificar
@@ -40,8 +44,11 @@ class RoutingController extends Controller
             $router=Router::where('id',$request->identifier)->firstOrFail();
 
             if($router!=[] && $request->identifier!=null){
-                
-                $response = Helper::httpClient('GET','routing/bgp/connection',$router);
+                try{
+                    $response = Helper::httpClient('GET','routing/bgp/connection',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
                 
                 foreach($helper->decodeResponse($response) as $bgp_connection){
                     $bgp_connection->router=$router->id; #talvez seja antes de descodificar
@@ -50,11 +57,6 @@ class RoutingController extends Controller
             }
         }
 
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $bgp_connections;
     }
@@ -105,7 +107,12 @@ class RoutingController extends Controller
             unset($request['local.role']);
         }
 
-        $response = Helper::httpClient('PUT','routing/bgp/connection',$router,$request->all());
+        try{
+            $response = Helper::httpClient('PUT','routing/bgp/connection',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
         return $response;
     }
 
@@ -157,8 +164,11 @@ class RoutingController extends Controller
 
         unset($request['router_identity']);
         unset($request['bgp_identity']);
-
-        Helper::httpClient('PUT','routing/bgp/connection/'.$bgp_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','routing/bgp/connection/'.$bgp_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function deleteBGP(Request $request) 
@@ -166,13 +176,15 @@ class RoutingController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','routing/bgp/connection/'.$request->id,$router);
-      
+        try{
+            Helper::httpClient('DELETE','routing/bgp/connection/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
 
     //OSPF//////////////////////////
-
 
     public function showOSPFInstance(Request $request){
        
@@ -185,8 +197,12 @@ class RoutingController extends Controller
             if($routers!=[] && $request->identifier!=null){
                 
                 foreach($routers as $router){
-                   
-                    $response = Helper::httpClient('GET','routing/ospf/instance',$router);
+
+                   try{
+                        $response = Helper::httpClient('GET','routing/ospf/instance',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $ospf_instance){
                         $ospf_instance->router=$router->id; #talvez seja antes de descodificar
@@ -204,20 +220,18 @@ class RoutingController extends Controller
 
             if($router!=[] && $request->identifier!=null){
                 
-                $response = Helper::httpClient('GET','routing/ospf/instance',$router);
-                
+                try{
+                    $response = Helper::httpClient('GET','routing/ospf/instance',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+
                 foreach($helper->decodeResponse($response) as $ospf_instance){
                     $ospf_instance->router=$router->id; #talvez seja antes de descodificar
                     array_push($ospf_instances,$ospf_instance);
                 }
             }
         }
-
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $ospf_instances;
     }
@@ -240,8 +254,12 @@ class RoutingController extends Controller
             unset($request['redistribute']);
         }
 
+        try{
+            $response = Helper::httpClient('PUT','routing/ospf/instance',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
 
-        $response = Helper::httpClient('PUT','routing/ospf/instance',$router,$request->all());
         return $response;
     }
 
@@ -263,7 +281,11 @@ class RoutingController extends Controller
         unset($request['router_identity']);
         unset($request['ospf_identity']);
         
-        Helper::httpClient('PUT','routing/ospf/instance/'.$ospf_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','routing/ospf/instance/'.$ospf_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function deleteOSPFInstance(Request $request) 
@@ -271,8 +293,11 @@ class RoutingController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','routing/ospf/instance/'.$request->id,$router);
-      
+        try{
+            Helper::httpClient('DELETE','routing/ospf/instance/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function showOSPFArea(Request $request){
@@ -287,7 +312,11 @@ class RoutingController extends Controller
                 
                 foreach($routers as $router){
                    
-                    $response = Helper::httpClient('GET','routing/ospf/area',$router);
+                    try{
+                        $response = Helper::httpClient('GET','routing/ospf/area',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $ospf_area){
                         $ospf_area->router=$router->id; #talvez seja antes de descodificar
@@ -305,7 +334,11 @@ class RoutingController extends Controller
 
             if($router!=[] && $request->identifier!=null){
                 
-                $response = Helper::httpClient('GET','routing/ospf/area',$router);
+                try{
+                    $response = Helper::httpClient('GET','routing/ospf/area',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
                 
                 foreach($helper->decodeResponse($response) as $ospf_area){
                     $ospf_area->router=$router->id; #talvez seja antes de descodificar
@@ -314,11 +347,6 @@ class RoutingController extends Controller
             }
         }
 
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $ospf_areas;
     }
@@ -336,8 +364,12 @@ class RoutingController extends Controller
         unset($request['area_id']);
         unset($request['identity']);
 
+        try{
+            $response = Helper::httpClient('PUT','routing/ospf/area',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
 
-        $response = Helper::httpClient('PUT','routing/ospf/area',$router,$request->all());
         return $response;
     }
 
@@ -355,7 +387,11 @@ class RoutingController extends Controller
         unset($request['router_identity']);
         unset($request['ospf_identity']);
         
-        Helper::httpClient('PUT','routing/ospf/area/'.$ospf_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','routing/ospf/area/'.$ospf_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function deleteOSPFArea(Request $request) 
@@ -363,7 +399,11 @@ class RoutingController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','routing/ospf/area/'.$request->id,$router);
+        try{
+            Helper::httpClient('DELETE','routing/ospf/area/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
       
     }
 
@@ -380,7 +420,11 @@ class RoutingController extends Controller
                 
                 foreach($routers as $router){
                    
-                    $response = Helper::httpClient('GET','routing/ospf/interface-template',$router);
+                    try{
+                        $response = Helper::httpClient('GET','routing/ospf/interface-template',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $ospf_template){
                         $ospf_template->router=$router->id; #talvez seja antes de descodificar
@@ -398,7 +442,11 @@ class RoutingController extends Controller
 
             if($router!=[] && $request->identifier!=null){
                 
-                $response = Helper::httpClient('GET','routing/ospf/interface-template',$router);
+                try{
+                    $response = Helper::httpClient('GET','routing/ospf/interface-template',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
                 
                 foreach($helper->decodeResponse($response) as $ospf_template){
                     $ospf_template->router=$router->id; #talvez seja antes de descodificar
@@ -407,11 +455,6 @@ class RoutingController extends Controller
             }
         }
 
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $ospf_templates;
     }
@@ -427,8 +470,12 @@ class RoutingController extends Controller
         
         unset($request['identity']);
 
+        try{
+            $response = Helper::httpClient('PUT','routing/ospf/interface-template',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
 
-        $response = Helper::httpClient('PUT','routing/ospf/interface-template',$router,$request->all());
         return $response;
     }
 
@@ -442,7 +489,11 @@ class RoutingController extends Controller
         unset($request['router_identity']);
         unset($request['ospf_identity']);
         
-        Helper::httpClient('PUT','routing/ospf/interface-template/'.$ospf_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','routing/ospf/interface-template/'.$ospf_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function deleteOSPFTemplate(Request $request) 
@@ -450,8 +501,12 @@ class RoutingController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','routing/ospf/interface-template/'.$request->id,$router);
-      
+        try{
+            Helper::httpClient('DELETE','routing/ospf/interface-template/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
     }
 
     public function showRIPInstance(Request $request){
@@ -466,7 +521,11 @@ class RoutingController extends Controller
                 
                 foreach($routers as $router){
                    
-                    $response = Helper::httpClient('GET','routing/rip/instance',$router);
+                    try{
+                        $response = Helper::httpClient('GET','routing/rip/instance',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $rip_instance){
                         $rip_instance->router=$router->id; #talvez seja antes de descodificar
@@ -484,8 +543,12 @@ class RoutingController extends Controller
 
             if($router!=[] && $request->identifier!=null){
                 
-                $response = Helper::httpClient('GET','routing/rip/instance',$router);
-                
+                try{
+                    $response = Helper::httpClient('GET','routing/rip/instance',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+
                 foreach($helper->decodeResponse($response) as $rip_instance){
                     $rip_instance->router=$router->id; #talvez seja antes de descodificar
                     array_push($rip_instances,$rip_instance);
@@ -493,11 +556,6 @@ class RoutingController extends Controller
             }
         }
 
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $rip_instances;
     }
@@ -513,8 +571,12 @@ class RoutingController extends Controller
         
         unset($request['identity']);
 
+        try{
+            $response = Helper::httpClient('PUT','routing/rip/instance',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
 
-        $response = Helper::httpClient('PUT','routing/rip/instance',$router,$request->all());
         return $response;
     }
 
@@ -528,7 +590,11 @@ class RoutingController extends Controller
         unset($request['router_identity']);
         unset($request['rip_identity']);
         
-        Helper::httpClient('PUT','routing/rip/instance/'.$rip_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','routing/rip/instance/'.$rip_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
 
@@ -537,7 +603,11 @@ class RoutingController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','routing/rip/instance/'.$request->id,$router);
+        try{
+            Helper::httpClient('DELETE','routing/rip/instance/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
       
     }
 
@@ -553,7 +623,11 @@ class RoutingController extends Controller
                 
                 foreach($routers as $router){
                    
-                    $response = Helper::httpClient('GET','routing/rip/interface-template',$router);
+                    try{
+                        $response = Helper::httpClient('GET','routing/rip/interface-template',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $rip_template){
                         $rip_template->router=$router->id; #talvez seja antes de descodificar
@@ -571,20 +645,18 @@ class RoutingController extends Controller
 
             if($router!=[] && $request->identifier!=null){
                 
-                $response = Helper::httpClient('GET','routing/rip/interface-template',$router);
-                
+                try{
+                    $response = Helper::httpClient('GET','routing/rip/interface-template',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+
                 foreach($helper->decodeResponse($response) as $rip_template){
                     $rip_template->router=$router->id; #talvez seja antes de descodificar
                     array_push($rip_templates,$rip_template);
                 }
             }
         }
-
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $rip_templates;
     }
@@ -600,8 +672,12 @@ class RoutingController extends Controller
         
         unset($request['identity']);
 
+        try{
+            $response = Helper::httpClient('PUT','routing/rip/interface-template',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
 
-        $response = Helper::httpClient('PUT','routing/rip/interface-template',$router,$request->all());
         return $response;
     }
 
@@ -615,7 +691,11 @@ class RoutingController extends Controller
         unset($request['router_identity']);
         unset($request['rip_identity']);
         
-        Helper::httpClient('PUT','routing/rip/interface-template/'.$rip_id,$router,$request->all());
+        try{
+            Helper::httpClient('PUT','routing/rip/interface-template/'.$rip_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
 
@@ -624,7 +704,11 @@ class RoutingController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','routing/rip/interface-template/'.$request->id,$router);
+        try{
+            Helper::httpClient('DELETE','routing/rip/interface-template/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
       
     }
 }

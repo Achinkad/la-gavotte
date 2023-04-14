@@ -8,7 +8,6 @@ import FirewallEdit from "./FirewallEdit.vue"
 const firewallStore = useFirewallStore()
 const routerStore = useRouterStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 const router = useRouter()
 
 var router_rules = ref("all")
@@ -20,20 +19,16 @@ const loadRules = (() => { firewallStore.loadRules(router_rules) })
 const rules = computed(() => { return firewallStore.getRules() })
 
 
+
 const deleteRule = (rule) => {
     
-
     firewallStore.deleteRules(rule)
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
+    
 }
 
 
 const showRule = (rule) => {
+   
 
     selected_rule.value = rule
     

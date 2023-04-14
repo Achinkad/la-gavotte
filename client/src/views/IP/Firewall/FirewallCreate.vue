@@ -7,7 +7,6 @@ import { useRouterStore } from "../../../stores/router.js"
 const firewallStore = useFirewallStore()
 const routerStore = useRouterStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -53,12 +52,8 @@ const createRule = () => {
     
     formData.append('identity', routerIdentification.value)
 
-   
-    if (firewallStore.createRules(formData)) {
-        notyf.success('A new Rule has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    firewallStore.createRules(formData)
+
 }
 
 const editProtocol = () => {

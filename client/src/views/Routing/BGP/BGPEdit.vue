@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, computed, inject } from "vue";
 import { useRoutingStore } from "../../../stores/routing.js"
-const notyf = inject('notyf')
 
 const routingStore = useRoutingStore()
 
@@ -18,7 +17,6 @@ const toggleDisabled = () => {
     props.bgpconnection.disabled = props.bgpconnection.disabled=='true' ? 'false' : 'true';
 
 }
-
 
 
 const editConnectionBGP = () => { 
@@ -69,13 +67,8 @@ const editConnectionBGP = () => {
     formData.append('router_identity', props.bgpconnection.router)
 
    
-    if (routingStore.editConnectionsBGP(formData)) {
-        notyf.success('A bgpconnection has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-   
-    
+    routingStore.editConnectionsBGP(formData)
+       
 }
 
 

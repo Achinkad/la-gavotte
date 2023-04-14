@@ -21,12 +21,19 @@ class InterfaceController extends Controller
                 foreach($routers as $router){
                     if($request->type=='all'){
 
-                        $response = Helper::httpClient('GET','interface',$router);
-
+                        try {
+                            $response = Helper::httpClient('GET','interface',$router);
+                        } catch (\Exception $e) {
+                            return response()->json($e->getMessage(), $e->getCode());
+                        }
 
                     }
                     else{
-                        $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
+                        try {
+                            $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
+                        } catch (\Exception $e) {
+                            return response()->json($e->getMessage(), $e->getCode());
+                        }
 
                     }
 
@@ -46,10 +53,19 @@ class InterfaceController extends Controller
             $router=Router::where('id',$request->identifier)->firstOrFail();
             if($router!=[] && $request->type!=null && $request->identifier!=null){
                 if($request->type=='all'){
-                    $response = Helper::httpClient('GET','interface',$router);
+                    try{
+                        $response = Helper::httpClient('GET','interface',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
+                    
                 }
                 else{
-                    $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
+                    try{
+                        $response = Helper::httpClient('GET','interface?type='.$request->type,$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
                 }
 
                 foreach($helper->decodeResponse($response) as $interface){
@@ -59,11 +75,6 @@ class InterfaceController extends Controller
             }
         }
 
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $interfaces;
     }

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed, inject } from "vue";
 import { useBridgeStore } from "../../stores/bridge.js"
-const notyf = inject('notyf')
+
 const bridgeStore = useBridgeStore()
 
 const props = defineProps({
@@ -22,7 +22,6 @@ const editBridge = () => {
     
     let formData = new FormData()
 
-    console.log(props.bridge)
     formData.append('name', props.bridge.name)
     formData.append('mtu', props.bridge.mtu)
     formData.append('protocol', props.bridge['protocol-mode'])
@@ -30,13 +29,7 @@ const editBridge = () => {
     formData.append('router_identity', props.bridge.router)
     formData.append('bridge_identity', props.bridge['.id'])
 
-    //console.log(formData)
-    /*
-    if (bridgeStore.editBridges(formData)) {
-        notyf.success('The bridge has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
+    bridgeStore.editBridges(formData)
     
 }
 

@@ -15,17 +15,23 @@ class BridgeController extends Controller
 
         $router=Router::where('id',$request->identity)->firstOrFail();
 
-        Helper::httpClient('DELETE','interface/bridge/'.$request->id,$router);
-      
+        try{
+            Helper::httpClient('DELETE','interface/bridge/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
     }
 
     public function deleteBridgePorts(Request $request) 
     {
 
         $router=Router::where('id',$request->identity)->firstOrFail();
-
-        Helper::httpClient('DELETE','interface/bridge/port/'.$request->id,$router);
-      
+        try{
+            Helper::httpClient('DELETE','interface/bridge/port/'.$request->id,$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function editBridges(Request $request) 
@@ -38,8 +44,12 @@ class BridgeController extends Controller
         unset($request['protocol']);
         unset($request['router_identity']);
         unset($request['bridge_identity']);
-        
-        Helper::httpClient('PATCH','interface/bridge/'.$bridge_id,$router,$request->all());
+
+        try{
+            Helper::httpClient('PATCH','interface/bridge/'.$bridge_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function editBridgePorts(Request $request) 
@@ -52,8 +62,11 @@ class BridgeController extends Controller
         unset($request['router_identity']);
         unset($request['port_identity']);
 
-        Helper::httpClient('PATCH','interface/bridge/port/'.$port_id,$router,$request->all());
-      
+        try{
+            Helper::httpClient('PATCH','interface/bridge/port/'.$port_id,$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
     }
 
     public function showBridges(Request $request){
@@ -68,7 +81,11 @@ class BridgeController extends Controller
                 
                 foreach($routers as $router){
                    
-                    $response = Helper::httpClient('GET','interface/bridge',$router);
+                    try{
+                        $response = Helper::httpClient('GET','interface/bridge',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $bridge){
                         $bridge->router=$router->id; #talvez seja antes de descodificar
@@ -86,20 +103,18 @@ class BridgeController extends Controller
 
             if($router!=[] && $request->identifier_bridges!=null){
                 
-                $response = Helper::httpClient('GET','interface/bridge',$router);
-                
+                try{
+                    $response = Helper::httpClient('GET','interface/bridge',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+
                 foreach($helper->decodeResponse($response) as $bridge){
                     $bridge->router=$router->id; #talvez seja antes de descodificar
                     array_push($bridges,$bridge);
                 }
             }
         }
-
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $bridges;
     }
@@ -117,7 +132,11 @@ class BridgeController extends Controller
                 
                 foreach($routers as $router){
                    
-                    $response = Helper::httpClient('GET','interface/bridge/port',$router);
+                    try{
+                        $response = Helper::httpClient('GET','interface/bridge/port',$router);
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
 
                     foreach($helper->decodeResponse($response) as $port){
                         $port->router=$router->id; #talvez seja antes de descodificar
@@ -134,20 +153,18 @@ class BridgeController extends Controller
 
             if($router!=[] && $request->identifier_ports!=null){
                 
-                $response = Helper::httpClient('GET','interface/bridge/port',$router);
-                
+                try{
+                    $response = Helper::httpClient('GET','interface/bridge/port',$router);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+
                 foreach($helper->decodeResponse($response) as $port){
                     $port->router=$router->id; #talvez seja antes de descodificar
                     array_push($ports,$port);
                 }
             }
         }
-
-        #VER SE ISTO SE APLICA
-        /*if ($interfaces->getStatusCode() != 200) {
-            return response()->json($response->getBody(), $response->getStatusCode());
-            die();
-        }*/
 
         return $ports;
     }
@@ -166,8 +183,12 @@ class BridgeController extends Controller
             unset($request['name']);
         }
        
-        $response = Helper::httpClient('PUT','interface/bridge',$router,$request->all());
-        
+        try{
+            $response = Helper::httpClient('PUT','interface/bridge',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
         return $response;
     }
 
@@ -187,8 +208,12 @@ class BridgeController extends Controller
             unset($request['bridge']);
         }
        
-        $response = Helper::httpClient('PUT','interface/bridge/port',$router,$request->all());
-
+        try{
+            $response = Helper::httpClient('PUT','interface/bridge/port',$router,$request->all());
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+        
         return $response;
 
     }

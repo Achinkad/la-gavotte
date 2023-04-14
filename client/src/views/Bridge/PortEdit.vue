@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed, inject } from "vue";
 import { useBridgeStore } from "../../stores/bridge.js"
-const notyf = inject('notyf')
+
 const bridgeStore = useBridgeStore()
 
 const props = defineProps({
@@ -34,12 +34,7 @@ const editBridge = () => {
     formData.append('router_identity', port.router)
     formData.append('port_identity', port['.id'])
 
-    if (bridgeStore.editPorts(formData)) {
-        notyf.success('The port has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-    
+    bridgeStore.editPorts(formData)
     
 }
 

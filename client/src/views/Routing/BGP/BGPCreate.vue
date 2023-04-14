@@ -7,7 +7,6 @@ import { useRouterStore } from "../../../stores/router.js"
 const routingStore = useRoutingStore()
 const routerStore = useRouterStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -61,11 +60,8 @@ const createConnectionBGP = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (routingStore.createConnectionsBGP(formData)) {
-        notyf.success('A new BGP Connection has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    routingStore.createConnectionsBGP(formData)
+    
     
 }
 
