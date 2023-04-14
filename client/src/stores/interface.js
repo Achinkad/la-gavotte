@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 export const useInterfaceStore = defineStore('interface', () => {
     // Axios
     const axiosApi = inject('axiosApi')
+    const notyf = inject('notyf') 
 
     // Array of interfaces
     const interfaces = ref([])
@@ -20,8 +21,8 @@ export const useInterfaceStore = defineStore('interface', () => {
             }
         }).then((response) => {
             interfaces.value = response.data;
-            
-
+        }).catch(error => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }

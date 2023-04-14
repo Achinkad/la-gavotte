@@ -4,7 +4,8 @@ import { defineStore } from 'pinia'
 export const useBridgeStore = defineStore('bridge', () => {
     // Axios
     const axiosApi = inject('axiosApi')
-
+    const notyf = inject('notyf') 
+    
     // Array of interfaces
     const bridges = ref([])
     const ports= ref([])
@@ -19,7 +20,9 @@ export const useBridgeStore = defineStore('bridge', () => {
             }
         }).then((response) => {
             bridges.value = response.data;
-           
+            notyf.success('The bridge was created with success.')
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -34,7 +37,9 @@ export const useBridgeStore = defineStore('bridge', () => {
             }
         }).then((response) => {
             ports.value = response.data;
-
+            notyf.success('The port was created with success.')
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -43,19 +48,12 @@ export const useBridgeStore = defineStore('bridge', () => {
         
         await axiosApi.put('bridges', data).then((response) => {
             
-            if(response.data!=false){
-                bridges.value.push(response.data)
-
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
+            notyf.success('The bridge was created with success.')
+            bridges.value.push(response.data)
                    
         }).catch((error) => {
-            console.log("error creating bridges!")
-            return "false"
+            
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -64,20 +62,12 @@ export const useBridgeStore = defineStore('bridge', () => {
         
         await axiosApi.put('bridges/ports', data).then((response) => {
 
-            if(response.data!=false){
-                ports.value.push(response.data)
+            notyf.success('The port was created with success.')
+            ports.value.push(response.data)
 
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
-                 
             
         }).catch((error) => {
-            console.log("error creating ports!")
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -95,11 +85,11 @@ export const useBridgeStore = defineStore('bridge', () => {
 
         if (i >= 0) bridges.value.splice(i, 1);
             
-           return "true" 
+        notyf.success('The bridge was deleted with success.')
             
         }).catch((error) => {
 
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -115,32 +105,12 @@ export const useBridgeStore = defineStore('bridge', () => {
             let i = ports.value.findIndex(element => element['.id'] === port['.id'])
 
             if (i >= 0) ports.value.splice(i, 1);
-           return "true" 
+
+            notyf.success('The port was deleted with success.') 
             
         }).catch((error) => {
 
-            return "false"
-        })
-       
-    }
-
-    async function editBridges(data){
-        
-        await axiosApi.patch('bridges', data).then((response) => {
-            
-            if(response.data!=false){
-                bridges.value.push(response.data)
-
-                return "true"
-            }
-            else{
-                
-                return "false"
-            }
-                   
-        }).catch((error) => {
-            console.log("error creating bridges!")
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -149,11 +119,11 @@ export const useBridgeStore = defineStore('bridge', () => {
         
         await axiosApi.patch('bridges/ports/'+data.get('port_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The port was edited with success.') 
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -163,11 +133,11 @@ export const useBridgeStore = defineStore('bridge', () => {
         
         await axiosApi.patch('bridges/'+data.get('bridge_identity'),data).then((response) => {
             
-            return "true"
+            notyf.success('The bridge was edited with success.') 
                    
         }).catch((error) => {
             
-            return "false"
+            notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }

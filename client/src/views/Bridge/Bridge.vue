@@ -10,7 +10,6 @@ import BridgeEdit from "./BridgeEdit.vue"
 const bridgeStore = useBridgeStore()
 const routerStore = useRouterStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 const router = useRouter()
 
 
@@ -27,27 +26,14 @@ const deleteBridge = (bridge) => {
     
 
     bridgeStore.deleteBridges(bridge)
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
+   
 }
 
 
 const showBridge = (bridge) => {
 
     selected_bridge.value = bridge
-    console.log(selected_bridge.value)
 
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
-    
 }
 
 watch(router_bridges, () => {
@@ -89,7 +75,7 @@ onBeforeMount(() => {
                         <div class="card-body pt-0">
                         <select class="custom-select custom-select-lg" v-model="router_bridges">
                             <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
+                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
                         </select>
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">

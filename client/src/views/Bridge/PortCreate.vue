@@ -9,7 +9,6 @@ const routerStore = useRouterStore()
 const bridgeStore = useBridgeStore()
 const interfaceStore = useInterfaceStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -45,11 +44,8 @@ const createPort = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (bridgeStore.createPorts(formData)) {
-        notyf.success('A new Port has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    bridgeStore.createPorts(formData)
+     
 }
 
 onBeforeMount(() => {

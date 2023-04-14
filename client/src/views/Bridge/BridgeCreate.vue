@@ -7,7 +7,6 @@ import { useRouterStore } from "../../stores/router.js"
 const routerStore = useRouterStore()
 const bridgeStore = useBridgeStore()
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 
 
 
@@ -31,11 +30,8 @@ const createBridge = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    bridgeStore.createBridges(formData)
+  
 }
 
 onBeforeMount(() => {

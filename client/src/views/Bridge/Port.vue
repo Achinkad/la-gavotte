@@ -13,7 +13,6 @@ const routerStore = useRouterStore()
 const interfaceStore = useInterfaceStore()
 
 const axiosApi = inject('axiosApi')
-const notyf = inject('notyf')
 const router = useRouter()
 
 var router_ports = ref("all")
@@ -33,13 +32,6 @@ const type_all = ref("all")
 
 const deletePort = (port) => {
     bridgeStore.deletePorts(port)
-
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
   
 }
 
@@ -49,13 +41,6 @@ const showPort = (port) => {
 
     loadInterfaces(ref(selected_port.value.router))
     loadBridges(ref(selected_port.value.router))
-
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
     
 }
 
@@ -102,7 +87,7 @@ onBeforeMount(() => {
                 <div class="card-body pt-0">
                 <select class="custom-select custom-select-lg" v-model="router_ports">
                     <option value="all" selected>All</option>
-                    <option :value="router.id" v-for="router in routers">{{router.identity}}/{{router.ip_address}}</option>
+                    <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
                 </select>
                     <table class="table table-responsive align-middle">
                                 <thead class="table-light">
