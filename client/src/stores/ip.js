@@ -11,6 +11,7 @@ export const useIPStore = defineStore('ip', () => {
     const addresses = ref([]) // IP Addresses
     const routes = ref([]) // Routes
     const dhcpServers = ref([]) // DHCP Servers
+    const dnsServers = ref([]) // DNS Servers
 
     // --- IP Addresses --- //
     async function loadAddresses(body) {
@@ -141,6 +142,25 @@ export const useIPStore = defineStore('ip', () => {
 
     const getDHCP = (() => { return dhcpServers.value })
 
+    // --- DNS --- //
+    async function loadDNS(body) {
+        await axiosApi.get('ip/dns', { params: body }).then(response => {
+            dnsServers.value = response.data
+        }).catch(error => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function editDNS(body) {
+        await axiosApi.patch('ip/dns/edit/', body).then(response => {
+            notyf.success('The DNS server was edited with success.')
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    const getDNS = (() => { return dnsServers.value })
+
     return {
         getAddresses,
         loadAddresses,
@@ -156,6 +176,9 @@ export const useIPStore = defineStore('ip', () => {
         getDHCP,
         deleteDHCP,
         createDHCP,
-        editDHCP
+        editDHCP,
+        loadDNS,
+        getDNS,
+        editDNS
     }
 })

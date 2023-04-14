@@ -11,9 +11,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ConnectException;
 
-
-
-
 class Helper
 {
     // Decodes a given base64 enconded string
@@ -33,9 +30,8 @@ class Helper
             'Authorization' => 'Basic ' . $router->authorization,
             'Content-Type' => 'application/json'
         ];
-        
-        try {
 
+        try {
             if ($bodyContent) {
                 $response = $client->request($httpRequestMethod, $completeUrl, [
                     'headers' => $headerOptions,

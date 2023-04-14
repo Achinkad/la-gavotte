@@ -72,7 +72,7 @@ const router = useRouter()
                                     <router-link class="nav-link" :class="{
                                         active: $route.name === 'DNS'
                                         }" :to="{ name: 'DNS' }">
-                                        DNS Servers
+                                        DNS Server
                                     </router-link>
                                 </li>
                                 <li>

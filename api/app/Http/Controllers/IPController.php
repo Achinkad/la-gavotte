@@ -149,14 +149,14 @@ class IPController extends Controller
         $router = Router::where('id', $request->id)->firstOrFail();
 
         try {
-            $routes = Helper::httpClient('GET', 'ip/dhcp-server', $router);
+            $dhcpServers = Helper::httpClient('GET', 'ip/dhcp-server', $router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
 
-        $routes = Helper::associateRouterToObject($routes, $router);
+        $dhcpServers = Helper::associateRouterToObject($dhcpServers, $router);
 
-        return $routes;
+        return $dhcpServers;
     }
 
     public function createDHCP(Request $request)
@@ -201,10 +201,10 @@ class IPController extends Controller
     public function deleteDHCP(Request $request)
     {
         $router = Router::where('id', $request->routerID)->firstOrFail();
-        $routeID = $request->route('id');
+        $dhcpID = $request->route('id');
 
         try {
-            $response = Helper::httpClient('DELETE', 'ip/dhcp-server/' . $routeID, $router);
+            $response = Helper::httpClient('DELETE', 'ip/dhcp-server/' . $dhcpID, $router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
@@ -217,5 +217,49 @@ class IPController extends Controller
         $option = $request->disabled == "true" ? "false" : "true"; // Toggle Disabled
         $body = array('disabled' => $option);
         $response = Helper::httpClient('PATCH', 'ip/dhcp-server/' . $dhcpServerID, $router, $body);
+    }
+
+    public function getDNS(Request $request)
+    {
+        $router = Router::where('id', $request->id)->firstOrFail();
+
+        try {
+            $dnsServers = Helper::httpClient('GET', 'ip/dns', $router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        $dnsServers = json_decode($dnsServers->getBody()->getContents());
+        $dnsServers->routerAddress = $router->ip_address;
+        $dnsServers->routerId = $router->id;
+
+        return $dnsServers;
+    }
+
+    public function editDNS(Request $request)
+    {
+        $router = Router::where('id', $request->router)->firstOrFail();
+
+        // Change the values for the RouterOS API
+        $request['max-udp-packet-size'] = $request['udpPacket'];
+        $request['max-concurrent-tcp-sessions'] = $request['tcpSession'];
+        $request['max-concurrent-queries'] = $request['queries'];
+
+        // Body Builder
+        $body = $request->except('router', 'udpPacket', 'tcpSession', 'queries');
+
+        try {
+            $response = Helper::httpClient('POST', 'ip/dns/set', $router, $body);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function toogleDisabledDNS(Request $request)
+    {
+        $router = Router::where('id', $request->router)->firstOrFail();
+        $option = $request->disabled == "true" ? "false" : "true"; // Toggle Disabled
+        $body = array('allow-remote-requests' => $option);
+        $response = Helper::httpClient('POST', 'ip/dns/set', $router, $body);
     }
 }

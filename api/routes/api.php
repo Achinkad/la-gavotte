@@ -60,6 +60,11 @@ Route::patch('ip/dhcp-server/edit/{id}', [IPController::class, 'editDHCP']);
 Route::patch('ip/dhcp-server/active/{id}', [IPController::class, 'toogleDisabledDHCP']);
 Route::delete('ip/dhcp-server/delete/{id}', [IPController::class, 'deleteDHCP']);
 
+/* --- [API Routes] -> IP (DNS) --- */
+Route::get('ip/dns', [IPController::class, 'getDNS']);
+Route::patch('ip/dns/edit', [IPController::class, 'editDNS']);
+Route::patch('ip/dns/active', [IPController::class, 'toogleDisabledDNS']);
+
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
