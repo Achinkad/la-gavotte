@@ -9,6 +9,8 @@ export const useIPStore = defineStore('ip', () => {
     const notyf = inject('notyf') // Notyf
 
     const addresses = ref([]) // IP Addresses
+    const routes = ref([]) // Routes
+    const dhcpServers = ref([]) // DHCP Servers
 
     // --- IP Addresses --- //
     async function loadAddresses(body) {
@@ -53,11 +55,107 @@ export const useIPStore = defineStore('ip', () => {
 
     const getAddresses = (() => { return addresses.value })
 
+    // --- Routes --- //
+    async function loadRoutes(body) {
+        await axiosApi.get('ip/routes', { params: body }).then(response => {
+            routes.value = response.data
+        }).catch(error => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function createRoute(body) {
+        await axiosApi.post('ip/route/create', body).then(response => {
+            notyf.success('The route was added with success.')
+            routes.value.push(response.data)
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function editRoute(body) {
+        await axiosApi.patch('ip/route/edit/' + body.get('id'), body).then(response => {
+            notyf.success('The route was edited with success.')
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function deleteRoute(route, router) {
+        let data = { routerID: router }
+
+        await axiosApi.delete('ip/route/delete/' + route['.id'], { params: data }).then(response => {
+            notyf.success('The route was deleted with success.')
+
+            // Remove from the array of addresses
+            let index = routes.value.indexOf(route)
+            if (index > -1) routes.value.splice(index, 1)
+
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    const getRoutes = (() => { return routes.value })
+
+    // --- DHCP --- //
+    async function loadDHCP(body) {
+        await axiosApi.get('ip/dhcp-server', { params: body }).then(response => {
+            dhcpServers.value = response.data
+        }).catch(error => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function createDHCP(body) {
+        await axiosApi.post('ip/dhcp-server/create', body).then(response => {
+            notyf.success('The DHCP server was added with success.')
+            dhcpServers.value.push(response.data)
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function editDHCP(body) {
+        await axiosApi.patch('ip/dhcp-server/edit/' + body.get('id'), body).then(response => {
+            notyf.success('The DHCP server was edited with success.')
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function deleteDHCP(dhcpServer, router) {
+        let data = { routerID: router }
+
+        await axiosApi.delete('ip/dhcp-server/delete/' + dhcpServer['.id'], { params: data }).then(response => {
+            notyf.success('The DHCP server was deleted with success.')
+
+            // Remove from the array of addresses
+            let index = dhcpServers.value.indexOf(dhcpServer)
+            if (index > -1) dhcpServers.value.splice(index, 1)
+
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    const getDHCP = (() => { return dhcpServers.value })
+
     return {
         getAddresses,
         loadAddresses,
         createAddress,
         deleteAddress,
-        editAddress
+        editAddress,
+        loadRoutes,
+        getRoutes,
+        deleteRoute,
+        createRoute,
+        editRoute,
+        loadDHCP,
+        getDHCP,
+        deleteDHCP,
+        createDHCP,
+        editDHCP
     }
 })

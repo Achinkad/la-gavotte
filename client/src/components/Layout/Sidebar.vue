@@ -41,7 +41,7 @@ const router = useRouter()
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarIP" aria-expanded="false" aria-controls="sidebarIP"
-                        :class="{ active: $route.name === 'Addresses' || $route.name === 'Routes' || $route.name === 'DHCP' || $route.name === 'Firewall' }">
+                        :class="{ active: $route.name === 'Addresses' || $route.name === 'Routes' || $route.name === 'DNS' || $route.name === 'DHCP' || $route.name === 'Firewall' }">
                             <i class="bi bi-diagram-3"></i> IP
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
@@ -65,7 +65,14 @@ const router = useRouter()
                                     <router-link class="nav-link" :class="{
                                         active: $route.name === 'DHCP'
                                         }" :to="{ name: 'DHCP' }">
-                                        DHCP Server
+                                        DHCP Servers
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{
+                                        active: $route.name === 'DNS'
+                                        }" :to="{ name: 'DNS' }">
+                                        DNS Servers
                                     </router-link>
                                 </li>
                                 <li>
