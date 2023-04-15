@@ -147,7 +147,7 @@ watch(routerIdentification, () => {
             </div>
         </div>
         <div class="col-md-5">
-            <div v-if="!selectedDNS" class="alert alert-warning" role="alert">
+            <div v-if="!selectedDNS" class="callout mt-0">
                 To edit a DNS server, click on the corresponding icon in the table. Be sure to double-check all changes before saving to avoid any disruptions to your DNS service on your device.
             </div>
             <EditDNS v-if="selectedDNS" :dnsServer="selectedDNS" :router="parseInt(routerIdentification)"/>

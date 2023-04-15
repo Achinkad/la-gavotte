@@ -10,11 +10,42 @@ use App\Models\Router;
 use App\Http\Requests\StoreRouterRequest;
 use App\Http\Resources\RouterResource;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
+
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
+
 class RouterController extends Controller
 {
     public function index()
     {
-        return RouterResource::collection(Router::all());
+        $routers = Router::all();
+
+        $client = new Client(['verify' => false]);
+
+        foreach ($routers as $router) {
+            $completeUrl = 'https://' . $router->ip_address . '/rest/system/identity';
+
+            $headerOptions = [
+                'Authorization' => 'Basic ' . $router->authorization,
+                'Content-Type' => 'application/json'
+            ];
+
+            try {
+                $response = $client->request('GET', $completeUrl, [
+                    'headers' => $headerOptions,
+                    'timeout' => 0.8
+                ]);
+
+                $router->disabled = false;
+            } catch (ConnectException $e) {
+                $router->disabled = true;
+            }
+        }
+
+        return $routers;
     }
 
     public function show(){

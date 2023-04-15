@@ -4,6 +4,9 @@ import { ref, watch, computed, inject, onBeforeMount } from 'vue'
 import { useRouterStore } from '../../stores/router.js'
 import { useVPNStore } from '../../stores/vpn.js'
 
+import CreateServer from '../../components/VPN/CreateServer.vue' // Component -> Create VPN
+import EditServer from '../../components/VPN/EditServer.vue' // Component -> Edit VPN
+
 const axiosApi = inject('axiosApi')
 const notyf = inject('notyf')
 
@@ -22,7 +25,7 @@ const loadServersVPN = ((data) => { VPNStore.loadServersVPN(data) })
 const vpnServers = computed(() => { return VPNStore.getServerVPN() })
 
 // Delete VPN Server
-const deleteVPN = ((vpnServer) => { ipStore.deleteVPN(vpnServer, routerIdentification.value) })
+const deleteVPN = ((vpnServer) => { VPNStore.deleteServerVPN(vpnServer, routerIdentification.value) })
 
 // Edit VPN Server
 const editVPN = ((vpnServer) => { selectedVPN.value = vpnServer })
@@ -36,19 +39,21 @@ const toogleDisabled = ((vpnServer) => {
         disabled: vpnServer.disabled
     }
 
-    axiosApi.patch('interface/wireguard' + vpnServer['.id'], body).then((response) => {
+    axiosApi.patch('vpn/server/active/' + vpnServer['.id'], body).then((response) => {
         if (body.disabled == "true") {
             notyf.success('The VPN server was activated with success.')
         } else {
             notyf.success('The VPN server was disabled with success.')
         }
 
-        loadVPN({ id: body.router })
+        loadServersVPN({ id: body.router })
     }).catch((error) => {
+        console.log(error)
         notyf.error('Oops, an error has occurred.')
     })
 })
 
+// Copy VPN Server into clipboard
 const copy = ((vpnServer) => {
     navigator.clipboard.writeText(vpnServer['public-key'])
     notyf.open({type: 'info', message: 'The public key is now on your clipboard. Go paste it!'})
@@ -76,7 +81,7 @@ watch(routerIdentification, () => {
                         <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
                     </select>
                 </div>
-                <h2 class="p-title">VPN Server</h2>
+                <h2 class="p-title">VPN Server - <a href="https://www.wireguard.com/" target="_blank" style="color:#374151;">WireGuard</a></h2>
             </div>
         </div>
     </div>
@@ -86,7 +91,12 @@ watch(routerIdentification, () => {
                 <div class="col-12">
                     <div class="card card-h-100">
                         <div class="d-flex card-header justify-content-between align-items-center">
-                            <h4 class="header-title">Title here</h4>
+                            <h4 class="header-title">VPN Servers Available</h4>
+                            <div class="d-flex justify-content-end" v-if="selectedVPN != null">
+                                <div class="px-1">
+                                    <button type="button" class="btn btn-primary" @click="newVPN()">Switch to Create Mode</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body pt-0">
                             <table class="table table-responsive align-middle">
@@ -130,11 +140,17 @@ watch(routerIdentification, () => {
                                     </tr>
                                 </tbody>
                             </table>
-                            <p class="mb-0 mt-4 text-muted" style="font-size:14px;"><b>*Note:</b> Click in the public key to copy it to clipboard.</p>
                         </div>
+                    </div>
+                    <div class="callout">
+                        <b>*Note:</b> You can click in the public key to copy it into your clipboard!
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-5">
+            <CreateServer v-if="!selectedVPN" :router="parseInt(routerIdentification)"/>
+            <EditServer v-if="selectedVPN" :vpnServer="selectedVPN" :router="parseInt(routerIdentification)"/>
         </div>
     </div>
 </template>

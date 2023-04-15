@@ -315,6 +315,15 @@ td {
     cursor: pointer;
 }
 
+.callout {
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #664d03;
+    background-color: #fff3cd;
+    border-left: 0.25rem solid #ffe69c;
+}
+
 @media (max-width: 767.98px) {
     .navbar {
         left: 0 !important;

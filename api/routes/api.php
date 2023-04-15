@@ -104,8 +104,19 @@ Route::get('ip/dns', [IPController::class, 'getDNS']);
 Route::patch('ip/dns/edit', [IPController::class, 'editDNS']);
 Route::patch('ip/dns/active', [IPController::class, 'toogleDisabledDNS']);
 
-/* --- [API Routes] -> VPN --- */
+/* --- [API Routes] -> VPN (SERVER) --- */
 Route::get('vpn/server', [VPNController::class, 'getServerVPN']);
+Route::post('vpn/server/create', [VPNController::class, 'createServerVPN']);
+Route::patch('vpn/server/edit/{id}', [VPNController::class, 'editServerVPN']);
+Route::delete('vpn/server/delete/{id}', [VPNController::class, 'deleteServerVPN']);
+Route::patch('vpn/server/active/{id}', [VPNController::class, 'toogleDisabledServerVPN']);
+
+/* --- [API Routes] -> VPN (CLIENT) --- */
+Route::get('vpn/client', [VPNController::class, 'getClientVPN']);
+Route::post('vpn/client/create', [VPNController::class, 'createClientVPN']);
+Route::patch('vpn/client/edit/{id}', [VPNController::class, 'editClientVPN']);
+Route::delete('vpn/client/delete/{id}', [VPNController::class, 'deleteClientVPN']);
+Route::patch('vpn/client/active/{id}', [VPNController::class, 'toogleDisabledClientVPN']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);

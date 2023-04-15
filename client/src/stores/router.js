@@ -17,7 +17,7 @@ export const useRouterStore = defineStore('router', () => {
 
     async function loadRouters() {
         await axiosApi.get('routers').then((response) => {
-            routers.value = response.data.data
+            routers.value = response.data
         })
     }
 
