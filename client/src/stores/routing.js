@@ -36,7 +36,7 @@ export const useRoutingStore = defineStore('routing', () => {
         await axiosApi.put('routing/bgp', data).then((response) => {
    
             bgp_connections.value.push(response.data)
-            notyf.success('The BGP connection was created with success.') 
+            notyf.success('The BGP connection was added with success.') 
                    
         }).catch((error) => {
 
@@ -110,7 +110,7 @@ export const useRoutingStore = defineStore('routing', () => {
 
            
             ospf_instances.value.push(response.data)
-            notyf.success('The OSPF Instance was created with success.')
+            notyf.success('The OSPF Instance was added with success.')
             
                    
         }).catch((error) => {
@@ -189,7 +189,7 @@ export const useRoutingStore = defineStore('routing', () => {
            
             ospf_areas.value.push(response.data)
 
-            notyf.success('The OSPF Area was created with success.')
+            notyf.success('The OSPF Area was added with success.')
                    
         }).catch((error) => {
 
@@ -266,7 +266,7 @@ export const useRoutingStore = defineStore('routing', () => {
            
             ospf_templates.value.push(response.data)
 
-            notyf.success('The OSPF Template was created with success.') 
+            notyf.success('The OSPF Template was added with success.') 
                    
         }).catch((error) => {
 
@@ -341,7 +341,7 @@ export const useRoutingStore = defineStore('routing', () => {
             
             rip_instances.value.push(response.data)
 
-            notyf.success('The RIP Instance was created with success.')
+            notyf.success('The RIP Instance was added with success.')
                    
         }).catch((error) => {
 
@@ -415,7 +415,7 @@ export const useRoutingStore = defineStore('routing', () => {
 
             rip_templates.value.push(response.data)
 
-            notyf.success('The RIP Template was created with success.')
+            notyf.success('The RIP Template was added with success.')
             
                    
         }).catch((error) => {

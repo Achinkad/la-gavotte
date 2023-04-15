@@ -147,7 +147,7 @@ watch(() => props.rule, (newRule) => {
                                 </div>
 
                                <div class="col-10 mt-3" v-if="protocolNegation=='false'">
-                            
+                                    <label>Select Protocol</label>
                                     <select class="form-select" v-model="rule.protocol">
                                         <option value="icmp">icmp</option>
                                         <option value="igmp">igmp</option>
@@ -187,7 +187,7 @@ watch(() => props.rule, (newRule) => {
                                 </div>
 
                                   <div class="col-10 mt-3" v-if="protocolNegation=='true'">
-                            
+                                    <label>Select Protocol</label>
                                     <select class="form-select" v-model="rule.protocol">
                                         <option value="!icmp">!icmp</option>
                                         <option value="!igmp">!igmp</option>
@@ -225,7 +225,7 @@ watch(() => props.rule, (newRule) => {
                                     </select>
                                     
                                 </div>
-                                <div class="form-check form-switch col-6">
+                                <div class="form-check form-switch col-12 mt-3">
                                     
                                     <input class="form-check-input" type="checkbox" role="switch" @click="toggleDisabled()" :checked="rule.disabled!=undefined && rule.disabled != 'false'">
                                     <label class="form-check-label" for="flexSwitchCheckDefault"> Disabled</label>

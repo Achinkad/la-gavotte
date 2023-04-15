@@ -15,16 +15,16 @@ const interfaceStore = useInterfaceStore()
 const axiosApi = inject('axiosApi')
 const router = useRouter()
 
-var router_ports = ref("all")
+var router_ports = ref("-")
 var selected_port= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
 const loadPorts = (() => { bridgeStore.loadPorts(router_ports) })
 const ports = computed(() => { return bridgeStore.getPorts() })
-const loadBridges = ((router_identifier) => { bridgeStore.loadBridges(router_identifier) })
+const loadBridges = (() => { bridgeStore.loadBridges(router_ports) })
 const bridges = computed(() => { return bridgeStore.getBridges() })
-const loadInterfaces = ((router_identifier) => { interfaceStore.loadInterfaces(router_identifier,type_all) })
+const loadInterfaces = (() => { interfaceStore.loadInterfaces(router_ports,type_all) })
 const interfaces = computed(() => { return interfaceStore.getEtherWlanIfaces() })
 
 const type_all = ref("all")
@@ -39,8 +39,8 @@ const showPort = (port) => {
 
     selected_port.value = port
 
-    loadInterfaces(ref(selected_port.value.router))
-    loadBridges(ref(selected_port.value.router))
+    loadInterfaces()
+    loadBridges()
     
 }
 
@@ -59,7 +59,7 @@ watch(router_ports, () => {
 onBeforeMount(() => {
 
     loadRouters()
-    loadPorts()
+   
 })
 
 </script>
@@ -68,6 +68,12 @@ onBeforeMount(() => {
     <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_ports">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">Ports</h2>
             </div>
         </div>
@@ -85,33 +91,34 @@ onBeforeMount(() => {
                     </div>
                 </div>
                 <div class="card-body pt-0">
-                <select class="custom-select custom-select-lg" v-model="router_ports">
-                    <option value="all" selected>All</option>
-                    <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                </select>
                     <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Interface</th>
                                         <th>Bridge</th>
-                                        <th>Disabled</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="ports.length==0">
-                                        <td colspan="6" class="text-center" style="height:55px!important;">There are no ports.</td>
+                                        <td colspan="5" class="text-center" style="height:55px!important;">There are no ports.</td>
                                     </tr>
                                     <tr v-for="port in ports">
-                                        <td>{{port['.id'].substring(1)}}</td>
-                                        <td>#{{port.router}}</td>
-                                        <td>{{port.interface}}</td>
-                                        <td>{{port.bridge}}</td> 
+
+                                        <td v-if="port['.id']==undefined">-</td>
+                                        <td v-else>{{port['.id'].substring(1)}}</td>
+
+                                        <td v-if="port.interface==undefined">-</td>
+                                        <td v-else>{{port.interface}}</td>
+                                        
+                                        <td v-if="port.bridge==undefined">-</td>
+                                        <td v-else>{{port.bridge}}</td> 
                                 
-                                        <td class="text-success" v-if="port.disabled=='false'">{{port.disabled}}</td>
-                                        <td class="text-danger" v-if="port.disabled=='true'">{{port.disabled}}</td>
+                                        <td class="text-success" v-if="port.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="port.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="port.disabled=='true'">DISABLED</td>
                                          <td>
                                             <div class="d-flex justify-content-center">
                                                

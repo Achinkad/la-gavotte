@@ -11,7 +11,7 @@ const notyf = inject('notyf')
 const router = useRouter()
 import OspfAreaEdit from "./OSPFAreaEdit.vue"
 
-var router_ospf = ref("all")
+var router_ospf = ref("-")
 var selected_ospf= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -25,13 +25,6 @@ const ospfinstances = computed(() => { return routingStore.getInstancesOSPF() })
 const deleteAreasOSPF = (ospfarea) => {
     
     routingStore.deleteAreasOSPF(ospfarea)
-
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
 }
 
 
@@ -49,7 +42,6 @@ watch(router_ospf, () => {
 onBeforeMount(() => {
    
     loadRouters()
-    loadAreasOSPF()
 
 })
 </script>
@@ -58,6 +50,12 @@ onBeforeMount(() => {
    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_ospf">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">OSPF</h2>
             </div>
         </div>
@@ -77,21 +75,17 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_ospf">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                       
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Name</th>
                                         <th>Instance</th>
                                         <th>Type</th>
                                         <th>Area Id</th>
-                                        <th>Disabled</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                       
                                     </tr>
@@ -99,13 +93,13 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="ospfareas.length==0">
-                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no OSPF Areas.</td>
+                                        <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Areas.</td>
                                     </tr>
                                     <tr v-for="ospfarea in ospfareas">
-                                  
-                                        <td>{{ospfarea['.id'].substring(1)}}</td>
-                                        <td>#{{ospfarea.router}}</td>
 
+                                        <td v-if="ospfarea['.id']==undefined">-</td>
+                                        <td v-else>{{ospfarea['.id'].substring(1)}}</td>
+                                
                                         <td v-if="ospfarea.name==undefined">-</td>
                                         <td v-else>{{ospfarea.name}}</td>
 
@@ -118,9 +112,9 @@ onBeforeMount(() => {
                                         <td v-if="ospfarea['area-id']==undefined">-</td>
                                         <td v-else>{{ospfarea['area-id']}}</td>
 
-                                        <td class="text-success" v-if="ospfarea.disabled==undefined">false</td>
-                                        <td class="text-success" v-if="ospfarea.disabled=='false'">{{ospfarea.disabled}}</td>
-                                        <td class="text-danger" v-if="ospfarea.disabled=='true'">{{ospfarea.disabled}}</td>
+                                        <td class="text-success" v-if="ospfarea.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="ospfarea.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="ospfarea.disabled=='true'">DISABLED</td>
 
                                          <td>
                                             <div class="d-flex justify-content-center">

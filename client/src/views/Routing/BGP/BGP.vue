@@ -10,7 +10,7 @@ const axiosApi = inject('axiosApi')
 const router = useRouter()
 import BgpEdit from "./BGPEdit.vue"
 
-var router_bgp = ref("all")
+var router_bgp = ref("-")
 var selected_bgp= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -38,7 +38,6 @@ watch(router_bgp, () => {
 onBeforeMount(() => {
    
     loadRouters()
-    loadConnectionsBGP()
 
 })
 </script>
@@ -47,6 +46,12 @@ onBeforeMount(() => {
    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_bgp">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">BGP</h2>
             </div>
         </div>
@@ -66,16 +71,12 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_bgp">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                       
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Name</th>
                                         <th>Router ID</th>
                                         <th>Remote Address</th>
@@ -85,7 +86,7 @@ onBeforeMount(() => {
                                         <th>Remote Port</th>
                                         <th>Local Port</th>
                                         <th>Local Role</th>
-                                        <th>Disabled</th>
+                                        <th>Status</th>
                                         <th>About</th>
                                         <th>Actions</th>
                                     </tr>
@@ -93,12 +94,12 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="bgpconnections.length==0">
-                                        <td colspan="14" class="text-center" style="height:55px!important;">There are no BGP Connections.</td>
+                                        <td colspan="13" class="text-center" style="height:55px!important;">There are no BGP Connections.</td>
                                     </tr>
                                     <tr v-for="bgpconnection in bgpconnections">
                                   
-                                        <td>{{bgpconnection['.id'].substring(1)}}</td>
-                                        <td>#{{bgpconnection.router}}</td>
+                                        <td v-if="bgpconnection['.id']==undefined">-</td>
+                                        <td v-else>{{bgpconnection['.id'].substring(1)}}</td>
 
                                         <td v-if="bgpconnection.name==undefined">-</td>
                                         <td v-else>{{bgpconnection.name}}</td>
@@ -127,9 +128,9 @@ onBeforeMount(() => {
                                         
                                         <td>{{bgpconnection['local.role']}}</td>
 
-                                        <td class="text-success" v-if="bgpconnection.disabled==undefined">false</td>
-                                        <td class="text-success" v-if="bgpconnection.disabled=='false'">{{bgpconnection.disabled}}</td>
-                                        <td class="text-danger" v-if="bgpconnection.disabled=='true'">{{bgpconnection.disabled}}</td>
+                                        <td class="text-success" v-if="bgpconnection.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="bgpconnection.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="bgpconnection.disabled=='true'">DISABLED</td>
 
                                         <td v-if="bgpconnection['.about']==undefined">Everything OK</td>
                                         <td class="text-danger" v-else>{{bgpconnection['.about']}}</td>

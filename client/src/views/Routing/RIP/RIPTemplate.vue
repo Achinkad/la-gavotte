@@ -13,7 +13,7 @@ const notyf = inject('notyf')
 const router = useRouter()
 import RipTemplateEdit from "./RIPTemplateEdit.vue"
 
-var router_rip = ref("all")
+var router_rip = ref("-")
 var selected_rip= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -33,12 +33,6 @@ const deleteTemplatesRIP = (riptemplate) => {
     
     routingStore.deleteTemplatesRIP(riptemplate)
 
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
 }
 
 
@@ -65,7 +59,6 @@ watch(router_rip, () => {
 onBeforeMount(() => {
    
     loadRouters()
-    loadTemplatesRIP()
 
 })
 </script>
@@ -74,6 +67,12 @@ onBeforeMount(() => {
    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_rip">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">RIP</h2>
             </div>
         </div>
@@ -93,16 +92,12 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_rip">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                       
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Name</th>
                                         <th>Instance</th>
                                         <th>Interfaces</th>
@@ -116,12 +111,12 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="riptemplates.length==0">
-                                        <td colspan="9" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
+                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
                                     </tr>
                                     <tr v-for="riptemplate in riptemplates">
-                                  
-                                        <td>{{riptemplate['.id'].substring(1)}}</td>
-                                        <td>#{{riptemplate.router}}</td>
+
+                                        <td v-if="riptemplate['.id']==undefined">-</td>
+                                        <td v-else>{{riptemplate['.id'].substring(1)}}</td>
 
                                         <td v-if="riptemplate.name==undefined">-</td>
                                         <td v-else>{{riptemplate.name}}</td>
