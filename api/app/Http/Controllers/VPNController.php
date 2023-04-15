@@ -111,10 +111,13 @@ class VPNController extends Controller
         $router = Router::where('id', $request->router)->firstOrFail();
 
         // Change the values for the RouterOS API
-        $request['listen-port'] = $request['port'];
+        $request['public-key'] = $request['publicKey'];
+        $request['allowed-address'] = $request['allowedAddresses'];
+        $request['endpoint-address'] = $request['endpointAddress'];
+        $request['endpoint-port'] = $request['endpointPort'];
 
         // Body Builder
-        $body = $request->except('router', 'port');
+        $body = $request->except('router', 'publicKey', 'allowedAddresses', 'endpointAddress', 'endpointPort');
 
         try {
             $response = Helper::httpClient('PUT', 'interface/wireguard/peers', $router, $body);
@@ -129,10 +132,13 @@ class VPNController extends Controller
         $router = Router::where('id', $request->router)->firstOrFail();
 
         // Change the values for the RouterOS API
-        $request['listen-port'] = $request['port'];
+        $request['public-key'] = $request['publicKey'];
+        $request['allowed-address'] = $request['allowedAddresses'];
+        $request['endpoint-address'] = $request['endpointAddress'];
+        $request['endpoint-port'] = $request['endpointPort'];
 
         // Body Builder
-        $body = $request->except('router', 'id', 'port');
+        $body = $request->except('router', 'id', 'publicKey', 'allowedAddresses', 'endpointAddress', 'endpointPort');
 
         try {
             $response = Helper::httpClient('PATCH', 'interface/wireguard/peers/' . $request->id, $router, $body);

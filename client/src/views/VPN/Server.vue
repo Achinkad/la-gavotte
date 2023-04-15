@@ -32,7 +32,7 @@ const editVPN = ((vpnServer) => { selectedVPN.value = vpnServer })
 
 const newVPN = () => { selectedVPN.value = null }
 
-// Toogle Disabled Route
+// Toogle Disabled VPN Server
 const toogleDisabled = ((vpnServer) => {
     let body = {
         router: routerIdentification.value,
@@ -77,11 +77,12 @@ watch(routerIdentification, () => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="routerIdentification">
-                        <option value="-" selected hidden disabled>Select a router</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
-                <h2 class="p-title">VPN Server - <a href="https://www.wireguard.com/" target="_blank" style="color:#374151;">WireGuard</a></h2>
+                <h2 class="p-title">VPN Server - <a href="https://www.wireguard.com/" target="_blank" style="color:#374151;">WireGuard</a> <i class="bi bi-link-45deg" style="position:relative;top:1px;"></i></h2>
             </div>
         </div>
     </div>

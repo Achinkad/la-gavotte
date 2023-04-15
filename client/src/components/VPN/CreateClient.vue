@@ -2,62 +2,100 @@
 import { ref, inject, computed, onBeforeMount, watch, toRef } from 'vue'
 
 import { useVPNStore } from '../../stores/vpn.js'
+import { useInterfaceStore } from '../../stores/interface.js'
 
 const notyf = inject('notyf') // Notyf
 
 const VPNStore = useVPNStore() // VPN Pinia Store
+const interfaceStore = useInterfaceStore() // Interface Pinia Store
 
 const props = defineProps({ router: { type: Number } }) // Router IP
 
-const routerIdentification = toRef(props, 'router')
+const routerIdentification = toRef(props, 'router') // Router IP Reference because BERTOLO IS DUMB!
+const interfaceType = ref("all") // Interface type because BERTOLO IS DUMB!
 
-const vpnServer = ref({
-    name: null,
-    mtu: 1420,
-    port: 13231
+const loadInterfaces = ((routerIdentification) => { interfaceStore.loadInterfaces(routerIdentification, interfaceType) })
+const interfaces = computed(() => { return interfaceStore.getInterfaces() })
+
+const loadServersVPN = ((data) => { VPNStore.loadServersVPN(data) })
+
+const vpnClient = ref({
+    interface: null,
+    publicKey: null,
+    allowedAddresses: '::/0',
+    endpointAddress: null,
+    endpointPort: null
 })
 
-const createServerVPN = (() => {
+const createClientVPN = (() => {
     let formData = new FormData()
 
     formData.append('router', props.router)
-    formData.append('name', vpnServer.value.name)
-    formData.append('mtu', vpnServer.value.mtu)
-    formData.append('port', vpnServer.value.port)
+    formData.append('interface', vpnClient.value.interface)
+    formData.append('publicKey', vpnClient.value.publicKey)
+    formData.append('allowedAddresses', vpnClient.value.allowedAddresses)
+    formData.append('endpointAddress', vpnClient.value.endpointAddress)
+    formData.append('endpointPort', vpnClient.value.endpointPort)
 
-    VPNStore.createServerVPN(formData)
-    Object.entries(vpnServer.value).forEach(([i]) => { vpnServer.value[i] = null })
+    VPNStore.createClientVPN(formData)
+    Object.entries(vpnClient.value).forEach(([i]) => { vpnClient.value[i] = null })
+})
+
+// Load Interfaces
+onBeforeMount(() => {
+    if(!isNaN(routerIdentification.value)) loadInterfaces(routerIdentification)
+})
+
+// Load Interfaces based on selected router
+watch(routerIdentification, () => {
+    if(!isNaN(routerIdentification.value)) loadInterfaces(routerIdentification)
+
+    let data = { id: routerIdentification.value }
+    loadServersVPN(data)
 })
 </script>
 
 <template>
     <div class="card card-h-100">
         <div class="d-flex card-header justify-content-between align-items-center">
-            <h4 class="header-title">Create a new VPN Server</h4>
+            <h4 class="header-title">Create a new VPN Client</h4>
         </div>
         <div class="card-body pt-0">
-            <form class="row g-3 needs-validation" novalidate @submit.prevent="createServerVPN">
+            <form class="row g-3 needs-validation" novalidate @submit.prevent="createClientVPN">
                 <div class="col-12">
-                    <label for="name" class="form-label">VPN Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="name" placeholder="Enter a name"
-                    v-model="vpnServer.name" required :disabled="isNaN(routerIdentification)">
+                    <label for="name" class="form-label">Interface <span class="text-danger">*</span></label>
+                    <select class="form-select" id="interface" v-model='vpnClient.interface' :disabled="isNaN(routerIdentification)">
+                        <option value="null" selected hidden disabled>Select a interface</option>
+                        <option v-for="i in interfaces" :key="i" :value="i.name" :disabled="i.disabled == 'true'" :hidden="i.type != 'wg'">{{i.name}}</option>
+                    </select>
                 </div>
                 <div class="col-6">
-                    <label for="network" class="form-label">Listen Port <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="network" placeholder="Enter a port"
-                    v-model="vpnServer.port" required :disabled="isNaN(routerIdentification)">
+                    <label for="endpointAddress" class="form-label">Enpoint Address <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="endpointAddress" placeholder="Enter an address"
+                    v-model="vpnClient.endpointAddress" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
-                    <label for="network" class="form-label">MTU <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="network" placeholder="Enter a value"
-                    v-model="vpnServer.mtu" required :disabled="isNaN(routerIdentification)">
+                    <label for="endpointPort" class="form-label">Endpoint Port <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="endpointPort" placeholder="Enter a port"
+                    v-model="vpnClient.endpointPort" required :disabled="isNaN(routerIdentification)">
+                </div>
+                <div class="col-12">
+                    <label for="allowedAddresses" class="form-label">Allowed Addresses <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="allowedAddresses" placeholder="Enter an address"
+                    v-model="vpnClient.allowedAddresses" required :disabled="isNaN(routerIdentification)">
+                    <div id="addressHelp" class="form-text">Please <u>use commas</u> to separate your addresses.</div>
+                </div>
+                <div class="col-12">
+                    <label for="publicKey" class="form-label">Public Key <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="publicKey" placeholder="Enter the public key of your device"
+                    v-model="vpnClient.publicKey" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-12 mt-4 d-flex justify-content-end">
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>
                     <div class="px-1">
-                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Add VPN Server</button>
+                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Add VPN Client</button>
                     </div>
                 </div>
             </form>

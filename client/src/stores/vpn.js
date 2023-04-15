@@ -31,7 +31,7 @@ export const useVPNStore = defineStore('vpn', () => {
 
     async function editServerVPN(body) {
         await axiosApi.patch('vpn/server/edit/' + body.get('id'), body).then(response => {
-            notyf.success('The VPN address was edited with success.')
+            notyf.success('The VPN server was edited with success.')
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
@@ -50,6 +50,10 @@ export const useVPNStore = defineStore('vpn', () => {
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
+    }
+
+    function getServerVPNByName(name) {
+        return serversVPN.value.filter( w => w.name == name)
     }
 
     const getServerVPN = (() => { return serversVPN.value })
@@ -63,30 +67,39 @@ export const useVPNStore = defineStore('vpn', () => {
         })
     }
 
-    async function editServerVPN(body) {
-        await axiosApi.patch('vpn/server/edit/' + body.get('id'), body).then(response => {
-            notyf.success('The VPN address was edited with success.')
+    async function createClientVPN(body) {
+        await axiosApi.post('vpn/client/create', body).then(response => {
+            notyf.success('The VPN client was added with success.')
+            clientsVPN.value.push(response.data)
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
     }
 
-    async function deleteServerVPN(vpnServer, router) {
+    async function editClientVPN(body) {
+        await axiosApi.patch('vpn/client/edit/' + body.get('id'), body).then(response => {
+            notyf.success('The VPN client was edited with success.')
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    async function deleteClientVPN(vpnClient, router) {
         let data = { routerID: router }
 
-        await axiosApi.delete('vpn/server/delete/' + vpnServer['.id'], { params: data }).then(response => {
-            notyf.success('The VPN server was deleted with success.')
+        await axiosApi.delete('vpn/client/delete/' + vpnClient['.id'], { params: data }).then(response => {
+            notyf.success('The VPN client was deleted with success.')
 
             // Remove from the array
-            let index = serversVPN.value.indexOf(vpnServer)
-            if (index > -1) serversVPN.value.splice(index, 1)
+            let index = clientsVPN.value.indexOf(vpnClient)
+            if (index > -1) clientsVPN.value.splice(index, 1)
 
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
     }
 
-    const getServerVPN = (() => { return clientsVPN.value })
+    const getClientVPN = (() => { return clientsVPN.value })
 
     return {
         loadServersVPN,
@@ -94,6 +107,11 @@ export const useVPNStore = defineStore('vpn', () => {
         createServerVPN,
         editServerVPN,
         deleteServerVPN,
-        loadClientsVPN
+        loadClientsVPN,
+        getClientVPN,
+        createClientVPN,
+        editClientVPN,
+        deleteClientVPN,
+        getServerVPNByName
     }
 })

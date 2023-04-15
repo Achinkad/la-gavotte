@@ -14,39 +14,39 @@ const routerStore = useRouterStore()
 const VPNStore = useVPNStore()
 
 const routerIdentification = ref('-') // Current Router
-const selectedVPN = ref(null) // Selected VPN Server
+const selectedVPN = ref(null) // Selected VPN Client
 
 // Routers
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
 
 // VPN Clients
-const loadServersVPN = ((data) => { VPNStore.loadServersVPN(data) })
-const vpnServers = computed(() => { return VPNStore.getServerVPN() })
+const loadClientsVPN = ((data) => { VPNStore.loadClientsVPN(data) })
+const vpnClients = computed(() => { return VPNStore.getClientVPN() })
 
-// Delete VPN Server
-const deleteVPN = ((vpnServer) => { VPNStore.deleteServerVPN(vpnServer, routerIdentification.value) })
+// Delete VPN Client
+const deleteVPN = ((vpnClient) => { VPNStore.deleteClientVPN(vpnClient, routerIdentification.value) })
 
-// Edit VPN Server
-const editVPN = ((vpnServer) => { selectedVPN.value = vpnServer })
+// Edit VPN Client
+const editVPN = ((vpnClient) => { selectedVPN.value = vpnClient })
 
 const newVPN = () => { selectedVPN.value = null }
 
-// Toogle Disabled Route
-const toogleDisabled = ((vpnServer) => {
+// Toogle Disabled VPN Client
+const toogleDisabled = ((vpnClient) => {
     let body = {
         router: routerIdentification.value,
-        disabled: vpnServer.disabled
+        disabled: vpnClient.disabled
     }
 
-    axiosApi.patch('vpn/server/active/' + vpnServer['.id'], body).then((response) => {
+    axiosApi.patch('vpn/client/active/' + vpnClient['.id'], body).then((response) => {
         if (body.disabled == "true") {
-            notyf.success('The VPN server was activated with success.')
+            notyf.success('The VPN client was activated with success.')
         } else {
-            notyf.success('The VPN server was disabled with success.')
+            notyf.success('The VPN client was disabled with success.')
         }
 
-        loadServersVPN({ id: body.router })
+        loadClientsVPN({ id: body.router })
     }).catch((error) => {
         console.log(error)
         notyf.error('Oops, an error has occurred.')
@@ -54,9 +54,18 @@ const toogleDisabled = ((vpnServer) => {
 })
 
 // Copy VPN Server into clipboard
-const copy = ((vpnServer) => {
-    navigator.clipboard.writeText(vpnServer['public-key'])
+const copy = ((vpnClient) => {
+    navigator.clipboard.writeText(vpnClient['public-key'])
     notyf.open({type: 'info', message: 'The public key is now on your clipboard. Go paste it!'})
+})
+
+const vpnAllowedAddresses = ((vpnClient) => {
+    let allowedAddresses = ['-']
+    if (vpnClient['allowed-address'].length > 0) {
+        allowedAddresses.splice(0, allowedAddresses.length)
+        allowedAddresses = vpnClient['allowed-address'].split(",")
+    }
+    return allowedAddresses
 })
 
 // Load Routers
@@ -64,10 +73,10 @@ onBeforeMount(() => {
     loadRouters()
 })
 
-// Load Routes
+// Load VPN Clients
 watch(routerIdentification, () => {
     let data = { id: routerIdentification.value }
-    loadServersVPN(data)
+    loadClientsVPN(data)
 })
 </script>
 
@@ -77,16 +86,17 @@ watch(routerIdentification, () => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="routerIdentification">
-                        <option value="-" selected hidden disabled>Select a router</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
-                <h2 class="p-title">VPN Clients - <a href="https://www.wireguard.com/" target="_blank" style="color:#374151;">WireGuard</a></h2>
+                <h2 class="p-title">VPN Clients - <a href="https://www.wireguard.com/" target="_blank" style="color:#374151;">WireGuard</a> <i class="bi bi-link-45deg" style="position:relative;top:1px;"></i></h2>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-h-100">
@@ -102,37 +112,41 @@ watch(routerIdentification, () => {
                             <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width:8%">#ID</th>
-                                        <th style="width:15%">Name</th>
-                                        <th style="width:13%">List Port</th>
+                                        <th style="width:7%">#ID</th>
+                                        <th style="width:15%">Interface</th>
+                                        <th style="width:15%">Allowed Addresses</th>
+                                        <th style="width:15%">Endpoint</th>
                                         <th>Public Key*</th>
-                                        <th class="text-center" style="width:13%">Activated</th>
-                                        <th class="text-center" style="width:20%">Actions</th>
+                                        <th class="text-center" style="width:12%">Activated</th>
+                                        <th class="text-center" style="width:13%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-if="vpnServers.length == 0">
-                                        <td colspan="6" class="text-center" style="height:55px!important;">Please, select a router.</td>
+                                    <tr v-if="vpnClients.length == 0">
+                                        <td colspan="7" class="text-center" style="height:55px!important;">Please, select a router.</td>
                                     </tr>
-                                    <tr v-for="vpnServer in vpnServers" :key="vpnServer['.id']">
-                                        <td class="align-middle">#{{ vpnServer['.id'].substring(1) }}</td>
-                                        <td>{{ vpnServer.name }}</td>
-                                        <td>{{ vpnServer['listen-port'] }}</td>
-                                        <td @click="copy(vpnServer)" title="Click to copy to clipboard"
-                                            style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px; cursor:pointer;"><u>{{ vpnServer['public-key'] }}</u></td>
+                                    <tr v-for="vpnClient in vpnClients" :key="vpnClient['.id']">
+                                        <td class="align-middle">#{{ vpnClient['.id'].substring(1) }}</td>
+                                        <td>{{ vpnClient.interface }}</td>
+                                        <td>
+                                            <span v-for="a in vpnAllowedAddresses(vpnClient)">{{ a }} <br> </span>
+                                        </td>
+                                        <td>{{ vpnClient['endpoint-address'] }}:{{ vpnClient['endpoint-port'] }}</td>
+                                        <td @click="copy(vpnClient)" title="Click to copy to clipboard"
+                                            style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px; cursor:pointer;"><u>{{ vpnClient['public-key'] }}</u></td>
                                         <td>
                                             <div class="form-check form-switch text-center">
                                                 <div class="d-flex justify-content-center">
-                                                    <input class="form-check-input" type="checkbox" role="switch" @click="toogleDisabled(vpnServer)" :checked="vpnServer.disabled == 'false'">
+                                                    <input class="form-check-input" type="checkbox" role="switch" @click="toogleDisabled(vpnClient)" :checked="vpnClient.disabled == 'false'">
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light table-button" title="Edit" @click="editVPN(vpnServer)">
+                                                <button class="btn btn-xs btn-light table-button" title="Edit" @click="editVPN(vpnClient)">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteVPN(vpnServer)">
+                                                <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteVPN(vpnClient)">
                                                     <i class="bi bi-trash3"></i>
                                                 </button>
                                             </div>
@@ -148,9 +162,9 @@ watch(routerIdentification, () => {
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <CreateClient v-if="!selectedVPN" :router="parseInt(routerIdentification)"/>
-            <EditClient v-if="selectedVPN" :vpnServer="selectedVPN" :router="parseInt(routerIdentification)"/>
+            <EditClient v-if="selectedVPN" :vpnClient="selectedVPN" :router="parseInt(routerIdentification)"/>
         </div>
     </div>
 </template>
