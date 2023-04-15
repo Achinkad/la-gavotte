@@ -20,7 +20,7 @@ export const useBridgeStore = defineStore('bridge', () => {
             }
         }).then((response) => {
             bridges.value = response.data;
-            notyf.success('The bridge was created with success.')
+            
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
@@ -37,7 +37,7 @@ export const useBridgeStore = defineStore('bridge', () => {
             }
         }).then((response) => {
             ports.value = response.data;
-            notyf.success('The port was created with success.')
+            
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
@@ -48,7 +48,7 @@ export const useBridgeStore = defineStore('bridge', () => {
         
         await axiosApi.put('bridges', data).then((response) => {
             
-            notyf.success('The bridge was created with success.')
+            notyf.success('The bridge was added with success.')
             bridges.value.push(response.data)
                    
         }).catch((error) => {
@@ -62,7 +62,7 @@ export const useBridgeStore = defineStore('bridge', () => {
         
         await axiosApi.put('bridges/ports', data).then((response) => {
 
-            notyf.success('The port was created with success.')
+            notyf.success('The port was added with success.')
             ports.value.push(response.data)
 
             

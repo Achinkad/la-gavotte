@@ -50,6 +50,12 @@ onBeforeMount(() => {
    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_rules">
+                        <option value="all">All</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">Rules</h2>
             </div>
         </div>
@@ -69,10 +75,7 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_rules">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                        
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
@@ -86,7 +89,7 @@ onBeforeMount(() => {
                                         <th>Src-port</th>
                                         <th>Dst-port</th>
                                         <th>Protocol</th>
-                                        <th>Disabled</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                
@@ -96,11 +99,18 @@ onBeforeMount(() => {
                                         <td colspan="11" class="text-center" style="height:55px!important;">There are no rules.</td>
                                     </tr>
                                     <tr v-for="rule in rules">
-                                  
-                                        <td>{{rule['.id'].substring(1)}}</td>
-                                        <td>#{{rule.router}}</td>
-                                        <td>{{rule.action}}</td>
-                                        <td>{{rule.chain}}</td>
+
+                                        <td v-if="rule['.id']==undefined">-</td>
+                                        <td v-else>{{rule['.id'].substring(1)}}</td>
+
+                                        <td v-if="rule.router==undefined">-</td>
+                                        <td v-else>#{{rule.router}}</td>
+
+                                        <td v-if="rule.action==undefined">-</td>
+                                        <td v-else>{{rule.action}}</td>
+
+                                        <td v-if="rule.chain==undefined">-</td>
+                                        <td v-else>{{rule.chain}}</td>
 
                                         <td v-if="rule['src-address']==undefined">-</td>
                                         <td v-else>{{rule['src-address']}}</td>
@@ -117,9 +127,9 @@ onBeforeMount(() => {
                                         <td v-if="rule.protocol==undefined">-</td>
                                         <td v-else>{{rule.protocol}}</td>
 
-                                        <td class="text-success" v-if="rule.disabled==undefined">false</td>
-                                        <td class="text-success" v-if="rule.disabled=='false'">{{rule.disabled}}</td>
-                                        <td class="text-danger" v-if="rule.disabled=='true'">{{rule.disabled}}</td>
+                                        <td class="text-success" v-if="rule.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="rule.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="rule.disabled=='true'">DISABLED</td>
                                          <td>
                                             <div class="d-flex justify-content-center">
                                                

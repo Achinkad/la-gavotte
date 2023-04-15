@@ -13,7 +13,7 @@ const axiosApi = inject('axiosApi')
 const router = useRouter()
 
 
-var router_bridges = ref("all")
+var router_bridges = ref("-")
 var selected_bridge= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -44,7 +44,6 @@ watch(router_bridges, () => {
 onBeforeMount(() => {
    
     loadRouters()
-    loadBridges()
 
 })
 
@@ -54,6 +53,12 @@ onBeforeMount(() => {
     <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_bridges">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">Bridges</h2>
             </div>
         </div>
@@ -73,39 +78,45 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_bridges">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                       
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Name</th>
                                         <th>L2 MTU/Actual MTU</th>
                                         <th>MAC Address</th>
                                         <th>Protocol</th>
-                                        <th>Disabled</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="bridges.length==0">
-                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no bridges.</td>
+                                        <td colspan="7" class="text-center" style="height:55px!important;">There are no bridges.</td>
                                     </tr>
                                     <tr v-for="bridge in bridges">
-                                  
-                                        <td>{{bridge['.id'].substring(1)}}</td>
-                                        <td>#{{bridge.router}}</td>
-                                        <td>{{bridge.name}}</td>
-                                        <td>{{bridge.l2mtu}}/{{bridge['actual-mtu']}}</td>
-                                        <td>{{bridge['mac-address']}}</td>
-                                        <td>{{bridge['protocol-mode']}}</td>
-                                        <td class="text-success" v-if="bridge.disabled=='false'">{{bridge.disabled}}</td>
-                                        <td class="text-danger" v-if="bridge.disabled=='true'">{{bridge.disabled}}</td>
+
+                                        <td v-if="bridge['.id']==undefined">-</td>
+                                        <td v-else>{{bridge['.id'].substring(1)}}</td>
+
+                                        <td v-if="bridge.name==undefined">-</td>
+                                        <td v-else>{{bridge.name}}</td>
+                                        
+                                        <td v-if="bridge.l2mtu==undefined || bridge['actual-mtu']==undefined">-</td>
+                                        <td v-else>{{bridge.l2mtu}}/{{bridge['actual-mtu']}}</td>
+
+                                        <td v-if="bridge['mac-address']==undefined">-</td>
+                                        <td v-else>{{bridge['mac-address']}}</td>
+
+                                        <td v-if="bridge['protocol-mode']==undefined">-</td>
+                                        <td v-else>{{bridge['protocol-mode']}}</td>
+
+                                        <td class="text-success" v-if="bridge.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="bridge.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="bridge.disabled=='true'">DISABLED</td>
                                          <td>
                                             <div class="d-flex justify-content-center">
                                                

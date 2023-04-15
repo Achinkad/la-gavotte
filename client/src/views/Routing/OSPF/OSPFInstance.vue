@@ -11,7 +11,7 @@ const notyf = inject('notyf')
 const router = useRouter()
 import OspfInstanceEdit from "./OSPFInstanceEdit.vue"
 
-var router_ospf = ref("all")
+var router_ospf = ref("-")
 var selected_ospf= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -24,12 +24,6 @@ const deleteInstancesOSPF = (ospfinstance) => {
     
     routingStore.deleteInstancesOSPF(ospfinstance)
 
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
 }
 
 
@@ -50,7 +44,6 @@ watch(router_ospf, () => {
 onBeforeMount(() => {
    
     loadRouters()
-    loadInstancesOSPF()
 
 })
 </script>
@@ -59,6 +52,12 @@ onBeforeMount(() => {
    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_ospf">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">OSPF</h2>
             </div>
         </div>
@@ -78,21 +77,17 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_ospf">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                        
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Name</th>
                                         <th>Router ID</th>
                                         <th>Redistribute</th>
                                         <th>Version</th>
-                                        <th>Disabled</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                       
                                     </tr>
@@ -100,12 +95,12 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="ospfinstances.length==0">
-                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no OSPF Instances.</td>
+                                        <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Instances.</td>
                                     </tr>
                                     <tr v-for="ospfinstance in ospfinstances">
                                   
-                                        <td>{{ospfinstance['.id'].substring(1)}}</td>
-                                        <td>#{{ospfinstance.router}}</td>
+                                        <td v-if="ospfinstance['.id']==undefined">-</td>
+                                        <td v-else>{{ospfinstance['.id'].substring(1)}}</td>
 
                                         <td v-if="ospfinstance.name==undefined">-</td>
                                         <td v-else>{{ospfinstance.name}}</td>
@@ -119,9 +114,9 @@ onBeforeMount(() => {
                                         <td v-if="ospfinstance.version==undefined">-</td>
                                         <td v-else>{{ospfinstance.version}}</td>
 
-                                        <td class="text-success" v-if="ospfinstance.disabled==undefined">false</td>
-                                        <td class="text-success" v-if="ospfinstance.disabled=='false'">{{ospfinstance.disabled}}</td>
-                                        <td class="text-danger" v-if="ospfinstance.disabled=='true'">{{ospfinstance.disabled}}</td>
+                                        <td class="text-success" v-if="ospfinstance.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="ospfinstance.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="ospfinstance.disabled=='true'">DISABLED</td>
 
                                          <td>
                                             <div class="d-flex justify-content-center">

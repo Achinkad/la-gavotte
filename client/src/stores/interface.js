@@ -12,7 +12,8 @@ export const useInterfaceStore = defineStore('interface', () => {
     
 
     async function loadInterfaces(identifier,type){
-       
+
+        
         await axiosApi.get('routers/interfaces',
         {
             params:{
@@ -21,6 +22,7 @@ export const useInterfaceStore = defineStore('interface', () => {
             }
         }).then((response) => {
             interfaces.value = response.data;
+            
         }).catch(error => {
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })

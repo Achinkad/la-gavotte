@@ -13,7 +13,7 @@ const notyf = inject('notyf')
 const router = useRouter()
 import OspfTemplateEdit from "./OSPFTemplateEdit.vue"
 
-var router_ospf = ref("all")
+var router_ospf = ref("-")
 var selected_ospf= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
@@ -36,12 +36,6 @@ const deleteTemplatesOSPF = (ospftemplate) => {
     
     routingStore.deleteTemplatesOSPF(ospftemplate)
 
-    /*
-    if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
 }
 
 
@@ -69,7 +63,6 @@ watch(router_ospf, () => {
 onBeforeMount(() => {
    
     loadRouters()
-    loadTemplatesOSPF()
 
 })
 </script>
@@ -78,6 +71,12 @@ onBeforeMount(() => {
    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
+                <div class="p-title-right" style="width:15%;">
+                    <select class="form-select" v-model="router_ospf">
+                        <option value="-" selected hidden disabled>Select a router</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                    </select>
+                </div>
                 <h2 class="p-title">OSPF</h2>
             </div>
         </div>
@@ -97,37 +96,32 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                        <select class="custom-select custom-select-lg" v-model="router_ospf">
-                            <option value="all" selected>All</option>
-                            <option :value="router.id" v-for="router in routers">{{router.ip_address}}</option>
-                        </select>
+                        
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
                                 
                                     <tr class="text-center">
                                         <th>#ID</th>
-                                        <th>Router</th>
                                         <th>Interfaces</th>
                                         <th>Area</th>
                                         <th>Networks</th>
                                         <th>Network Type</th>
                                         <th>Cost</th>
                                         <th>Priority</th>
-                                        <th>Disabled</th>
-                                        <th>Actions</th>
-                                      
+                                        <th>Status</th>
+                                        <th>Actions</th>                                     
                                     </tr>
                                
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="ospftemplates.length==0">
-                                        <td colspan="10" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
+                                        <td colspan="9" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
                                     </tr>
                                     <tr v-for="ospftemplate in ospftemplates">
-                                  
-                                        <td>{{ospftemplate['.id'].substring(1)}}</td>
-                                        <td>#{{ospftemplate.router}}</td>
-
+                                        
+                                        <td v-if="ospftemplate['.id']==undefined">-</td>
+                                        <td v-else>{{ospftemplate['.id'].substring(1)}}</td>
+                                      
                                         <td v-if="ospftemplate.interfaces==undefined || ospftemplate.interfaces==''">-</td>
                                         <td v-else>{{ospftemplate.interfaces}}</td>
 
@@ -146,9 +140,9 @@ onBeforeMount(() => {
                                         <td v-if="ospftemplate.priority==undefined">-</td>
                                         <td v-else>{{ospftemplate.priority}}</td>
 
-                                        <td class="text-success" v-if="ospftemplate.disabled==undefined">false</td>
-                                        <td class="text-success" v-if="ospftemplate.disabled=='false'">{{ospftemplate.disabled}}</td>
-                                        <td class="text-danger" v-if="ospftemplate.disabled=='true'">{{ospftemplate.disabled}}</td>
+                                        <td class="text-success" v-if="ospftemplate.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="ospftemplate.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="ospftemplate.disabled=='true'">DISABLED</td>
 
                                          <td>
                                             <div class="d-flex justify-content-center">

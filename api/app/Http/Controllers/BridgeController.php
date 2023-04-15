@@ -6,7 +6,6 @@ use App\Helper\Helper;
 use App\Models\Router;
 use Illuminate\Http\Request;
 
-use GuzzleHttp\Exception\ClientException;
 
 class BridgeController extends Controller
 {
@@ -72,48 +71,13 @@ class BridgeController extends Controller
     public function showBridges(Request $request){
        
         $bridges=[];
-        $helper = new Helper();
-
-        if($request->identifier_bridges=='all'){
-            $routers=Router::all();
-            
-            if($routers!=[] && $request->identifier_bridges!=null){
+               
+        $router=Router::where('id',$request->identifier_bridges)->firstOrFail();    
                 
-                foreach($routers as $router){
-                   
-                    try{
-                        $response = Helper::httpClient('GET','interface/bridge',$router);
-                    } catch (\Exception $e) {
-                        return response()->json($e->getMessage(), $e->getCode());
-                    }
-
-                    foreach($helper->decodeResponse($response) as $bridge){
-                        $bridge->router=$router->id; #talvez seja antes de descodificar
-                        array_push($bridges,$bridge);
-                    }
-
-                }
-                
-            }
-            
-        }
-        else{
-            
-            $router=Router::where('id',$request->identifier_bridges)->firstOrFail();
-
-            if($router!=[] && $request->identifier_bridges!=null){
-                
-                try{
-                    $response = Helper::httpClient('GET','interface/bridge',$router);
-                } catch (\Exception $e) {
-                    return response()->json($e->getMessage(), $e->getCode());
-                }
-
-                foreach($helper->decodeResponse($response) as $bridge){
-                    $bridge->router=$router->id; #talvez seja antes de descodificar
-                    array_push($bridges,$bridge);
-                }
-            }
+        try{
+            $bridges = Helper::httpClient('GET','interface/bridge',$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
         }
 
         return $bridges;
@@ -121,51 +85,16 @@ class BridgeController extends Controller
 
 
     public function showBridgePorts(Request $request){
-        $ports=[];
-        $helper = new Helper();
+        $ports=[];       
+
+        $router=Router::where('id',$request->identifier_ports)->firstOrFail();
         
-
-        if($request->identifier_ports=='all'){
-            $routers=Router::all();
-          
-            if($routers!=[] && $request->identifier_ports!=null){
-                
-                foreach($routers as $router){
-                   
-                    try{
-                        $response = Helper::httpClient('GET','interface/bridge/port',$router);
-                    } catch (\Exception $e) {
-                        return response()->json($e->getMessage(), $e->getCode());
-                    }
-
-                    foreach($helper->decodeResponse($response) as $port){
-                        $port->router=$router->id; #talvez seja antes de descodificar
-                        array_push($ports,$port);
-                    }
-
-                }
-                
-            }
-            
+        try{
+            $ports = Helper::httpClient('GET','interface/bridge/port',$router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
         }
-        else{
-            $router=Router::where('id',$request->identifier_ports)->firstOrFail();
-
-            if($router!=[] && $request->identifier_ports!=null){
-                
-                try{
-                    $response = Helper::httpClient('GET','interface/bridge/port',$router);
-                } catch (\Exception $e) {
-                    return response()->json($e->getMessage(), $e->getCode());
-                }
-
-                foreach($helper->decodeResponse($response) as $port){
-                    $port->router=$router->id; #talvez seja antes de descodificar
-                    array_push($ports,$port);
-                }
-            }
-        }
-
+      
         return $ports;
     }
 
