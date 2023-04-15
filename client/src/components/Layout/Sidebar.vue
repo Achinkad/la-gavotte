@@ -260,6 +260,12 @@ const router = useRouter()
     top: 0;
     color: #fff !important;
     text-decoration: none !important;
+    background-color: #313a46;
+    z-index: 9999;
+}
+
+.logo:hover {
+    background-color: #313a46;
 }
 
 .logo .nav-link {
