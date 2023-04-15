@@ -15,10 +15,16 @@ export const useRouterStore = defineStore('router', () => {
         })
     }
 
-    async function loadRouters() {
-        await axiosApi.get('routers').then((response) => {
-            routers.value = response.data
-        })
+    async function loadRouters(dashboard) {
+        if (dashboard) {
+            await axiosApi.get('routers', { params:{ dashboard: true }}).then((response) => {
+                routers.value = response.data
+            })
+        } else {
+            await axiosApi.get('routers').then((response) => {
+                routers.value = response.data
+            })
+        }
     }
 
     function getRouterById(id) {
