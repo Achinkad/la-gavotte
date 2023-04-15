@@ -324,6 +324,43 @@ td {
     border-left: 0.25rem solid #ffe69c;
 }
 
+.badge {
+    vertical-align: middle;
+}
+
+.badge-success-lighten {
+    color: #0acf97 !important;
+    background-color: rgba(10,207,151,.18);
+}
+
+.badge-danger-lighten {
+    color: #fa5c7c !important;
+    background-color: rgba(250,92,124,.18);
+}
+
+.badge-info-lighten {
+    color: #39afd1 !important;
+    background-color: rgba(57,175,209,.18);
+}
+
+.badge-warning-lighten {
+    color: #ffc35a !important;
+    background-color: rgba(255,195,90,.18);
+}
+
+.badge {
+    padding: 0.5em 0.5rem;
+    font-size: 0.75em;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 0.5rem;
+    display: inline-block;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+}
+
 @media (max-width: 767.98px) {
     .navbar {
         left: 0 !important;

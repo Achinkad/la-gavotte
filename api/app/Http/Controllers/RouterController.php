@@ -19,7 +19,7 @@ use GuzzleHttp\Exception\ConnectException;
 
 class RouterController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $routers = Router::all();
 
@@ -42,6 +42,18 @@ class RouterController extends Controller
                 $router->disabled = false;
             } catch (ConnectException $e) {
                 $router->disabled = true;
+            }
+        }
+
+        if (isset($request->dashboard)) {
+            foreach ($routers as $router) {
+                if (!$router->disabled) {
+                    $stats = Helper::httpClient('GET', 'system/resource', $router);
+                    if ($stats->getStatusCode() != 200) die();
+                    $stats = Helper::decodeResponse($stats);
+                    $router->freeMemory = $stats->{'free-memory'};
+                    $router->freeSpace = $stats->{'free-hdd-space'};
+                }
             }
         }
 

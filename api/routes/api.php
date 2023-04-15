@@ -12,6 +12,7 @@ use App\Http\Controllers\WirelessController;
 use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\IPController;
 use App\Http\Controllers\VPNController;
+use App\Http\Controllers\BackupController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -117,6 +118,9 @@ Route::post('vpn/client/create', [VPNController::class, 'createClientVPN']);
 Route::patch('vpn/client/edit/{id}', [VPNController::class, 'editClientVPN']);
 Route::delete('vpn/client/delete/{id}', [VPNController::class, 'deleteClientVPN']);
 Route::patch('vpn/client/active/{id}', [VPNController::class, 'toogleDisabledClientVPN']);
+
+/* --- [API Routes] -> BACKUP --- */
+Route::post('backup', [BackupController::class, 'doBackup']);
 
 /* --- [API Routes] -> Auth --- */
 Route::post('login', [AuthController::class, 'login']);

@@ -23,7 +23,7 @@ watch(router_interfaces, () => {
 })
 
 watch(type_interfaces, () => {
-    
+
     loadInterfaces()
 })
 
@@ -37,29 +37,27 @@ onBeforeMount(() => {
 <template>
     <div class="row">
         <div class="col-12">
-            <div class="p-title-box mt-4">
-                <div>
+            <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_interfaces">
                         <option value="-" selected hidden disabled>Select a router</option>
                         <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
                     </select>
                 </div>
-                    <h2 class="p-title">Interfaces </h2>
-                </div>
+                <h2 class="p-title">Interfaces </h2>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
+    <div class="row">
         <div class="col-12">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">
                     <h4 class="header-title">Connected Interfaces</h4>
-                     
+
                 </div>
-               
+
                 <div class="card-body pt-0">
-                
+
                     <div class="p-title-right mb-3" style="width:15%;" v-if="router_interfaces!='-'">
                     <div class="row align-items-center">
                         <div class="col-auto">
@@ -116,14 +114,14 @@ onBeforeMount(() => {
 
                                         <td v-if="iface['tx-byte']==undefined">-</td>
                                         <td v-else>{{iface['tx-byte']}} kbps</td>
-                                        
+
                                         <td class="text-success" v-if="iface.disabled==undefined">ACTIVE</td>
                                         <td class="text-success" v-if="iface.disabled=='false'">ACTIVE</td>
                                         <td class="text-danger" v-if="iface.disabled=='true'">DISABLED</td>
                                 </tr>
                             </tbody>
                 </table>
-               
+
                 </div>
             </div>
         </div>

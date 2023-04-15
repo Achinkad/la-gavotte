@@ -1,14 +1,36 @@
 <script setup>
-import { computed, onBeforeMount } from 'vue'
+import { inject, computed, onBeforeMount } from 'vue'
 
 import { useUserStore } from "../stores/user.js"
 import { useRouterStore } from '../stores/router.js'
 
+const axiosApi = inject('axiosApi')
+const notyf = inject('notyf')
+
 const userStore = useUserStore()
 const routerStore = useRouterStore()
 
-const loadRouters = (() => { routerStore.loadRouters() })
+const loadRouters = ((dashboard = true) => { routerStore.loadRouters(dashboard) })
 const routers = computed(() => { return routerStore.getRouters() })
+
+const percentageOfActiveRouters = ((routers) => {
+    let numActive = 0, numTotal = routers.length
+    routers.forEach((i) => { if(!i.disabled) numActive++ })
+    return ((numActive / numTotal) * 100).toFixed(2) + "%"
+})
+
+const backup = ((router) => {
+    let body = {
+        router: router.id,
+        name: 'flash/LTI-VERY-NICE.backup'
+    }
+
+    axiosApi.post('backup', body).then((response) => {
+        notyf.success('Backup done succesfully!')
+    }).catch((error) => {
+        notyf.error('Oops, an error has occurred.')
+    })
+})
 
 onBeforeMount(() => {
     loadRouters()
@@ -33,9 +55,10 @@ onBeforeMount(() => {
                                 <i class="bi bi-router-fill card-icon"></i>
                             </div>
                             <h5 class="text-muted fw-normal mt-0">Routers</h5>
-                            <h3 class="mt-3 mb-3">261</h3>
+                            <h3 class="mt-3 mb-3">{{ routers.length }}</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-success me-2"> 98% </span>
+                                <span class="text-success me-2" v-if="routers.length > 0"> {{ percentageOfActiveRouters(routers) }} </span>
+                                <span class="text-success me-2" v-else> - </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
@@ -48,10 +71,40 @@ onBeforeMount(() => {
                                 <i class="bi bi-database-fill card-icon"></i>
                             </div>
                             <h5 class="text-muted fw-normal mt-0">Backups</h5>
-                            <h3 class="mt-3 mb-3">143</h3>
+                            <h3 class="mt-3 mb-3">26</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-success me-2"> 100% </span>
-                                <span class="text-nowrap">Backups done</span>
+                                <span class="text-success me-2"> 76.12% </span>
+                                <span class="text-nowrap">In last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="card widget-flat">
+                        <div class="card-body">
+                            <div class="float-end">
+                                <i class="bi bi-graph-up card-icon"></i>
+                            </div>
+                            <h5 class="text-muted fw-normal mt-0">Traffic</h5>
+                            <h3 class="mt-3 mb-3">~ 14 P/S</h3>
+                            <p class="mb-0 text-muted">
+                                <span class="text-danger me-2"> -12.57% </span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="card widget-flat">
+                        <div class="card-body">
+                            <div class="float-end">
+                                <i class="bi bi-incognito card-icon"></i>
+                            </div>
+                            <h5 class="text-muted fw-normal mt-0">VPN Clients</h5>
+                            <h3 class="mt-3 mb-3">8</h3>
+                            <p class="mb-0 text-muted">
+                                <span class="text-success me-2"> 12.31% </span>
+                                <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
                     </div>
@@ -68,21 +121,40 @@ onBeforeMount(() => {
                     <table class="table table-responsive align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20%">#ID</th>
-                                <th>Identity</th>
+                                <th style="width:10%">#ID</th>
                                 <th>IP Address</th>
                                 <th>MAC Address</th>
+                                <th style="width:15%">Free Memory</th>
+                                <th style="width:13%">Free Space</th>
+                                <th class="text-center" style="width:10%">Active</th>
+                                <th class="text-center" style="width:15%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="routers.length == 0">
-                                <td colspan="4" class="text-center" >There are no routers registered in the system.</td>
+                                <td colspan="5" class="text-center" style="height:55px!important;">There are no routers registered in the system.</td>
                             </tr>
                             <tr v-for="router in routers" :key="router.id">
                                 <td class="align-middle" style="height:55px!important;">#{{ router.id }}</td>
-                                <td>{{ router.identity }}</td>
                                 <td>{{ router.ip_address }}</td>
                                 <td>{{ router.mac_address }}</td>
+                                <td v-if="!router.disabled">{{ (router.freeMemory / 1000000).toFixed(2) }} MB</td>
+                                <td v-else> - </td>
+                                <td v-if="!router.disabled">{{ (router.freeSpace / 1000000).toFixed(2) }} MB</td>
+                                <td v-else> - </td>
+                                <td v-if="router.disabled" class="text-center">
+                                    <span class="badge badge-danger-lighten">Disabled</span>
+                                </td>
+                                <td v-else class="text-center">
+                                    <span class="badge badge-success-lighten">Active</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn btn-xs btn-light table-button" title="Backup" :disabled="router.disabled" @click="backup(router)">
+                                            <i class="bi bi-database-add"></i>
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
