@@ -11,7 +11,6 @@ class BridgeController extends Controller
 {
     public function deleteBridges(Request $request) 
     {
-
         $router=Router::where('id',$request->identity)->firstOrFail();
 
         try{
@@ -71,13 +70,19 @@ class BridgeController extends Controller
     public function showBridges(Request $request){
        
         $bridges=[];
+        $helper = new Helper();
                
         $router=Router::where('id',$request->identifier_bridges)->firstOrFail();    
                 
         try{
-            $bridges = Helper::httpClient('GET','interface/bridge',$router);
+            $response = Helper::httpClient('GET','interface/bridge',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $bridge){
+            $bridge->router=$router->id; #talvez seja antes de descodificar
+            array_push($bridges,$bridge);
         }
 
         return $bridges;
@@ -85,14 +90,20 @@ class BridgeController extends Controller
 
 
     public function showBridgePorts(Request $request){
-        $ports=[];       
+        $ports=[];  
+        $helper = new Helper();     
 
         $router=Router::where('id',$request->identifier_ports)->firstOrFail();
         
         try{
-            $ports = Helper::httpClient('GET','interface/bridge/port',$router);
+            $response = Helper::httpClient('GET','interface/bridge/port',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $port){
+            $port->router=$router->id; #talvez seja antes de descodificar
+            array_push($ports,$port);
         }
       
         return $ports;

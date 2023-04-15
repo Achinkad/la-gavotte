@@ -55,6 +55,7 @@ class WirelessController extends Controller
 
     public function showSecurityProfiles(Request $request)
     {
+
         $router = Router::where('id', $request->id)->firstOrFail();
 
         try {

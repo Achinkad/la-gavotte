@@ -15,7 +15,7 @@ var selected_rule= ref(null)
 
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
-const loadRules = (() => { firewallStore.loadRules(router_rules) })
+const loadRules = ((active_routers) => { firewallStore.loadRules(router_rules,active_routers) })
 const rules = computed(() => { return firewallStore.getRules() })
 
 
@@ -35,15 +35,40 @@ const showRule = (rule) => {
 }
 
 watch(router_rules, () => {
-    loadRules()
+   
+    let active_routers = []
+
+
+    if(router_rules.value=='all'){
+        routers.value.forEach(element => {
+    
+            if(!element.disabled){
+                active_routers.push(element.id)
+            
+            }
+        })
+    }
+    loadRules(active_routers)
 })
 
 onBeforeMount(() => {
-   
-    loadRouters()
-    loadRules()
 
+    loadRouters()
+
+    let active_routers = []
+  
+    routers.value.forEach(element => {
+    
+        if(!element.disabled){
+            active_routers.push(element.id)
+            
+        }
+    })
+
+    loadRules(active_routers)
+   
 })
+
 </script>
 
 <template>
@@ -52,8 +77,9 @@ onBeforeMount(() => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_rules">
-                        <option value="all">All</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="all" v-if="routers.length > 0">All</option>
+                        <option value="all" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
                 <h2 class="p-title">Rules</h2>

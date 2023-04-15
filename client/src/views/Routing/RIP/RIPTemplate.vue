@@ -69,8 +69,9 @@ onBeforeMount(() => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_rip">
-                        <option value="-" selected hidden disabled>Select a router</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
                 <h2 class="p-title">RIP</h2>
@@ -103,7 +104,8 @@ onBeforeMount(() => {
                                         <th>Interfaces</th>
                                         <th>Mode</th>
                                         <th>Cost</th>
-                                        <th>Disabled</th>
+                                        <th>About</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                       
                                     </tr>
@@ -111,7 +113,7 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="riptemplates.length==0">
-                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
+                                        <td colspan="9" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
                                     </tr>
                                     <tr v-for="riptemplate in riptemplates">
 
@@ -133,9 +135,12 @@ onBeforeMount(() => {
                                         <td v-if="riptemplate.cost==undefined">-</td>
                                         <td v-else>{{riptemplate.cost}}</td>
 
-                                        <td class="text-success" v-if="riptemplate.disabled==undefined">false</td>
-                                        <td class="text-success" v-if="riptemplate.disabled=='false'">{{riptemplate.disabled}}</td>
-                                        <td class="text-danger" v-if="riptemplate.disabled=='true'">{{riptemplate.disabled}}</td>
+                                        <td class="text-success" v-if="riptemplate['.about']==undefined">Everything OK</td>
+                                        <td class="text-danger" v-else>{{riptemplate['.about']}}</td>
+
+                                        <td class="text-success" v-if="riptemplate.disabled==undefined">ACTIVE</td>
+                                        <td class="text-success" v-if="riptemplate.disabled=='false'">ACTIVE</td>
+                                        <td class="text-danger" v-if="riptemplate.disabled=='true'">DISABLED</td>
 
                                          <td>
                                             <div class="d-flex justify-content-center">

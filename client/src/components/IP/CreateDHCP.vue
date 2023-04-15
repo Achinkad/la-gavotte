@@ -69,7 +69,7 @@ watch(routerIdentification, () => {
             <h4 class="header-title">Create a new DHCP Server</h4>
         </div>
         <div class="card-body pt-0">
-            <form class="row g-3 needs-validation" novalidate @submit.prevent="createDHCP">
+            <form class="row g-3 needs-validation" @submit.prevent="createDHCP">
                 <div class="col-6">
                     <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="name" placeholder="Enter a name"
@@ -88,7 +88,6 @@ watch(routerIdentification, () => {
                         <option value="null" selected hidden disabled>Select a interface</option>
                         <option v-for="i in verifyInterfaces()" :key="i" :value="i.name" :disabled="i.disabled == 'true' || i.running == 'false'">{{i.name}}</option>
                     </select>
-                    <div id="interfaceSelectHelp" class="form-text"><u>You must select a router</u> to select an interface.</div>
                 </div>
                 <div class="col-6">
                     <label for="addressPool" class="form-label">Address Pool <span class="text-danger">*</span></label>
@@ -98,7 +97,8 @@ watch(routerIdentification, () => {
                         <option value="dhcp_pool0">DHCP Pool 0</option>
                     </select>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto add a new DHCP Server.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

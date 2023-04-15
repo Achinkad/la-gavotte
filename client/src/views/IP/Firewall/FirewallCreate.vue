@@ -12,8 +12,10 @@ const axiosApi = inject('axiosApi')
 const loadRouters = (() => { routerStore.loadRouters() })
 const routers = computed(() => { return routerStore.getRouters() })
 
-const routerIdentification = ref("-")
+const routerIdentification = ref("all")
 const protocolNegation = ref('false')
+
+
 
 const rule = ref({
     action: 'accept',
@@ -22,6 +24,8 @@ const rule = ref({
 })
 
 const createRule = () => {
+
+    let active_routers = []
 
     let formData = new FormData()
 
@@ -43,13 +47,20 @@ const createRule = () => {
     }
     
 
-    if(protocolNegation.value == 'true' && rule.value.protocol!=undefined){
-        formData.append('protocol', '!'+rule.value.protocol)
-    }
-    if(protocolNegation.value == 'false' && rule.value.protocol!=undefined){
+    if(rule.value.protocol!=undefined){
         formData.append('protocol', rule.value.protocol)
     }
     
+
+    routers.value.forEach(element => {
+   
+        if(!element.disabled){
+            active_routers.push(element.id)
+           
+        }
+    })
+
+    formData.append('active_routers', active_routers)
     formData.append('identity', routerIdentification.value)
 
     firewallStore.createRules(formData)
@@ -96,13 +107,14 @@ onBeforeMount(() => {
                             <div class="col-12 mt-3">
                             <label>Select Router</label>
                                 <select class="form-select" v-model="routerIdentification">
-                                    <option value="-" selected hidden disabled>Select a router</option>
-                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                    <option value="all" v-if="routers.length > 0">All</option>
+                                    <option value="all" selected hidden disabled v-else>Loading routers...</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                                 </select>
                             </div>
                             
 
-                            <div v-if="routerIdentification!='-'" class="row">
+                            
 
                                 <div class="col-6 mt-3">
                                     <label>Select Action</label>
@@ -240,7 +252,7 @@ onBeforeMount(() => {
                                     </select>     
                               
                                 </div>
-                            </div>
+                            
                             <div class="col-12 mt-4 d-flex justify-content-end">
                             <div class="px-1">
                                 <button type="reset" class="btn btn-light px-4 me-1">Clear</button>

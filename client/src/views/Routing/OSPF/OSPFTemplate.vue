@@ -73,8 +73,9 @@ onBeforeMount(() => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_ospf">
-                        <option value="-" selected hidden disabled>Select a router</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
                 <h2 class="p-title">OSPF</h2>
@@ -108,6 +109,7 @@ onBeforeMount(() => {
                                         <th>Network Type</th>
                                         <th>Cost</th>
                                         <th>Priority</th>
+                                        <th>About</th>
                                         <th>Status</th>
                                         <th>Actions</th>                                     
                                     </tr>
@@ -115,7 +117,7 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="ospftemplates.length==0">
-                                        <td colspan="9" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
+                                        <td colspan="10" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
                                     </tr>
                                     <tr v-for="ospftemplate in ospftemplates">
                                         
@@ -139,6 +141,9 @@ onBeforeMount(() => {
 
                                         <td v-if="ospftemplate.priority==undefined">-</td>
                                         <td v-else>{{ospftemplate.priority}}</td>
+
+                                        <td class="text-success" v-if="ospftemplate['.about']==undefined">Everything OK</td>
+                                        <td class="text-danger" v-else>{{ospftemplate['.about']}}</td>
 
                                         <td class="text-success" v-if="ospftemplate.disabled==undefined">ACTIVE</td>
                                         <td class="text-success" v-if="ospftemplate.disabled=='false'">ACTIVE</td>

@@ -48,8 +48,9 @@ onBeforeMount(() => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_bgp">
-                        <option value="-" selected hidden disabled>Select a router</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
                 <h2 class="p-title">BGP</h2>
@@ -132,7 +133,7 @@ onBeforeMount(() => {
                                         <td class="text-success" v-if="bgpconnection.disabled=='false'">ACTIVE</td>
                                         <td class="text-danger" v-if="bgpconnection.disabled=='true'">DISABLED</td>
 
-                                        <td v-if="bgpconnection['.about']==undefined">Everything OK</td>
+                                        <td class="text-success" v-if="bgpconnection['.about']==undefined">Everything OK</td>
                                         <td class="text-danger" v-else>{{bgpconnection['.about']}}</td>
 
                                          <td>

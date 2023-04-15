@@ -46,7 +46,9 @@ const editDNS = (() => {
                 </div>
                 <div class="col-6">
                     <label for="tpc" class="form-label">Max. Concurrent TCP Session <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="tpc" placeholder="Enter a value" v-model="dnsServer['max-concurrent-tcp-sessions']" required>
+                    <input type="text" class="form-control" id="tpc" placeholder="Enter a value"
+                    pattern="^(?:0|[1-9]\d{0,8}|[1-3]\d{0,9}|4[0-2]\d{0,8}|429496729[0-5])$"
+                    v-model="dnsServer['max-concurrent-tcp-sessions']" required>
                 </div>
                 <div class="col-6">
                     <label for="queries" class="form-label">Max. Concurrent Queries <span class="text-danger">*</span></label>

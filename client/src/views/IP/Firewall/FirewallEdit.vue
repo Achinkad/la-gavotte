@@ -5,7 +5,7 @@ const notyf = inject('notyf')
 
 const firewallStore = useFirewallStore()
 
-const protocolNegation = ref(props.rule.protocol[0]=='!' ? 'true' : 'false')
+const protocolNegation = ref(props.rule.protocol!=undefined && props.rule.protocol[0]=='!' ? 'true' : 'false')
 
 const props = defineProps({
     rule: {
@@ -14,7 +14,6 @@ const props = defineProps({
     }
    
 })
-
 
 
 const toggleDisabled = () => {
@@ -51,10 +50,8 @@ const editBridge = () => {
         formData.append('dst_port', props.rule['dst-port'])
     }
     
-    if(protocolNegation.value == 'true' && props.rule.protocol!=undefined){
-        formData.append('protocol', '!'+props.rule.protocol)
-    }
-    if(protocolNegation.value == 'false' && props.rule.protocol!=undefined){
+
+    if(props.rule.protocol!=undefined){
         formData.append('protocol', props.rule.protocol)
     }
     

@@ -52,8 +52,9 @@ onBeforeMount(() => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_ospf">
-                        <option value="-" selected hidden disabled>Select a router</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
                 <h2 class="p-title">OSPF</h2>
@@ -85,6 +86,7 @@ onBeforeMount(() => {
                                         <th>Instance</th>
                                         <th>Type</th>
                                         <th>Area Id</th>
+                                        <th>About</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                       
@@ -93,7 +95,7 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-if="ospfareas.length==0">
-                                        <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Areas.</td>
+                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no OSPF Areas.</td>
                                     </tr>
                                     <tr v-for="ospfarea in ospfareas">
 
@@ -111,6 +113,9 @@ onBeforeMount(() => {
 
                                         <td v-if="ospfarea['area-id']==undefined">-</td>
                                         <td v-else>{{ospfarea['area-id']}}</td>
+
+                                        <td class="text-success" v-if="ospfarea['.about']==undefined">Everything OK</td>
+                                        <td class="text-danger" v-else>{{ospfarea['.about']}}</td>
 
                                         <td class="text-success" v-if="ospfarea.disabled==undefined">ACTIVE</td>
                                         <td class="text-success" v-if="ospfarea.disabled=='false'">ACTIVE</td>
