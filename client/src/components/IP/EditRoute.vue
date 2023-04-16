@@ -58,7 +58,7 @@ watch(routerIdentification, () => {
                     v-model="route['dst-address']" required>
                 </div>
                 <div class="col-6">
-                    <label for="distance" class="form-label">Distance</label>
+                    <label for="distance" class="form-label">Distance [1-255]</label>
                     <input type="text" class="form-control" id="distance" placeholder="Enter a distance"
                     pattern="^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d?)$"
                     v-model="route.distance" required>
@@ -71,7 +71,9 @@ watch(routerIdentification, () => {
                     </datalist>
                     <div id="interfaceSelectHelp" class="form-text">Enter an interface or an address (double-click). <u>You must select a router to choose an interface</u>.</div>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+
+                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a Route.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

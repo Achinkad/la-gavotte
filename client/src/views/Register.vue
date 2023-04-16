@@ -7,6 +7,7 @@ const router = useRouter()
 const configStore = useConfigStore()
 const axiosApi = inject('axiosApi')
 const apiUrl = inject('apiUrl')
+const notyf = inject('notyf') 
 
 const user = ref({
     name: '',
@@ -28,7 +29,10 @@ const saveUser = () => {
     axiosApi.post(apiUrl + '/api/users', formData)
         .then((response) => {
             user.value = response.data.data
+            notyf.success('Registered with success.')
             router.back()
+        }).catch(error => {
+            notyf.error('Something went wrong while registering, check the fields.')
         })
 }
 
@@ -65,7 +69,7 @@ onBeforeUnmount(() => {
                                 <p class="text-muted">Don't have an account? Create your account, it takes less than a
                                     minute.</p>
                             </div>
-                            <form class="row g-3 needs-validation" novalidate @submit.prevent="register">
+                            <form class="row g-3 needs-validation" @submit.prevent="register">
                                 <div class="mb-3 col-md-6">
                                     <label for="inputName" class="form-label">Name <span
                                             class="text-danger">*</span></label>

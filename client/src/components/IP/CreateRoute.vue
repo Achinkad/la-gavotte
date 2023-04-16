@@ -11,8 +11,8 @@ const interfaceStore = useInterfaceStore() // Interface Pinia Store
 
 const props = defineProps({ router: { type: Number } }) // Router IP
 
-const routerIdentification = toRef(props, 'router') // Router IP Reference because BERTOLO IS DUMB!
-const interfaceType = ref("all") // Interface type because BERTOLO IS DUMB!
+const routerIdentification = toRef(props, 'router') // Router IP Reference
+const interfaceType = ref("all") // Interface type 
 
 const loadInterfaces = ((routerIdentification) => { interfaceStore.loadInterfaces(routerIdentification, interfaceType) })
 const interfaces = computed(() => { return interfaceStore.getInterfaces() })
@@ -60,7 +60,7 @@ watch(routerIdentification, () => {
                     v-model="route.destination" required>
                 </div>
                 <div class="col-6">
-                    <label for="distance" class="form-label">Distance</label>
+                    <label for="distance" class="form-label">Distance [1-255] </label>
                     <input type="text" class="form-control" id="distance" placeholder="Enter a distance"
                     pattern="^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d?)$"
                     v-model="route.distance" required>

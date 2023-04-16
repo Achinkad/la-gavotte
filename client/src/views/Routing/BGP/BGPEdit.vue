@@ -91,21 +91,21 @@ const editConnectionBGP = () => {
                                 <div class="col-6 mt-3">
                                     <label for="src_address" class="form-label">Router ID</label>
                                     <input type="text" class="form-control" id="router_id" placeholder="Enter the Router ID"
-                                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                                     v-model="bgpconnection['router-id']">
                                 </div>
 
                                  <div class="col-6 mt-3">
                                     <label for="remote_address" class="form-label">Remote Address</label>
                                     <input type="text" class="form-control" id="remote_address" placeholder="Enter the Remote Address"
-                                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
                                     v-model="bgpconnection['remote.address']">
                                 </div>
 
                                 <div class="col-6 mt-3">
                                     <label for="local_address" class="form-label">Local Address</label>
                                     <input type="text" class="form-control" id="local_address" placeholder="Enter the Local Address"
-                                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
                                     v-model="bgpconnection['local.address']">
                                 </div>
 
@@ -120,13 +120,17 @@ const editConnectionBGP = () => {
                                 </div>
 
                                 <div class="col-6 mt-3">
-                                    <label for="remote_port" class="form-label">Remote Port</label>
-                                    <input type="text" class="form-control" id="remote_port" placeholder="Enter the Remote Port" v-model="bgpconnection['remote.port']">
+                                    <label for="remote_port" class="form-label">Remote Port [0-65535]</label>
+                                    <input type="text" class="form-control" id="remote_port" placeholder="Enter the Remote Port"
+                                    pattern="^([0-9]|[1-9][0-9]|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
+                                    v-model="bgpconnection['remote.port']">
                                 </div>
 
                                 <div class="col-6 mt-3">
-                                    <label for="local_port" class="form-label">Local Port</label>
-                                    <input type="text" class="form-control" id="local_port" placeholder="Enter the Local Port" v-model="bgpconnection['local.port']">
+                                    <label for="local_port" class="form-label">Local Port [0-65535]</label>
+                                    <input type="text" class="form-control" id="local_port" placeholder="Enter the Local Port" 
+                                    pattern="^([0-9]|[1-9][0-9]|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
+                                    v-model="bgpconnection['local.port']">
                                 </div>
 
                                 <div class="col-6 mt-3">

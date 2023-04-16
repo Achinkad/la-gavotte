@@ -57,12 +57,7 @@ const editTemplateOSPF = () => {
 
     formData.append('router_identity', props.ospftemplate.router)
 
-    if (routingStore.editTemplatesOSPF(formData)) {
-        notyf.success('A ospf interface-template has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-   
+    routingStore.editTemplatesOSPF(formData)
     
 }
 
@@ -101,7 +96,7 @@ const editTemplateOSPF = () => {
                                 <div class="col-6 mt-3">
                                     <label for="src_address" class="form-label">Networks</label>
                                     <input type="text" class="form-control" id="router_id" placeholder="Enter the OSPF Template Networks"
-                                   
+                                    pattern="^(\d{1,3}\.){3}\d{1,3}(,\s*\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})*$"
                                     v-model="ospftemplate.networks">
                                 </div>
 
@@ -123,13 +118,17 @@ const editTemplateOSPF = () => {
                                 </div>
 
                                 <div class="col-6 mt-3">
-                                    <label for="cost" class="form-label">Cost</label>
-                                    <input type="number" class="form-control" id="name" placeholder="Enter the OSPF Interface-Template Cost" v-model="ospftemplate.cost">
+                                    <label for="cost" class="form-label">Cost [1-65535]</label>
+                                    <input type="number" class="form-control" id="name" placeholder="Enter the OSPF Interface-Template Cost" 
+                                    pattern="^([1-9]|[1-9][0-9]|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
+                                    v-model="ospftemplate.cost">
                                 </div>
 
                                 <div class="col-6 mt-3">
-                                    <label for="priority" class="form-label">Priority</label>
-                                    <input type="number" class="form-control" id="name" placeholder="Enter the OSPF Interface-Template Priority" v-model="ospftemplate.priority">
+                                    <label for="priority" class="form-label">Priority [0-255]</label>
+                                    <input type="number" class="form-control" id="name" placeholder="Enter the OSPF Interface-Template Priority"
+                                    pattern="^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+                                    v-model="ospftemplate.priority">
                                 </div>
 
                                 <div class="form-check form-switch col-6">

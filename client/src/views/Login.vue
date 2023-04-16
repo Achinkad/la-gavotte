@@ -52,14 +52,14 @@ onBeforeUnmount(() => {
                                 <p class="text-muted">Enter your email address and password to access the application.
                                 </p>
                             </div>
-                            <form class="row g-3 needs-validation" novalidate @submit.prevent="login">
+                            <form class="row g-3 needs-validation" @submit.prevent="login">
                                 <div class="mb-3">
-                                    <label for="inputUsername" class="form-label">E-Mail</label>
+                                    <label for="inputUsername" class="form-label">E-Mail <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="inputUsername"
                                     placeholder="Enter your email" required v-model="credentials.username">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="inputPassword" class="form-label">Password</label>
+                                    <label for="inputPassword" class="form-label">Password <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control" id="inputPassword"
                                     placeholder="Enter your password" required v-model="credentials.password">
                                 </div>

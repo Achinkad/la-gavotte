@@ -42,12 +42,8 @@ const createInstanceRIP = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (routingStore.createInstancesRIP(formData)) {
-        notyf.success('A new RIP Instance has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-    
+    routingStore.createInstancesRIP(formData)
+     
 }
 
 

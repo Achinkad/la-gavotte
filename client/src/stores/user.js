@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('user', () => {
     const axiosApi = inject('axiosApi')
-
+    const notyf = inject('notyf') 
     const user = ref(null)
 
     const userId = computed(() => {
@@ -32,10 +32,12 @@ export const useUserStore = defineStore('user', () => {
             axiosApi.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
             sessionStorage.setItem('token', response.data.access_token)
             await load_user()
+            notyf.success('Logged in with success.')
             return true
         }
         catch(error) {
             clear_user()
+            notyf.error("Invalid username or password")
             return false
         }
     }
@@ -44,8 +46,10 @@ export const useUserStore = defineStore('user', () => {
         try {
             await axiosApi.post('logout')
             clear_user()
+            notyf.success('Logged out with success.')
             return true
         } catch (error) {
+            notyf.success('Something went wrong while logging out!')
             return false
         }
     }
