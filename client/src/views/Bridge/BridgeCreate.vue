@@ -104,7 +104,14 @@ onBeforeMount(() => {
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <div class="col-12 mt-4 d-flex justify-content-end">
+                                    <div class="px-1">
+                                        <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                                    </div>
+                                    <div class="px-1">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
                                 </div>
                             </form>
                         </div>
