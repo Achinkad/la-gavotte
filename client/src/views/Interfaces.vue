@@ -28,7 +28,7 @@ watch(type_interfaces, () => {
 })
 
 onBeforeMount(() => {
-   loadRouters()
+    loadRouters()
 
 })
 
@@ -52,75 +52,79 @@ onBeforeMount(() => {
         <div class="col-12">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Connected Interfaces</h4>
-
+                    <h4 class="header-title">List of all available interfaces</h4>
+                    <div class="d-flex justify-content-end" v-if="router_interfaces != '-'">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <label for="type_interfaces" class="form-label mb-0">Type:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select id="type_interfaces" class="form-select" v-model="type_interfaces">
+                                    <option value="all" selected>All</option>
+                                    <option value="ether">Ethernet</option>
+                                    <option value="wlan">Wireless</option>
+                                    <option value="bridge">Bridge</option>
+                                    <option value="wg">Wireguard</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="card-body pt-0">
+                    <table class="table table-responsive align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center" style="width:5%">#ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Actual MTU</th>
+                                <th>L2 MTU</th>
+                                <th>TX</th>
+                                <th>RX</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="interfaces.length==0">
+                                <td colspan="8" class="text-center" style="height:55px!important;">There are no interfaces.</td>
+                            </tr>
+                            <tr v-for="iface in interfaces">
 
-                    <div class="p-title-right mb-3" style="width:15%;" v-if="router_interfaces!='-'">
-                    <div class="row align-items-center">
-                        <div class="col-auto">
-                            <label for="type_interfaces" class="form-label">Type:</label>
-                        </div>
-                        <div class="col-auto">
-                            <select id="type_interfaces" class="form-select" v-model="type_interfaces">
-                            <option value="all" selected>All</option>
-                            <option value="ether">Ethernet</option>
-                            <option value="wlan">Wireless</option>
-                            <option value="bridge">Bridge</option>
-                            <option value="wg">Wireguard</option>
-                            </select>
-                        </div>
-                    </div>
+                                <td class="text-center" v-if="iface['.id']==undefined" style="height:55px!important;"> -</td>
+                                <td class="text-center" style="height:55px!important;">{{iface['.id'].substring(1)}}</td>
 
-                    </div>
-                 <table class="table table-responsive align-middle">
-                                <thead class="table-light">
-                                    <tr class="text-center">
-                                        <th>#ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Actual MTU</th>
-                                        <th>L2 MTU</th>
-                                        <th>TX</th>
-                                        <th>RX</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr v-if="interfaces.length==0">
-                                        <td colspan="8" class="text-center" style="height:55px!important;">There are no interfaces.</td>
-                                    </tr>
-                                    <tr v-for="iface in interfaces">
+                                <td v-if="iface.name==undefined"> -</td>
+                                <td v-else>{{iface.name}}</td>
 
-                                        <td v-if="iface['.id']==undefined">-</td>
-                                        <th >{{iface['.id'].substring(1)}}</th>
+                                <td v-if="iface.type==undefined"> -</td>
+                                <td v-else>{{iface.type}}</td>
 
-                                        <td v-if="iface.name==undefined">-</td>
-                                        <td v-else>{{iface.name}}</td>
+                                <td v-if="iface['actual-mtu']==undefined"> -</td>
+                                <td v-else>{{iface['actual-mtu']}}</td>
 
-                                        <td v-if="iface.type==undefined">-</td>
-                                        <td v-else>{{iface.type}}</td>
+                                <td v-if="iface.l2mtu==undefined"> -</td>
+                                <td v-else>{{iface.l2mtu}}</td>
 
-                                        <td v-if="iface['actual-mtu']==undefined">-</td>
-                                        <td v-else>{{iface['actual-mtu']}}</td>
+                                <td v-if="iface['rx-byte']==undefined"> -</td>
+                                <td v-else>{{iface['rx-byte']}} kbps</td>
 
-                                        <td v-if="iface.l2mtu==undefined">-</td>
-                                        <td v-else>{{iface.l2mtu}}</td>
+                                <td v-if="iface['tx-byte']==undefined"> -</td>
+                                <td v-else>{{iface['tx-byte']}} kbps</td>
 
-                                        <td v-if="iface['rx-byte']==undefined">-</td>
-                                        <td v-else>{{iface['rx-byte']}} kbps</td>
+                                <td class="text-center" v-if="iface.disabled==undefined">
+                                    <span class="badge badge-success-lighten">Active</span>
+                                </td>
 
-                                        <td v-if="iface['tx-byte']==undefined">-</td>
-                                        <td v-else>{{iface['tx-byte']}} kbps</td>
+                                <td class="text-center" v-if="iface.disabled=='false'">
+                                    <span class="badge badge-success-lighten">Active</span>
+                                </td>
 
-                                        <td class="text-success" v-if="iface.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="iface.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="iface.disabled=='true'">DISABLED</td>
-                                </tr>
-                            </tbody>
-                </table>
+                                <td class="text-center" v-if="iface.disabled=='true'">
+                                    <span class="badge badge-danger-lighten">Disabled</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                 </div>
             </div>

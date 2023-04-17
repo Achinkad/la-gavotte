@@ -29,13 +29,13 @@ const createBridge = () => {
     formData.append('protocol', bridge.value.protocol)
     formData.append('identity', routerIdentification.value)
 
-   
+
     bridgeStore.createBridges(formData)
-  
+
 }
 
 onBeforeMount(() => {
-   
+
     loadRouters()
 })
 
@@ -63,7 +63,7 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                       
+
 
                            <form class="row g-3" @submit.prevent="createBridge">
                             <div class="col-12">
@@ -101,7 +101,7 @@ onBeforeMount(() => {
                                         <label class="form-check-label" for="rstp">MSTP</label><br>
                                     </div>
                                 </div>
-                           
+
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
@@ -110,6 +110,6 @@ onBeforeMount(() => {
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>

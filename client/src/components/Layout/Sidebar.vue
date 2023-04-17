@@ -41,7 +41,8 @@ const router = useRouter()
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarIP" aria-expanded="false" aria-controls="sidebarIP"
-                        :class="{ active: $route.name === 'Addresses' || $route.name === 'Routes' || $route.name === 'DNS' || $route.name === 'DHCP' || $route.name === 'Firewall' }">
+                        :class="{ active: $route.name === 'Addresses' || $route.name === 'Routes' || $route.name === 'DNS' || $route.name === 'DHCP'
+                        || $route.name === 'Firewall' || $route.name === 'FirewallCreate' }">
                             <i class="bi bi-diagram-3"></i> IP
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
@@ -77,7 +78,7 @@ const router = useRouter()
                                 </li>
                                 <li>
                                     <router-link class="nav-link" :class="{
-                                        active: $route.name === 'Firewall'
+                                        active: $route.name === 'Firewall' || $route.name === 'FirewallCreate'
                                         }" :to="{ name: 'Firewall' }">
                                         Firewall Rules
                                     </router-link>
@@ -86,7 +87,8 @@ const router = useRouter()
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarBridge" aria-expanded="false" aria-controls="sidebarIP">
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarBridge" aria-expanded="false" aria-controls="sidebarIP"
+                        :class="{ active: $route.name === 'Bridges' || $route.name === 'Ports'}">
                             <i class="bi bi-tv"></i> Bridge
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
@@ -135,7 +137,9 @@ const router = useRouter()
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRouting" aria-expanded="false" aria-controls="sidebarRouting">
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRouting" aria-expanded="false" aria-controls="sidebarRouting"
+                        :class="{ active: $route.name === 'BGP' || $route.name === 'OSPFInstance' || $route.name === 'OSPFTemplate' || $route.name === 'OSPFArea'
+                        || $route.name === 'RIPInstance' || $route.name === 'RIPTemplate'}">
                             <i class="bi bi-arrow-left-right"></i> Routing
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
@@ -149,12 +153,13 @@ const router = useRouter()
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarOSPF" aria-expanded="false" aria-controls="sidebarRouting">
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarOSPF" aria-expanded="false" aria-controls="sidebarRouting"
+                        :class="{active: $route.name === 'OSPFInstance' || $route.name === 'OSPFTemplate' || $route.name === 'OSPFArea' }">
                             OSPF
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
                         <div class="collapse" id="sidebarOSPF">
-                            <ul class="side-nav-second-level">
+                            <ul class="side-nav-third-level">
                                 <li>
                                     <router-link class="nav-link" :class="{
                                         active: $route.name === 'OSPFInstance'
@@ -180,12 +185,13 @@ const router = useRouter()
                         </div>
 
 
-                    <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRIP" aria-expanded="false" aria-controls="sidebarRouting">
+                    <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarRIP" aria-expanded="false" aria-controls="sidebarRouting"
+                    :class="{active: $route.name === 'RIPInstance' || $route.name === 'RIPTemplate'}">
                             RIP
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                     </a>
                         <div class="collapse" id="sidebarRIP">
-                            <ul class="side-nav-second-level">
+                            <ul class="side-nav-third-level">
                                 <li>
                                     <router-link class="nav-link" :class="{
                                         active: $route.name === 'RIPInstance'
@@ -421,6 +427,30 @@ ul.side-nav-second-level {
 }
 
 ul.side-nav-second-level li {
+    padding: 0 !important;
+}
+
+.side-nav-third-level li a {
+    padding: 10px 30px 8px 65px;
+    display: block;
+    position: relative;
+    -webkit-transition: all .4s;
+    transition: all .4s;
+    font-size: .89rem;
+    text-decoration: none;
+    color: #8391a2;
+}
+
+
+.side-nav-third-level li a:hover {
+    color: #fff;
+}
+
+ul.side-nav-third-level {
+    padding: 0 !important;
+}
+
+ul.side-nav-third-level li {
     padding: 0 !important;
 }
 </style>

@@ -32,7 +32,7 @@ const type_all = ref("all")
 
 const deletePort = (port) => {
     bridgeStore.deletePorts(port)
-  
+
 }
 
 const showPort = (port) => {
@@ -41,7 +41,7 @@ const showPort = (port) => {
 
     loadInterfaces()
     loadBridges()
-    
+
 }
 
 const toggleDisabled = () => {
@@ -52,14 +52,14 @@ const toggleDisabled = () => {
 
 
 watch(router_ports, () => {
- 
-   loadPorts()
+
+    loadPorts()
 })
 
 onBeforeMount(() => {
 
     loadRouters()
-   
+
 })
 
 </script>
@@ -78,69 +78,74 @@ onBeforeMount(() => {
             </div>
         </div>
     </div>
-    
-        <div class="col-md-12">
-            <div class="card card-h-100">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Connected Ports</h4>
-                    <div class="px-1">
-                        <router-link :to="{ name: 'PortCreate'}"
-                                                        :title="`Create Port`">
-                            <button type="submit" class="btn btn-primary">Add Port</button>
-                        </router-link>
-                    </div>
-                </div>
-                <div class="card-body pt-0">
-                    <table class="table table-responsive align-middle">
-                                <thead class="table-light">
-                                    <tr class="text-center">
-                                        <th>#ID</th>
-                                        <th>Interface</th>
-                                        <th>Bridge</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr v-if="ports.length==0">
-                                        <td colspan="5" class="text-center" style="height:55px!important;">There are no ports.</td>
-                                    </tr>
-                                    <tr v-for="port in ports">
-
-                                        <td v-if="port['.id']==undefined">-</td>
-                                        <td v-else>{{port['.id'].substring(1)}}</td>
-
-                                        <td v-if="port.interface==undefined">-</td>
-                                        <td v-else>{{port.interface}}</td>
-                                        
-                                        <td v-if="port.bridge==undefined">-</td>
-                                        <td v-else>{{port.bridge}}</td> 
-                                
-                                        <td class="text-success" v-if="port.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="port.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="port.disabled=='true'">DISABLED</td>
-                                         <td>
-                                            <div class="d-flex justify-content-center">
-                                               
-                                                <button class="btn btn-xs btn-light" title="Delete" @click="deletePort(port)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                 <button class="btn btn-xs btn-light" title="Edit" @click="showPort(port)">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                            </div>
-                                            
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                </div>
+    <div class="col-md-12">
+        <div class="card card-h-100">
+            <div class="d-flex card-header justify-content-between align-items-center">
+                <h4 class="header-title">Connected Ports</h4>
+                <div class="px-1">
+                    <router-link :to="{ name: 'PortCreate'}"
+                    :title="`Create Port`">
+                    <button type="submit" class="btn btn-primary">Add Port</button>
+                </router-link>
             </div>
-           
-               <port-edit :port="selected_port" :bridges="bridges" :interfaces="interfaces" v-if="selected_port"></port-edit>
-          
         </div>
-        
+        <div class="card-body pt-0">
+            <table class="table table-responsive align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:10%;">#ID</th>
+                        <th>Interface</th>
+                        <th>Bridge</th>
+                        <th class="text-center" style="width:15%;">Status</th>
+                        <th class="text-center" style="width:15%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="ports.length==0">
+                        <td colspan="5" class="text-center" style="height:55px!important;">There are no ports.</td>
+                    </tr>
+                    <tr v-for="port in ports">
+
+                        <td v-if="port['.id']==undefined">-</td>
+                        <td v-else>{{port['.id'].substring(1)}}</td>
+
+                        <td v-if="port.interface==undefined">-</td>
+                        <td v-else>{{port.interface}}</td>
+
+                        <td v-if="port.bridge==undefined">-</td>
+                        <td v-else>{{port.bridge}}</td>
+
+                        <td class="text-center" v-if="port.disabled==undefined">
+                            <span class="badge badge-success-lighten">Active</span>
+                        </td>
+                        <td class="text-center" v-if="port.disabled=='false'">
+                            <span class="badge badge-success-lighten">Active</span>
+                        </td>
+                        <td class="text-center" v-if="port.disabled=='true'">
+                            <span class="badge badge-danger-lighten">Disabled</span>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center">
+
+                                <button class="btn btn-xs btn-light table-button" title="Edit" @click="showPort(port)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-xs btn-light ms-2 table-button" title="Delete" @click="deletePort(port)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <port-edit :port="selected_port" :bridges="bridges" :interfaces="interfaces" v-if="selected_port"></port-edit>
+
+</div>
+
 
 </template>

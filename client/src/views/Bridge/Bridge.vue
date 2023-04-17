@@ -23,10 +23,10 @@ const bridges = computed(() => { return bridgeStore.getBridges() })
 
 
 const deleteBridge = (bridge) => {
-    
+
 
     bridgeStore.deleteBridges(bridge)
-   
+
 }
 
 
@@ -42,7 +42,7 @@ watch(router_bridges, () => {
 
 
 onBeforeMount(() => {
-   
+
     loadRouters()
 
 })
@@ -78,22 +78,22 @@ onBeforeMount(() => {
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                       
+
                             <table class="table table-responsive align-middle" >
                                 <thead class="table-light">
-                                
-                                    <tr class="text-center">
-                                        <th>#ID</th>
+
+                                    <tr>
+                                        <th style="width:10%;">#ID</th>
                                         <th>Name</th>
                                         <th>L2 MTU/Actual MTU</th>
                                         <th>MAC Address</th>
                                         <th>Protocol</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th class="text-center" style="width:10%;">Status</th>
+                                        <th class="text-center" style="width:10%;">Actions</th>
                                     </tr>
-                               
+
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody>
                                     <tr v-if="bridges.length==0">
                                         <td colspan="7" class="text-center" style="height:55px!important;">There are no bridges.</td>
                                     </tr>
@@ -104,7 +104,7 @@ onBeforeMount(() => {
 
                                         <td v-if="bridge.name==undefined">-</td>
                                         <td v-else>{{bridge.name}}</td>
-                                        
+
                                         <td v-if="bridge.l2mtu==undefined || bridge['actual-mtu']==undefined">-</td>
                                         <td v-else>{{bridge.l2mtu}}/{{bridge['actual-mtu']}}</td>
 
@@ -114,33 +114,39 @@ onBeforeMount(() => {
                                         <td v-if="bridge['protocol-mode']==undefined">-</td>
                                         <td v-else>{{bridge['protocol-mode']}}</td>
 
-                                        <td class="text-success" v-if="bridge.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="bridge.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="bridge.disabled=='true'">DISABLED</td>
+                                        <td class="text-center" v-if="bridge.disabled==undefined">
+                                            <span class="badge badge-success-lighten">Active</span>
+                                        </td>
+                                        <td class="text-center" v-if="bridge.disabled=='false'">
+                                            <span class="badge badge-success-lighten">Active</span>
+                                        </td>
+                                        <td class="text-center" v-if="bridge.disabled=='true'">
+                                            <span class="badge badge-danger-lighten">Disabled</span>
+                                        </td>
                                          <td>
                                             <div class="d-flex justify-content-center">
-                                               
-                                               <button class="btn btn-xs btn-light" title="Delete" @click="deleteBridge(bridge)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <button class="btn btn-xs btn-light" title="Edit" @click="showBridge(bridge)">
+
+                                                <button class="btn btn-xs btn-light table-button" title="Edit" @click="showBridge(bridge)">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                               
+                                               <button class="btn btn-xs btn-light ms-2 table-button" title="Delete" @click="deleteBridge(bridge)">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+
                                             </div>
-                                           
+
                                         </td>
-                                        
-                                   
+
+
                                     </tr>
                                 </tbody>
-                            </table> 
+                            </table>
                         </div >
                     </div>
 
-               
+
                     <bridge-edit :bridge="selected_bridge" v-if="selected_bridge"></bridge-edit>
-             
+
         </div>
      </div>
         </div>

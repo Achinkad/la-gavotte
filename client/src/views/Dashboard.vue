@@ -132,7 +132,7 @@ onBeforeMount(() => {
                         </thead>
                         <tbody>
                             <tr v-if="routers.length == 0">
-                                <td colspan="5" class="text-center" style="height:55px!important;">There are no routers registered in the system.</td>
+                                <td colspan="7" class="text-center" style="height:55px!important;">There are no routers registered in the system.</td>
                             </tr>
                             <tr v-for="router in routers" :key="router.id">
                                 <td class="align-middle" style="height:55px!important;">#{{ router.id }}</td>
