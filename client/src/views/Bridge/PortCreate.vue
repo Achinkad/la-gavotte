@@ -87,8 +87,9 @@ onBeforeMount(() => {
                                 </select>
                             </div>
                             <div v-if="routerIdentification!='-'">
-                                <div class="col-6">
-                                <label>Select Interface</label>
+                            
+                                <div class="col-6 mt-3">
+                                <label class="form-label">Select Interface</label>
                                     <select class="form-select" v-model="port.interface" required>
                                         <option value="-" selected hidden disabled>Select a interface</option>
                                         <option value="all">All</option>
@@ -98,8 +99,8 @@ onBeforeMount(() => {
                                         <option v-for="iface in interfaces" :key="iface.name" :value="iface.name">{{ iface.name }}</option>
                                     </select>
                                 </div>
-                                <div class="col-6">
-                                <label>Select Bridge</label>
+                                <div class="col-6 mt-3">
+                                <label class="form-label">Select Bridge</label>
                                     <select class="form-select" v-model="port.bridge" required>
                                         <option value="-" selected hidden disabled>Select a bridge</option>
                                         <option v-for="bridge in bridges" :key="bridge.name" :value="bridge.name">{{ bridge.name }}</option>
