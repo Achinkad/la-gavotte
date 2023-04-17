@@ -73,12 +73,12 @@ watch(routerIdentification, () => {
                 <div class="col-6">
                     <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="name" placeholder="Enter a name"
-                    v-model="dhcpServer.name" required>
+                    v-model="dhcpServer.name" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
                     <label for="leaseTime" class="form-label">Lease Time</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="leaseTime" placeholder="Enter a lease time" v-model="dhcpServer.leaseTime" required>
+                        <input type="text" class="form-control" id="leaseTime" placeholder="Enter a lease time" v-model="dhcpServer.leaseTime" required :disabled="isNaN(routerIdentification)">
                         <span class="input-group-text">Minutes</span>
                     </div>
                 </div>
@@ -91,22 +91,24 @@ watch(routerIdentification, () => {
                 </div>
                 <div class="col-6">
                     <label for="addressPool" class="form-label">Address Pool <span class="text-danger">*</span></label>
-                    <select class="form-select" id="addressPool" v-model='dhcpServer.addressPool'>
+                    <select class="form-select" id="addressPool" v-model='dhcpServer.addressPool' :disabled="isNaN(routerIdentification)">
                         <option value="null" selected hidden disabled>Select an address pool</option>
                         <option value="static-only">Static only</option>
                         <option value="dhcp_pool0">DHCP Pool 0</option>
                     </select>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto add a new DHCP Server.</div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
+                <div class="col-12 mt-4 d-flex justify-content-end">
                     <div class="px-1">
-                        <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                        <button type="reset" class="btn btn-light px-4 me-1" :disabled="isNaN(routerIdentification)">Clear</button>
                     </div>
                     <div class="px-1">
-                        <button type="submit" class="btn btn-primary">Add DHCP Server</button>
+                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Add DHCP Server</button>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="callout" v-if="isNaN(routerIdentification)">
+        <b>Note</b>: You must select a router to add a new DHCP server.
     </div>
 </template>

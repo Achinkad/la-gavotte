@@ -64,11 +64,11 @@ const createSecurityProfile = (() => {
                 <div class="col-6">
                     <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="name" placeholder="Enter a Name"
-                    v-model="securityProfile.name" required>
+                    v-model="securityProfile.name" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
                     <label for="mode" class="form-label">Mode <span class="text-danger">*</span></label>
-                    <select class="form-select" id="mode" v-model='securityProfile.mode' required>
+                    <select class="form-select" id="mode" v-model='securityProfile.mode' required :disabled="isNaN(routerIdentification)">
                         <option value="none">none</option>
                         <option value="dynamic-keys">dynamic keys</option>
                         <option value="static-keys-optional">static keys optional</option>
@@ -88,25 +88,27 @@ const createSecurityProfile = (() => {
                 <div class="col-6" v-if="securityProfile.authenticationTypes == 'wpa-psk' && securityProfile.mode == 'dynamic-keys'">
                     <label for="wpaKey" class="form-label">WPA Pre-Shared Key <span class="text-danger">*</span></label>
                     <input type="password" class="form-control" :class="{ hasErrorForm: hasError }" id="wpaKey"
-                    placeholder="Enter a WPA Key" v-model="securityProfile.wpaPreSharedKey">
+                    placeholder="Enter a WPA Key" v-model="securityProfile.wpaPreSharedKey" :disabled="isNaN(routerIdentification)">
                     <div id="wpaKeyHelp" class="form-text" :class="{ 'text-danger': hasError }">Must be 8-64 characters long.</div>
                 </div>
                 <div class="col-6" v-if="securityProfile.authenticationTypes == 'wpa2-psk' && securityProfile.mode == 'dynamic-keys'">
                     <label for="wpa2Key" class="form-label">WPA2 Pre-Shared Key <span class="text-danger">*</span></label>
                     <input type="password" class="form-control" :class="{ hasErrorForm: hasError }" id="wpa2Key"
-                    placeholder="Enter a WPA2 Key" v-model="securityProfile.wpa2PreSharedKey">
+                    placeholder="Enter a WPA2 Key" v-model="securityProfile.wpa2PreSharedKey" :disabled="isNaN(routerIdentification)">
                     <div id="wpa2KeyHelp" class="form-text" :class="{ 'text-danger': hasError }">Must be 8-64 characters long.</div>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto add a new Security Profile.</div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
+                <div class="col-12 mt-4 d-flex justify-content-end">
                     <div class="px-1">
-                        <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                        <button type="reset" class="btn btn-light px-4 me-1" :disabled="isNaN(routerIdentification)">Clear</button>
                     </div>
                     <div class="px-1">
-                        <button type="submit" class="btn btn-primary">Add Security Profile</button>
+                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Add Security Profile</button>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="callout" v-if="isNaN(routerIdentification)">
+        <b>Note</b>: You must select a router to add a new address.
     </div>
 </template>

@@ -71,7 +71,7 @@ watch(routerIdentification, () => {
                     v-model="vpnClient['endpoint-address']" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
-                    <label for="endpointPort" class="form-label">Endpoint Port [1-65535]<span class="text-danger">*</span></label>
+                    <label for="endpointPort" class="form-label">Endpoint Port <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="endpointPort" placeholder="Enter a port"
                     pattern="^([1-9]|[1-9][0-9]|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
                     v-model="vpnClient['endpoint-port']" required :disabled="isNaN(routerIdentification)">
@@ -88,16 +88,18 @@ watch(routerIdentification, () => {
                     v-model="vpnClient['public-key']" required :disabled="isNaN(routerIdentification)">
                 </div>
 
-                <div class="col-12 mt-4 d-flex" style="font-size:0.9em;" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a VPN Client.</div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
+                <div class="col-12 mt-4 d-flex justify-content-end">
                     <div class="px-1">
-                        <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                        <button type="reset" class="btn btn-light px-4 me-1" :disabled="isNaN(routerIdentification)">Clear</button>
                     </div>
                     <div class="px-1">
-                        <button type="submit" class="btn btn-primary">Edit VPN Client</button>
+                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Edit VPN Client</button>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="callout" v-if="isNaN(routerIdentification)">
+        <b>Note</b>: You must select a router to add a new VPN client.
     </div>
 </template>

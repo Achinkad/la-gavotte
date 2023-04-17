@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 use App\Helper\Helper;
 use App\Models\Router;
 
@@ -166,5 +168,21 @@ class VPNController extends Controller
         $option = $request->disabled == "true" ? "false" : "true"; // Toggle Disabled
         $body = array('disabled' => $option);
         $response = Helper::httpClient('PATCH', 'interface/wireguard/peers/' . $idVPN,  $router, $body);
+    }
+
+    public function downloadConfigFile(Request $request)
+    {
+        $content = '[Interface]
+PrivateKey = <YOUR_PRIVATE_KEY>
+Address = '. $request->vpn["allowed-address"] .'
+
+[Peer]
+PublicKey = '. $request->vpn["public-key"] .'
+Endpoint = '. $request->vpn["endpoint-address"] .':'. $request->vpn["endpoint-port"] .'
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = '. substr($request->vpn["persistent-keepalive"], 0, -1) .'';
+
+        Storage::disk('public')->put('wg0.conf', $content);
+        return Storage::download('public/wg0.conf');
     }
 }

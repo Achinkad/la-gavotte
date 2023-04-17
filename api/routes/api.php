@@ -119,6 +119,9 @@ Route::patch('vpn/client/edit/{id}', [VPNController::class, 'editClientVPN']);
 Route::delete('vpn/client/delete/{id}', [VPNController::class, 'deleteClientVPN']);
 Route::patch('vpn/client/active/{id}', [VPNController::class, 'toogleDisabledClientVPN']);
 
+/* --- [API Routes] -> VPN (DOWNLOAD) --- */
+Route::post('vpn/client/download', [VPNController::class, 'downloadConfigFile']);
+
 /* --- [API Routes] -> BACKUP --- */
 Route::post('backup', [BackupController::class, 'doBackup']);
 

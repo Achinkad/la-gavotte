@@ -37,39 +37,43 @@ const editDNS = (() => {
                 <div class="col-6">
                     <label for="server" class="form-label">Servers</label>
                     <input type="text" class="form-control" id="server" placeholder="Enter a server address"
-                    v-model="dnsServer.servers">
+                    v-model="dnsServer.servers" :disabled="isNaN(routerIdentification)">
                     <div id="serverHelp" class="form-text">Insert your servers <u>seperated by commas.</u></div>
                 </div>
                 <div class="col-6">
-                    <label for="packetSize" class="form-label">Max. UDP Packet Size [64-65507]<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="packetSize" placeholder="Enter a value" 
-                    
+                    <label for="packetSize" class="form-label">Max. UDP Packet Size<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="packetSize" placeholder="Enter a value"
                     pattern="^([6][4-9]|[7-9]\d{1}|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|6550[0-7])$"
-                    v-model="dnsServer['max-udp-packet-size']" required>
+                    v-model="dnsServer['max-udp-packet-size']" required :disabled="isNaN(routerIdentification)">
+                    <div class="form-text">Value range: 64 - 65507.</div>
                 </div>
                 <div class="col-6">
-                    <label for="tpc" class="form-label">Max. Concurrent TCP Session [0-4294967295] <span class="text-danger">*</span></label>
+                    <label for="tpc" class="form-label">Max. Concurrent TCP Session <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="tpc" placeholder="Enter a value"
                     pattern="^(?:0|[1-9]\d{0,8}|[1-3]\d{0,9}|4[0-2]\d{0,8}|429496729[0-5])$"
-                    v-model="dnsServer['max-concurrent-tcp-sessions']" required>
+                    v-model="dnsServer['max-concurrent-tcp-sessions']" required :disabled="isNaN(routerIdentification)">
+                    <div class="form-text">Value range: 0 - 4294967295.</div>
                 </div>
                 <div class="col-6">
-                    <label for="queries" class="form-label">Max. Concurrent Queries [0-4294967295]<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="queries" placeholder="Enter a value" 
+                    <label for="queries" class="form-label">Max. Concurrent Queries <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="queries" placeholder="Enter a value"
                     pattern="^(?:0|[1-9]\d{0,8}|[1-3]\d{0,9}|4[0-2]\d{0,8}|429496729[0-5])$"
-                    v-model="dnsServer['max-concurrent-queries']" required>
+                    v-model="dnsServer['max-concurrent-queries']" required :disabled="isNaN(routerIdentification)">
+                    <div class="form-text">Value range: 0 - 4294967295.</div>
                 </div>
 
-                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a DNS Server.</div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
+                <div class="col-12 mt-4 d-flex justify-content-end">
                     <div class="px-1">
-                        <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                        <button type="reset" class="btn btn-light px-4 me-1" :disabled="isNaN(routerIdentification)">Clear</button>
                     </div>
                     <div class="px-1">
-                        <button type="submit" class="btn btn-primary">Edit DNS Server</button>
+                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Edit DNS Server</button>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="callout" v-if="isNaN(routerIdentification)">
+        <b>Note</b>: You must select a router to edit DNS server.
     </div>
 </template>

@@ -68,6 +68,28 @@ const vpnAllowedAddresses = ((vpnClient) => {
     return allowedAddresses
 })
 
+const downloadConfigFile = ((vpnClient) => {
+    let body = {
+        router: routerIdentification.value,
+        vpn: vpnClient
+    }
+
+    axiosApi.post('vpn/client/download', body).then((response) => {
+        let fileURL = window.URL.createObjectURL(new Blob([response.data]))
+        let fileLink = document.createElement('a')
+
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', 'wg0.conf')
+        document.body.appendChild(fileLink)
+        fileLink.click()
+
+        notyf.success('The VPN client configuration was downloaded with success.')
+    }).catch((error) => {
+        console.log(error)
+        notyf.error('Oops, an error has occurred.')
+    })
+})
+
 // Load Routers
 onBeforeMount(() => {
     loadRouters()
@@ -115,10 +137,10 @@ watch(routerIdentification, () => {
                                         <th style="width:7%">#ID</th>
                                         <th style="width:15%">Interface</th>
                                         <th style="width:15%">Allowed Addresses</th>
-                                        <th style="width:15%">Endpoint</th>
+                                        <th style="width:14%">Endpoint</th>
                                         <th>Public Key*</th>
-                                        <th class="text-center" style="width:12%">Activated</th>
-                                        <th class="text-center" style="width:13%">Actions</th>
+                                        <th class="text-center" style="width:11%">Activated</th>
+                                        <th class="text-center" style="width:15%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,7 +165,10 @@ watch(routerIdentification, () => {
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light table-button" title="Edit" @click="editVPN(vpnClient)">
+                                                <button class="btn btn-xs btn-light table-button" title="Download configuration" @click="downloadConfigFile(vpnClient)">
+                                                    <i class="bi bi-download"></i>
+                                                </button>
+                                                <button class="btn btn-xs btn-light table-button ms-2" title="Edit" @click="editVPN(vpnClient)">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
                                                 <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteVPN(vpnClient)">

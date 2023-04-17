@@ -80,7 +80,7 @@ onBeforeMount(() => {
                                 </div>
                                 <div class="col-6">
                                     <label for="exampleInputPassword1">MTU [68-65535]</label>
-                                    <input type="text" class="form-control" placeholder="Password" 
+                                    <input type="text" class="form-control" placeholder="Password"
                                     pattern="^([6][8-9]|[7-9]\d{1}|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
                                     v-model="bridge.mtu">
                                 </div>

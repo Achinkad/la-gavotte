@@ -11,7 +11,7 @@ const interfaceStore = useInterfaceStore() // Interface Pinia Store
 
 const props = defineProps({ router: { type: Number } }) // Router IP
 
-const routerIdentification = toRef(props, 'router') // Router IP Reference 
+const routerIdentification = toRef(props, 'router') // Router IP Reference
 const interfaceType = ref("all") // Interface type
 
 const loadInterfaces = ((routerIdentification) => { interfaceStore.loadInterfaces(routerIdentification, interfaceType) })
@@ -57,13 +57,13 @@ watch(routerIdentification, () => {
                     <label for="address" class="form-label">IP Address <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="address" placeholder="Enter an address"
                     pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
-                    v-model="address.address" required>
+                    v-model="address.address" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
                     <label for="network" class="form-label">Network address</label>
                     <input type="text" class="form-control" id="network" placeholder="Enter a network address"
                     pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-                    v-model="address.network" >
+                    v-model="address.network" :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
                     <label for="interface" class="form-label">Interface <span class="text-danger">*</span></label>
@@ -71,19 +71,20 @@ watch(routerIdentification, () => {
                         <option value="null" selected hidden disabled>Select a interface</option>
                         <option v-for="i in interfaces" :key="i" :value="i.name" :disabled="i.disabled == 'true'">{{i.name}}</option>
                     </select>
-                   
+
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end " v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto add a new Address.</div>
-                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
-                
+                <div class="col-12 mt-4 d-flex justify-content-end">
                     <div class="px-1">
-                        <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                        <button type="reset" class="btn btn-light px-4 me-1" :disabled="isNaN(routerIdentification)">Clear</button>
                     </div>
                     <div class="px-1">
-                        <button type="submit" class="btn btn-primary">Add Address</button>
+                        <button type="submit" class="btn btn-primary" :disabled="isNaN(routerIdentification)">Add Address</button>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="callout" v-if="isNaN(routerIdentification)">
+        <b>Note</b>: You must select a router to add a new address.
     </div>
 </template>
