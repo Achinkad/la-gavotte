@@ -117,24 +117,32 @@ watch(() => props.rule, (newRule) => {
                 <div class="col-6 mt-3">
                     <label for="src_address" class="form-label">Src-Address</label>
                     <input type="text" class="form-control" id="src_address" placeholder="Enter the Src Address"
-                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                    pattern="^^!?\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
                     v-model="rule['src-address']">
+                    <div id="addressHelp" class="form-text">To negate the address just type "!" before the address</div>
                 </div>
 
                 <div class="col-6 mt-3">
                     <label for="dst_address" class="form-label">Dst-Address</label>
                     <input type="text" class="form-control" id="dst_address" placeholder="Enter the Dst Address"
-                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                    pattern="^!?\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
                     v-model="rule['dst-address']">
+                    <div id="addressHelp" class="form-text">To negate the address just type "!" before the address</div>
                 </div>
 
                 <div class="col-6 mt-3">
-                    <label for="src_port" class="form-label" >Src-Port</label>
-                    <input type="text" class="form-control" id="src_port" placeholder="Enter the Src Port" v-model="rule['src-port']" :disabled="protocolNegation=='true' || (rule.protocol!='udp'  && rule.protocol!='tcp')">
+                    <label for="src_port" class="form-label" >Src-Port [0-65535]</label>
+                    <input type="text" class="form-control" id="src_port" placeholder="Enter the Src Port" 
+                    pattern="^!?([0-9]|[1-9][0-9]|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
+                    v-model="rule['src-port']" :disabled="protocolNegation=='true' || (rule.protocol!='udp'  && rule.protocol!='tcp')">
+                    <div id="portHelp" class="form-text">To negate the port just type "!" before the port <br><u> NOTE: Src-Port only available when protocol is udp or tcp</u></div>
                 </div>
                 <div class="col-6 mt-3">
-                    <label for="dst_port" class="form-label" >Dst-Port</label>
-                    <input type="text" class="form-control" id="dst_port" placeholder="Enter the Dst Port" v-model="rule['dst-port']" :disabled="protocolNegation=='true' || (rule.protocol!='udp'  && rule.protocol!='tcp')">
+                    <label for="dst_port" class="form-label" >Dst-Port [0-65535]</label>
+                    <input type="text" class="form-control" id="dst_port" placeholder="Enter the Dst Port" 
+                    pattern="^!?([0-9]|[1-9][0-9]|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
+                    v-model="rule['dst-port']" :disabled="protocolNegation=='true' || (rule.protocol!='udp'  && rule.protocol!='tcp')">
+                    <div id="portHelp" class="form-text">To negate the port just type "!" before the port <br><u> NOTE: Dst-Port only available when protocol is udp or tcp</u></div>
                 </div>
 
 
