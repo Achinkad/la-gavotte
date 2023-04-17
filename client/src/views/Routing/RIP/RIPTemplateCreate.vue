@@ -118,9 +118,9 @@ onBeforeMount(() => {
 
                                  <div class="col-6 mt-3">
 
-                                <label>Instance</label>
+                                <label class="form-label">Instance</label>
                                 <div>
-                                    <select class="custom-select" v-model="riptemplate.instance">
+                                    <select class="form-select" v-model="riptemplate.instance">
 
                                         <option v-for="instance in ripinstances" :value="instance.name">{{ instance.name }}</option>
                                     </select>
@@ -128,7 +128,7 @@ onBeforeMount(() => {
                                 </div>
 
                                 
-                                    <div class="col-6 mt-3">
+                                <div class="col-6 mt-3">
                                 <label>Select Interfaces</label>
                                     <select class="form-select" v-model="riptemplate.interfaces" multiple>
                 
@@ -140,15 +140,16 @@ onBeforeMount(() => {
                                     </select>
                                 </div>
 
-                                <label>Mode</label>
+                            <div class="col-6 mt-3">
+                                <label class="form-label">Mode</label>
                                 <div>
-                                    <select class="custom-select" v-model="riptemplate.mode">
+                                    <select class="form-select" v-model="riptemplate.mode">
 
                                         <option value="passive">Passive</option>
                                         <option value="strict">Strict</option>
                                     </select>
                                 </div>
-                               
+                            </div>   
 
                                 <div class="col-6 mt-3">
                                     <label for="cost" class="form-label">Cost [0-4294967295]</label>

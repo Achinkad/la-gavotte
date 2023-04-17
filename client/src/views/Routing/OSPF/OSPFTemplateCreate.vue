@@ -142,9 +142,9 @@ onBeforeMount(() => {
 
                                 
                                 <div class="col-6 mt-3">
-                                <label>Network Type</label>
+                                <label class="form-label">Network Type</label>
                                 <div>
-                                    <select class="custom-select" v-model="ospftemplate.type">
+                                    <select class="form-select" v-model="ospftemplate.type">
 
                                         <option value="broadcast">broadcast</option>
                                         <option value="nbma">nbma</option>

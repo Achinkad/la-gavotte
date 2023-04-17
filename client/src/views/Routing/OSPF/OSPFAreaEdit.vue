@@ -74,7 +74,7 @@ const editInstanceOSPF = () => {
                                 </div>
 
                                 <div class="col-6 mt-3">
-                                <label>Select Instance</label>
+                                <label class="form-label">Select Instance</label>
                                     <select class="form-select" v-model="ospfarea.instance" required>
                                         <option value="-" selected hidden disabled>Select a bridge</option>
                                         <option v-for="instance in ospfinstances" :value="instance.name">{{ instance.name }}</option>
@@ -83,9 +83,9 @@ const editInstanceOSPF = () => {
 
                                 
                                 <div class="col-6 mt-3">
-                                <label>Type</label>
+                                <label class="form-label">Type</label>
                                 <div>
-                                    <select class="custom-select" v-model="ospfarea.type">
+                                    <select class="form-select" v-model="ospfarea.type">
 
                                         <option value="default">default</option>
                                         <option value="nssa">nssa</option>
@@ -104,7 +104,7 @@ const editInstanceOSPF = () => {
                            <div class="form-check form-switch col-6">
                                     
                                     <input class="form-check-input" type="checkbox" role="switch" @click="toggleDisabled()" :checked="ospfarea.disabled!=undefined && ospfarea.disabled != 'false'">
-                                    <label class="form-check-label" for="flexSwitchCheckDefault"> Disabled</label>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault" > Disabled</label>
                                     
                             </div>
                                 

@@ -21,6 +21,7 @@ const routers = computed(() => { return routerStore.getRouters() })
 const loadRules = ((active_routers) => { firewallStore.loadRules(router_rules,active_routers) })
 const rules = computed(() => { return firewallStore.getRules() })
 
+
 const deleteRule = (rule) => {
 
     firewallStore.deleteRules(rule)

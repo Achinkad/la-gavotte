@@ -167,9 +167,9 @@ onBeforeMount(() => {
 
                                 
                                 <div class="col-6 mt-3">
-                                <label>Version</label>
+                                <label class="form-label">Version</label>
                                 <div>
-                                    <select class="custom-select" v-model="ospfinstance.version">
+                                    <select class="form-select" v-model="ospfinstance.version">
 
                                         <option value="2">2</option>
                                         <option value="3">3</option>
