@@ -50,15 +50,17 @@ watch(routerIdentification, () => {
             <h4 class="header-title">You're editing the route {{ route['.id'] }}</h4>
         </div>
         <div class="card-body pt-0">
-            <form class="row g-3 needs-validation" novalidate @submit.prevent="editRoute">
+            <form class="row g-3 needs-validation" @submit.prevent="editRoute">
                 <div class="col-6">
                     <label for="address" class="form-label">Destination address <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="address" placeholder="Enter a destination address"
+                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
                     v-model="route['dst-address']" required>
                 </div>
                 <div class="col-6">
-                    <label for="distance" class="form-label">Distance</label>
+                    <label for="distance" class="form-label">Distance [1-255]</label>
                     <input type="text" class="form-control" id="distance" placeholder="Enter a distance"
+                    pattern="^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d?)$"
                     v-model="route.distance" required>
                 </div>
                 <div class="col-6">
@@ -69,7 +71,9 @@ watch(routerIdentification, () => {
                     </datalist>
                     <div id="interfaceSelectHelp" class="form-text">Enter an interface or an address (double-click). <u>You must select a router to choose an interface</u>.</div>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+
+                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a Route.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

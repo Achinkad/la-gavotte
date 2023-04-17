@@ -11,7 +11,7 @@ class WirelessController extends Controller
     public function showWirelessNetworks(Request $request)
     {
         $router = Router::where('id', $request->id)->firstOrFail();
-
+        
         try {
             $wirelessNetworks = Helper::httpClient('GET', 'interface/wireless', $router);
         } catch (\Exception $e) {
@@ -34,6 +34,7 @@ class WirelessController extends Controller
 
     public function editWirelessNetwork(Request $request)
     {
+      
         $router = Router::where('id', $request->router)->firstOrFail();
 
         // Change the values for the RouterOS API
@@ -48,13 +49,16 @@ class WirelessController extends Controller
 
         try {
             $response = Helper::httpClient('PATCH', 'interface/wireless/' . $request->id, $router, $body);
+           
         } catch (\Exception $e) {
+          
             return response()->json($e->getMessage(), $e->getCode());
         }
     }
 
     public function showSecurityProfiles(Request $request)
     {
+
         $router = Router::where('id', $request->id)->firstOrFail();
 
         try {

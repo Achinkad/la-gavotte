@@ -10,12 +10,13 @@ export const useFirewallStore = defineStore('firewall', () => {
     const rules = ref([])
     
 
-    async function loadRules(identifier){
-       
+    async function loadRules(identifier,active_routers){
+
         await axiosApi.get('firewalls',
         {
             params:{
                 identifier: identifier.value,
+                active_routers: active_routers
             }
         }).then((response) => {
             rules.value = response.data;
@@ -26,12 +27,18 @@ export const useFirewallStore = defineStore('firewall', () => {
        
     }
 
-
     async function createRules(data){
-        
+
         await axiosApi.put('firewalls', data).then((response) => {
 
-        rules.value.push(response.data)
+        if(data.get('identity')=='all'){
+            response.data.forEach(element => rules.value.push(element))
+        }
+        else{
+            rules.value.push(response.data)
+        }
+        
+    
         notyf.success('The firewall rule was added with success.')
                    
         }).catch((error) => {

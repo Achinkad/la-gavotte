@@ -42,12 +42,8 @@ const createInstanceRIP = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (routingStore.createInstancesRIP(formData)) {
-        notyf.success('A new RIP Instance has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-    
+    routingStore.createInstancesRIP(formData)
+     
 }
 
 
@@ -87,7 +83,7 @@ onBeforeMount(() => {
                             <label>Select Router</label>
                                 <select class="form-select" v-model="routerIdentification">
                                     <option value="-" selected hidden disabled>Select a router</option>
-                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                                 </select>
                             </div>
                             

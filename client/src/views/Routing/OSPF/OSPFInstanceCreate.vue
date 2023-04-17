@@ -45,11 +45,7 @@ const createInstanceOSPF = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (routingStore.createInstancesOSPF(formData)) {
-        notyf.success('A new OSPF Instance has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    routingStore.createInstancesOSPF(formData)
     
 }
 
@@ -90,7 +86,7 @@ onBeforeMount(() => {
                             <label>Select Router</label>
                                 <select class="form-select" v-model="routerIdentification">
                                     <option value="-" selected hidden disabled>Select a router</option>
-                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                                 </select>
                             </div>
                             
@@ -105,7 +101,7 @@ onBeforeMount(() => {
                                 <div class="col-6 mt-3">
                                     <label for="src_address" class="form-label">Router ID</label>
                                     <input type="text" class="form-control" id="router_id" placeholder="Enter the OSPF Router ID"
-                                   
+                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                                     v-model="ospfinstance['router-id']">
                                 </div>
 

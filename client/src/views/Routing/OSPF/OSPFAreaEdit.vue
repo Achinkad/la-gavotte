@@ -51,12 +51,8 @@ const editInstanceOSPF = () => {
 
     formData.append('router_identity', props.ospfarea.router)
 
-    if (routingStore.editAreasOSPF(formData)) {
-        notyf.success('A ospf area has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-   
+    routingStore.editAreasOSPF(formData)
+    
     
 }
 
@@ -101,7 +97,7 @@ const editInstanceOSPF = () => {
                                 <div class="col-6 mt-3">
                                     <label for="src_address" class="form-label">Area Id</label>
                                     <input type="text" class="form-control" id="router_id" placeholder="Enter the OSPF Area ID"
-                                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                                     v-model="ospfarea['area-id']">
                                 </div>
                            

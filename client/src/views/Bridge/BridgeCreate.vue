@@ -70,7 +70,7 @@ onBeforeMount(() => {
                             <label>Select Router</label>
                                 <select class="form-select" v-model="routerIdentification">
                                     <option value="-" selected hidden disabled>Select a router</option>
-                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                                 </select>
                             </div>
                             <div v-if="routerIdentification!='-'">
@@ -79,8 +79,10 @@ onBeforeMount(() => {
                                     <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name of the bridge interface" v-model="bridge.name">
                                 </div>
                                 <div class="col-6">
-                                    <label for="exampleInputPassword1">MTU</label>
-                                    <input type="number" class="form-control" placeholder="Password" v-model="bridge.mtu">
+                                    <label for="exampleInputPassword1">MTU [68-65535]</label>
+                                    <input type="text" class="form-control" placeholder="Password" 
+                                    pattern="^([6][8-9]|[7-9]\d{1}|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[1-4]\d{2}|655[0-2][0-9]|6553[0-5])$"
+                                    v-model="bridge.mtu">
                                 </div>
                                 <div class="col-12">
                                     <p>Select the protocol</p>

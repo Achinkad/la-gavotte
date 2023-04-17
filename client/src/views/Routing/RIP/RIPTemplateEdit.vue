@@ -62,12 +62,7 @@ const editTemplateRIP = () => {
 
     formData.append('router_identity', props.riptemplate.router)
 
-    if (routingStore.editTemplatesRIP(formData)) {
-        notyf.success('A rip template has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-   
+    routingStore.editTemplatesRIP(formData)
     
 }
 

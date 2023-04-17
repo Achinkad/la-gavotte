@@ -47,12 +47,7 @@ const editInstanceRIP = () => {
 
     formData.append('router_identity', props.ripinstance.router)
 
-    if (routingStore.editInstancesRIP(formData)) {
-        notyf.success('A rip instance has been edited.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-   
+   routingStore.editInstancesRIP(formData)
     
 }
 

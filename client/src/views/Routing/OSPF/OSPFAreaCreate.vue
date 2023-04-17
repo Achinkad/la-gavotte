@@ -43,11 +43,8 @@ const createAreaOSPF = () => {
     
     formData.append('identity', routerIdentification.value)
 
-    if (routingStore.createAreasOSPF(formData)) {
-        notyf.success('A new OSPF Area has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
+    routingStore.createAreasOSPF(formData)
+    
     
 }
 
@@ -88,7 +85,7 @@ onBeforeMount(() => {
                             <label>Select Router</label>
                                 <select class="form-select" @change="loadInstancesOSPF()" v-model="routerIdentification">
                                     <option value="-" selected hidden disabled>Select a router</option>
-                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                                 </select>
                             </div>
                             
@@ -124,7 +121,7 @@ onBeforeMount(() => {
                                 <div class="col-6 mt-3">
                                     <label for="src_address" class="form-label">Area Id</label>
                                     <input type="text" class="form-control" id="router_id" placeholder="Enter the OSPF Area ID"
-                                    pattern="^!?\b(?:\d{1,3}\.){3}\d{1,3}\b$"
+                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                                     v-model="ospfarea['area-id']">
                                 </div>
                            

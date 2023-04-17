@@ -14,13 +14,19 @@ class RoutingController extends Controller
     public function showBGP(Request $request){
        
         $bgp_connections=[];
+        $helper = new Helper();
               
         $router=Router::where('id',$request->identifier)->firstOrFail();
  
         try{
-            $bgp_connections = Helper::httpClient('GET','routing/bgp/connection',$router);
+            $response = Helper::httpClient('GET','routing/bgp/connection',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $bgp_connection){
+            $bgp_connection->router=$router->id; #talvez seja antes de descodificar
+            array_push($bgp_connections,$bgp_connection);
         }
                 
         return $bgp_connections;
@@ -154,13 +160,19 @@ class RoutingController extends Controller
     public function showOSPFInstance(Request $request){
        
         $ospf_instances=[];
+        $helper = new Helper();
                  
         $router=Router::where('id',$request->identifier)->firstOrFail();
    
         try{
-            $ospf_instances = Helper::httpClient('GET','routing/ospf/instance',$router);
+            $response = Helper::httpClient('GET','routing/ospf/instance',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $ospf_instance){
+            $ospf_instance->router=$router->id; #talvez seja antes de descodificar
+            array_push($ospf_instances,$ospf_instance);
         }
 
         return $ospf_instances;
@@ -233,13 +245,19 @@ class RoutingController extends Controller
     public function showOSPFArea(Request $request){
        
         $ospf_areas=[];
+        $helper = new Helper();
  
         $router=Router::where('id',$request->identifier)->firstOrFail();
 
         try{
-            $ospf_areas = Helper::httpClient('GET','routing/ospf/area',$router);
+            $response = Helper::httpClient('GET','routing/ospf/area',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $ospf_area){
+            $ospf_area->router=$router->id; #talvez seja antes de descodificar
+            array_push($ospf_areas,$ospf_area);
         }
                 
         return $ospf_areas;
@@ -305,13 +323,19 @@ class RoutingController extends Controller
     public function showOSPFTemplate(Request $request){
        
         $ospf_templates=[];
+        $helper = new Helper();
                
         $router=Router::where('id',$request->identifier)->firstOrFail();
  
         try{
-            $ospf_templates = Helper::httpClient('GET','routing/ospf/interface-template',$router);
+            $response = Helper::httpClient('GET','routing/ospf/interface-template',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $ospf_template){
+            $ospf_template->router=$router->id; #talvez seja antes de descodificar
+            array_push($ospf_templates,$ospf_template);
         }
                 
         return $ospf_templates;
@@ -372,13 +396,19 @@ class RoutingController extends Controller
     public function showRIPInstance(Request $request){
        
         $rip_instances=[];
+        $helper = new Helper();
                 
         $router=Router::where('id',$request->identifier)->firstOrFail();
        
         try{
-            $rip_instances = Helper::httpClient('GET','routing/rip/instance',$router);
+            $response = Helper::httpClient('GET','routing/rip/instance',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        foreach($helper->decodeResponse($response) as $rip_instance){
+            $rip_instance->router=$router->id; #talvez seja antes de descodificar
+            array_push($rip_instances,$rip_instance);
         }
 
         return $rip_instances;
@@ -438,14 +468,20 @@ class RoutingController extends Controller
     public function showRIPTemplate(Request $request){
        
         $rip_templates=[];
+        $helper = new Helper();
                
         $router=Router::where('id',$request->identifier)->firstOrFail();
      
         try{
-            $rip_templates = Helper::httpClient('GET','routing/rip/interface-template',$router);
+            $response = Helper::httpClient('GET','routing/rip/interface-template',$router);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }       
+
+        foreach($helper->decodeResponse($response) as $rip_template){
+            $rip_template->router=$router->id; #talvez seja antes de descodificar
+            array_push($rip_templates,$rip_template);
+        }
         
         return $rip_templates;
     }

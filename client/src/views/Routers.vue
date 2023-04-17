@@ -85,11 +85,11 @@ onBeforeMount(() => {
                     <h4 class="header-title">Connect with a new router</h4>
                 </div>
                 <div class="card-body pt-0">
-                    <form class="row g-3 needs-validation" novalidate @submit.prevent="registerRouter">
+                    <form class="row g-3 needs-validation" @submit.prevent="registerRouter">
                         <div class="col-12">
                             <label for="ip_address" class="form-label">IP Address <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="ip_address" placeholder="Enter an IP Address"
-                            pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5]).){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"
+                            pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                             v-model="router.ip_address" required>
                         </div>
                         <div class="col-6">

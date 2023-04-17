@@ -16,25 +16,26 @@ class FirewallController extends Controller
         $helper = new Helper();
 
         if($request->identifier=='all'){
-            $routers=Router::all();
-            
-            if($routers!=[] && $request->identifier!=null){
+
+            $active_routers=$request->active_routers;
+           
                 
-                foreach($routers as $router){
+                foreach($active_routers as $router_id){
+                    $router=Router::where('id',$router_id)->first();
+
                     try{
                         $response = Helper::httpClient('GET','ip/firewall/filter',$router);
+
                     } catch (\Exception $e) {
                         return response()->json($e->getMessage(), $e->getCode());
                     }
                     foreach($helper->decodeResponse($response) as $rule){
-                        $rule->router=$router->id; #talvez seja antes de descodificar
+                        $rule->router=$router->id; 
                         array_push($rules,$rule);
                     }
 
                 }
                 
-            }
-            
         }
         else{
             
@@ -60,13 +61,6 @@ class FirewallController extends Controller
 
     public function createRules(Request $request){
 
-        if($request->identity=='-'){
-          return "false";
-        }
-
-        $router=Router::where('id',$request['identity'])->firstOrFail();
-
-    
         $request['src-address']=$request['src_address'];    
         $request['dst-address']=$request['dst_address'];
         $request['src-port']=$request['src_port'];
@@ -75,21 +69,49 @@ class FirewallController extends Controller
         unset($request['dst_address']);
         unset($request['src_port']);
         unset($request['dst_port']);
-        unset($request['identity']);
 
-        
         if($request['src-address']==null){
             unset($request['src-address']);
         }
+
         if($request['dst-address']==null){
             unset($request['dst-address']);
         }
+
         if($request['src-port']==null){
             unset($request['src-port']);
         }
+
         if($request['dst-port']==null){
             unset($request['dst-port']);
         }
+
+
+        if($request->identity=='all'){
+            $responses=[];
+            
+            $active_routers=explode(',',$request->active_routers);
+            unset($request['identity']);
+            unset($request['active_routers']);
+            
+            foreach($active_routers as $router_id){
+                $router=Router::where('id',$router_id)->first();
+                
+                try{
+                    $response = Helper::httpClient('PUT','ip/firewall/filter',$router,$request->all());
+                    array_push($responses,$response);
+                } catch (\Exception $e) {
+                    return response()->json($e->getMessage(), $e->getCode());
+                }
+                      
+                return $responses;
+                }
+        }
+
+        $router=Router::where('id',$request['identity'])->firstOrFail();
+
+        unset($request['identity']);
+        
 
         try{
             $response = Helper::httpClient('PUT','ip/firewall/filter',$router,$request->all());

@@ -152,7 +152,7 @@ export const useIPStore = defineStore('ip', () => {
     }
 
     async function editDNS(body) {
-        await axiosApi.patch('ip/dns/edit/', body).then(response => {
+        await axiosApi.patch('ip/dns/edit', body).then(response => {
             notyf.success('The DNS server was edited with success.')
         }).catch((error) => {
             notyf.error(error.response.data + " (" + error.response.status + ")")

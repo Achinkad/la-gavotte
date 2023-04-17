@@ -54,11 +54,13 @@ watch(routerIdentification, () => {
                 <div class="col-6">
                     <label for="address" class="form-label">IP Address <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="address" placeholder="Enter an address"
+                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:/(?:3[0-2]|[12]?[0-9]))?$"
                     v-model="address.address" required>
                 </div>
                 <div class="col-6">
                     <label for="network" class="form-label">Network address</label>
                     <input type="text" class="form-control" id="network" placeholder="Enter a network address"
+                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                     v-model="address.network" required>
                 </div>
                 <div class="col-6">
@@ -67,9 +69,11 @@ watch(routerIdentification, () => {
                         <option value="null" selected hidden disabled>Select a interface</option>
                         <option v-for="i in interfaces" :key="i" :value="i.name" :disabled="i.disabled == 'true'">{{i.name}}</option>
                     </select>
-                    <div id="interfaceSelectHelp" class="form-text"><u>You must select a router</u> to select an interface.</div>
+                    
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+
+                <div class="col-12 mt-4 d-flex justify-content-end " v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a Address.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

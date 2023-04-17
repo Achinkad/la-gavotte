@@ -63,12 +63,8 @@ const createTemplateRIP = () => {
     formData.append('identity', routerIdentification.value)
 
    
-    if (routingStore.createTemplatesRIP(formData)) {
-        notyf.success('A new RIP Template has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }
-    
+    routingStore.createTemplatesRIP(formData)
+   
 }
 
 
@@ -108,7 +104,7 @@ onBeforeMount(() => {
                             <label>Select Router</label>
                                 <select class="form-select" @change="loadInstancesAndInterfaces()" v-model="routerIdentification">
                                     <option value="-" selected hidden disabled>Select a router</option>
-                                    <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                                    <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                                 </select>
                             </div>
                             
@@ -155,8 +151,10 @@ onBeforeMount(() => {
                                
 
                                 <div class="col-6 mt-3">
-                                    <label for="cost" class="form-label">Cost</label>
-                                    <input type="number" class="form-control" id="name" placeholder="Enter the RIP Interface-Template Cost" v-model="riptemplate.cost">
+                                    <label for="cost" class="form-label">Cost [0-4294967295]</label>
+                                    <input type="number" class="form-control" id="name" placeholder="Enter the RIP Interface-Template Cost" 
+                                    pattern="^(?:0|[1-9]\d{0,8}|[1-3]\d{0,9}|4[0-2]\d{0,8}|429496729[0-5])$"
+                                    v-model="riptemplate.cost">
                                 </div>
 
                            

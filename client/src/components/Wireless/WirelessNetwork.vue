@@ -12,6 +12,8 @@ const notyf = inject('notyf')
 const routerStore = useRouterStore()
 const wirelessStore = useWirelessStore()
 
+const routerIdentification = toRef(props, 'router') // Router IP Reference 
+
 // Security Profiles
 const loadSecurityProfiles = (() => { wirelessStore.loadSecurityProfiles({ id: props.network.routerId }) })
 const securityProfiles = computed(() => { return wirelessStore.getSecurityProfiles() })
@@ -58,7 +60,7 @@ onBeforeMount(() => {
                             <h4 class="header-title">You're viewing the wireless network: {{ network.name }} </h4>
                         </div>
                         <div class="card-body pt-0">
-                            <form class="row g-3 needs-validation" novalidate @submit.prevent="editWirelessNetwork">
+                            <form class="row g-3 needs-validation" @submit.prevent="editWirelessNetwork">
                                 <div class="col-3">
                                     <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" placeholder="Insert a name"
@@ -72,11 +74,13 @@ onBeforeMount(() => {
                                 <div class="col-3">
                                     <label for="mac" class="form-label">MAC Address<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="mac" placeholder="Insert a MAC address"
+                                    pattern="([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}"
                                     v-model='network["mac-address"]' required>
                                 </div>
                                 <div class="col-3">
-                                    <label for="mtu" class="form-label">MTU <span class="text-danger">*</span></label>
+                                    <label for="mtu" class="form-label">MTU [32-2290]<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="mtu" placeholder="Insert a MTU"
+                                    pattern="^(3[2-9]|[4-9][0-9]|[1-9][0-9]{2}|[1-9]\d{3}|2[0-1][0-9]{2}|22[0-8][0-9]|2290)$"
                                     v-model='network.mtu' required>
                                 </div>
                                 <div class="col-3">
@@ -139,7 +143,8 @@ onBeforeMount(() => {
                                         <option value="none">none</option>
                                     </select>
                                 </div>
-                                <div class="col-12 mt-4 d-flex justify-content-end">
+                                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a Wireless Network.</div>
+                                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                                     <div class="px-1">
                                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                                     </div>

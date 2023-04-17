@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject,toRef } from 'vue'
 
 import { useWirelessStore } from '../../stores/wireless.js'
 
@@ -14,6 +14,8 @@ const props = defineProps({
 
 const hasError = ref(false) // Flag for Error Handling
 const passwordFieldType = ref('password') // Password Field Toogle
+
+const routerIdentification = toRef(props, 'router') // Router IP Reference
 
 const showPassword = (() => {
     passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
@@ -103,7 +105,9 @@ const editSecurityProfile = (() => {
                     </div>
                     <div id="wpa2KeyHelp" class="form-text" :class="{ 'text-danger': hasError }">Must be 8-64 characters long.</div>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+
+                 <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a Security Profile.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

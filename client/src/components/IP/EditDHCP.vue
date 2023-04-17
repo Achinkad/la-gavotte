@@ -92,7 +92,9 @@ watch(routerIdentification, () => {
                         <option value="dhcp_pool0">DHCP Pool 0</option>
                     </select>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+
+                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto edit a DHCP Server.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

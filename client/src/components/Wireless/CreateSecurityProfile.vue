@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject,toRef } from 'vue'
 
 import { useWirelessStore } from '../../stores/wireless.js'
 
@@ -9,9 +9,11 @@ const wirelessStore = useWirelessStore() // Wireless Pinia Store
 
 const props = defineProps({ router: { type: Number } })
 
+const routerIdentification = toRef(props, 'router') // Router IP Reference
+
 const securityProfile = ref({
     name: null,
-    mode: null,
+    mode: 'none',
     authenticationTypes: null,
     wpaPreSharedKey: null,
     wpa2PreSharedKey: null
@@ -25,9 +27,18 @@ const createSecurityProfile = (() => {
     formData.append('router', props.router)
     formData.append('name', securityProfile.value.name)
     formData.append('mode', securityProfile.value.mode)
-    formData.append('authenticationTypes', securityProfile.value.authenticationTypes)
-    formData.append('wpaPreSharedKey', securityProfile.value.wpaPreSharedKey)
-    formData.append('wpa2PreSharedKey', securityProfile.value.wpa2PreSharedKey)
+
+    if(securityProfile.value.authenticationTypes!=null){
+        formData.append('authenticationTypes', securityProfile.value.authenticationTypes)
+    }
+
+    if(securityProfile.value.wpaPreSharedKey!=null){
+        formData.append('wpaPreSharedKey', securityProfile.value.wpaPreSharedKey)
+    }
+
+    if(securityProfile.value.wpa2PreSharedKey!=null){
+        formData.append('wpa2PreSharedKey', securityProfile.value.wpa2PreSharedKey)
+    }
 
     let key = securityProfile.value.wpaPreSharedKey
     let key2 = securityProfile.value.wpa2PreSharedKey
@@ -49,7 +60,7 @@ const createSecurityProfile = (() => {
             <h4 class="header-title">Create a new security profile</h4>
         </div>
         <div class="card-body pt-0">
-            <form class="row g-3 needs-validation" novalidate @submit.prevent="createSecurityProfile">
+            <form class="row g-3 needs-validation" @submit.prevent="createSecurityProfile">
                 <div class="col-6">
                     <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="name" placeholder="Enter a Name"
@@ -57,8 +68,7 @@ const createSecurityProfile = (() => {
                 </div>
                 <div class="col-6">
                     <label for="mode" class="form-label">Mode <span class="text-danger">*</span></label>
-                    <select class="form-select" id="mode" v-model='securityProfile.mode'>
-                        <option value="null" selected hidden disabled>Select a Mode</option>
+                    <select class="form-select" id="mode" v-model='securityProfile.mode' required>
                         <option value="none">none</option>
                         <option value="dynamic-keys">dynamic keys</option>
                         <option value="static-keys-optional">static keys optional</option>
@@ -87,7 +97,8 @@ const createSecurityProfile = (() => {
                     placeholder="Enter a WPA2 Key" v-model="securityProfile.wpa2PreSharedKey">
                     <div id="wpa2KeyHelp" class="form-text" :class="{ 'text-danger': hasError }">Must be 8-64 characters long.</div>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-end">
+                <div class="col-12 mt-4 d-flex justify-content-end" v-if="isNaN(routerIdentification)"><u>Note: You must select a router</u>&nbspto add a new Security Profile.</div>
+                <div class="col-12 mt-4 d-flex justify-content-end" v-else>
                     <div class="px-1">
                         <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
                     </div>

@@ -52,8 +52,9 @@ watch(routerIdentification, () => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="routerIdentification">
-                        <option value="all" selected hidden disabled>All</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id">{{ router.ip_address }}</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select Router</option>
+                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
                 <h2 class="p-title">Security Profiles</h2>
