@@ -19,7 +19,8 @@ class FirewallController extends Controller
 
             $active_routers=$request->active_routers;
            
-                
+                if($active_routers!=null){
+
                 foreach($active_routers as $router_id){
                     $router=Router::where('id',$router_id)->first();
 
@@ -35,7 +36,7 @@ class FirewallController extends Controller
                     }
 
                 }
-                
+            }
         }
         else{
             
