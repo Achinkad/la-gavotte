@@ -82,7 +82,7 @@ onBeforeMount(() => {
 
                            <form class="row g-3" @submit.prevent="createAreaOSPF">
                             <div class="col-12">
-                            <label>Select Router</label>
+                            <label class="form-label">Select Router</label>
                                 <select class="form-select" @change="loadInstancesOSPF()" v-model="routerIdentification">
                                     <option value="-" selected hidden disabled>Select a router</option>
                                     <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
@@ -98,7 +98,7 @@ onBeforeMount(() => {
                                 </div>
 
                                 <div class="col-6 mt-3">
-                                <label>Select Instance</label>
+                                <label class="form-label">Select Instance</label>
                                     <select class="form-select" v-model="ospfarea.instance" required>
                                         <option value="-" selected hidden disabled>Select a Instance</option>
                                         <option v-for="instance in ospfinstances" :value="instance.name">{{ instance.name }}</option>
@@ -107,9 +107,9 @@ onBeforeMount(() => {
 
                                 
                                 <div class="col-6 mt-3">
-                                <label>Type</label>
+                                <label class="form-label">Type</label>
                                 <div>
-                                    <select class="custom-select" v-model="ospfarea.type">
+                                    <select class="form-select" v-model="ospfarea.type">
 
                                         <option value="default">default</option>
                                         <option value="nssa">nssa</option>

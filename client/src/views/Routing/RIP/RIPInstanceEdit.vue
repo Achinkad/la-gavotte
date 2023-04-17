@@ -70,9 +70,9 @@ const editInstanceRIP = () => {
 
                                  <div class="col-6 mt-3">
 
-                                <label>AFI</label>
+                                <label class="form-label">AFI</label>
                                 <div>
-                                    <select class="custom-select" v-model="ripinstance.afi">
+                                    <select class="form-select" v-model="ripinstance.afi">
 
                                         <option value="ipv4">Ipv4</option>
                                         <option value="ipv6">Ipv6</option>
