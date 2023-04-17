@@ -33,18 +33,18 @@ const type_all = ref("all")
 
 
 const deleteTemplatesOSPF = (ospftemplate) => {
-    
+
     routingStore.deleteTemplatesOSPF(ospftemplate)
 
 }
 
 
 const showTemplatesOSPF = (ospftemplate) => {
-   
+
     if(ospftemplate.interfaces!=undefined && ospftemplate.interfaces!="" && !(ospftemplate.interfaces instanceof Array)){
         ospftemplate.interfaces = ospftemplate.interfaces.split(',')
     }
-    
+
     if(ospftemplate.interfaces==undefined ||ospftemplate.interfaces=="" && !(ospftemplate.interfaces instanceof Array)){
         ospftemplate.interfaces = []
     }
@@ -53,7 +53,7 @@ const showTemplatesOSPF = (ospftemplate) => {
     loadAreasOSPF()
     loadInterfaces()
     selected_ospf.value = ospftemplate
-    
+
 }
 
 watch(router_ospf, () => {
@@ -61,14 +61,14 @@ watch(router_ospf, () => {
 })
 
 onBeforeMount(() => {
-   
+
     loadRouters()
 
 })
 </script>
 
 <template>
-   <div class="row">
+    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
@@ -90,91 +90,93 @@ onBeforeMount(() => {
                         <div class="d-flex card-header justify-content-between align-items-center">
                             <h4 class="header-title">OSPF Interface-Templates</h4>
                             <div class="px-1">
-                               <router-link :to="{ name: 'OSPFTemplateCreate'}"
-                                                    :title="`Create OSPF interface-template`">
-                                    <button class="btn btn-primary">Add OSPF Interface-Template</button>
-                                </router-link>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0">
-                        
-                            <table class="table table-responsive align-middle" >
-                                <thead class="table-light">
-                                
-                                    <tr class="text-center">
-                                        <th>#ID</th>
-                                        <th>Interfaces</th>
-                                        <th>Area</th>
-                                        <th>Networks</th>
-                                        <th>Network Type</th>
-                                        <th>Cost</th>
-                                        <th>Priority</th>
-                                        <th>About</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>                                     
-                                    </tr>
-                               
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr v-if="ospftemplates.length==0">
-                                        <td colspan="10" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
-                                    </tr>
-                                    <tr v-for="ospftemplate in ospftemplates">
-                                        
-                                        <td v-if="ospftemplate['.id']==undefined">-</td>
-                                        <td v-else>{{ospftemplate['.id'].substring(1)}}</td>
-                                      
-                                        <td v-if="ospftemplate.interfaces==undefined || ospftemplate.interfaces==''">-</td>
-                                        <td v-else>{{ospftemplate.interfaces}}</td>
-
-                                        <td v-if="ospftemplate.area==undefined">-</td>
-                                        <td v-else>{{ospftemplate.area}}</td>
-
-                                        <td v-if="ospftemplate.networks==undefined">-</td>
-                                        <td v-else>{{ospftemplate.networks}}</td>
-
-                                        <td v-if="ospftemplate.type==undefined">-</td>
-                                        <td v-else>{{ospftemplate.type}}</td>
-
-                                        <td v-if="ospftemplate.cost==undefined">-</td>
-                                        <td v-else>{{ospftemplate.cost}}</td>
-
-                                        <td v-if="ospftemplate.priority==undefined">-</td>
-                                        <td v-else>{{ospftemplate.priority}}</td>
-
-                                        <td class="text-success" v-if="ospftemplate['.about']==undefined">Everything OK</td>
-                                        <td class="text-danger" v-else>{{ospftemplate['.about']}}</td>
-
-                                        <td class="text-success" v-if="ospftemplate.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="ospftemplate.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="ospftemplate.disabled=='true'">DISABLED</td>
-
-                                         <td>
-                                            <div class="d-flex justify-content-center">
-                                               
-                                               <button class="btn btn-xs btn-light" title="Delete" @click="deleteTemplatesOSPF(ospftemplate)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <button class="btn btn-xs btn-light" title="Edit" @click="showTemplatesOSPF(ospftemplate)">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                               
-                                            </div>
-                                           
-                                        </td>
-                                        
-
-                                   
-                                    </tr>
-                                </tbody>
-                            </table> 
+                                <router-link :to="{ name: 'OSPFTemplateCreate'}"
+                                :title="`Create OSPF interface-template`">
+                                <button class="btn btn-primary">Add OSPF Interface-Template</button>
+                            </router-link>
                         </div>
                     </div>
+                    <div class="card-body pt-0">
 
-               <ospf-template-edit :ospftemplate="selected_ospf" :ospfareas="ospfareas" :interfaces="interfaces" v-if="selected_ospf"></ospf-template-edit>
-             
+                        <table class="table table-responsive align-middle" >
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Interfaces</th>
+                                    <th>Area</th>
+                                    <th>Networks</th>
+                                    <th>Network Type</th>
+                                    <th>Cost</th>
+                                    <th>Priority</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr v-if="ospftemplates.length==0">
+                                    <td colspan="9" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
+                                </tr>
+                                <tr v-for="ospftemplate in ospftemplates">
+
+                                    <td v-if="ospftemplate['.id']==undefined">-</td>
+                                    <td v-else>{{ospftemplate['.id'].substring(1)}}</td>
+
+                                    <td v-if="ospftemplate.interfaces==undefined || ospftemplate.interfaces==''">-</td>
+                                    <td v-else>{{ospftemplate.interfaces}}</td>
+
+                                    <td v-if="ospftemplate.area==undefined">-</td>
+                                    <td v-else>{{ospftemplate.area}}</td>
+
+                                    <td v-if="ospftemplate.networks==undefined">-</td>
+                                    <td v-else>{{ospftemplate.networks}}</td>
+
+                                    <td v-if="ospftemplate.type==undefined">-</td>
+                                    <td v-else>{{ospftemplate.type}}</td>
+
+                                    <td v-if="ospftemplate.cost==undefined">-</td>
+                                    <td v-else>{{ospftemplate.cost}}</td>
+
+                                    <td v-if="ospftemplate.priority==undefined">-</td>
+                                    <td v-else>{{ospftemplate.priority}}</td>
+
+                                    <td class="text-center" v-if="ospftemplate.disabled==undefined">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="ospftemplate.disabled=='false'">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="ospftemplate.disabled=='true'">
+                                        <span class="badge badge-danger-lighten">Disabled</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+
+                                            <button class="btn btn-xs btn-light table-button" title="Edit" @click="showTemplatesOSPF(ospftemplate)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteTemplatesOSPF(ospftemplate)">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <ospf-template-edit :ospftemplate="selected_ospf" :ospfareas="ospfareas" :interfaces="interfaces" v-if="selected_ospf"></ospf-template-edit>
+
+            </div>
         </div>
-     </div>
-        </div>
-        </div>
+    </div>
+</div>
 </template>

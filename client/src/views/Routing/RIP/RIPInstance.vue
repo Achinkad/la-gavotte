@@ -21,15 +21,15 @@ const ripinstances = computed(() => { return routingStore.getInstancesRIP() })
 
 
 const deleteInstancesRIP = (ripinstance) => {
-    
+
     routingStore.deleteInstancesRIP(ripinstance)
 
     /*
     if (bridgeStore.createBridges(formData)) {
-        notyf.success('A new Bridge has been added.')
-    } else {
-        notyf.error('Oops, an error has occurred.')
-    }*/
+    notyf.success('A new Bridge has been added.')
+} else {
+notyf.error('Oops, an error has occurred.')
+}*/
 }
 
 
@@ -39,7 +39,7 @@ const showInstancesRIP = (ripinstance) => {
     }
 
     selected_rip.value = ripinstance
-    
+
 }
 
 watch(router_rip, () => {
@@ -47,14 +47,14 @@ watch(router_rip, () => {
 })
 
 onBeforeMount(() => {
-   
+
     loadRouters()
 
 })
 </script>
 
 <template>
-   <div class="row">
+    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
@@ -76,74 +76,82 @@ onBeforeMount(() => {
                         <div class="d-flex card-header justify-content-between align-items-center">
                             <h4 class="header-title">RIP Instances</h4>
                             <div class="px-1">
-                               <router-link :to="{ name: 'RIPInstanceCreate'}"
-                                                    :title="`Create RIP Instance`">
-                                    <button class="btn btn-primary">Add RIP Instance</button>
-                                </router-link>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0">
-                        
-                            <table class="table table-responsive align-middle" >
-                                <thead class="table-light">
-                                
-                                    <tr class="text-center">
-                                        <th>#ID</th>
-                                        <th>Name</th>
-                                        <th>AFI</th>
-                                        <th>Redistribute</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                      
-                                    </tr>
-                               
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr v-if="ripinstances.length==0">
-                                        <td colspan="6" class="text-center" style="height:55px!important;">There are no RIP Instances.</td>
-                                    </tr>
-                                    <tr v-for="ripinstance in ripinstances">
-
-                                        <td v-if="ripinstance['.id']==undefined">-</td>
-                                        <td v-else>{{ripinstance['.id'].substring(1)}}</td>
-
-                                        <td v-if="ripinstance.name==undefined">-</td>
-                                        <td v-else>{{ripinstance.name}}</td>
-
-                                        <td v-if="ripinstance.afi==undefined">-</td>
-                                        <td v-else>{{ripinstance.afi}}</td>
-
-                                        <td v-if="ripinstance.redistribute==undefined || ripinstance.redistribute==''">-</td>
-                                        <td v-else>{{ripinstance.redistribute}}</td>
-
-                                        <td class="text-success" v-if="ripinstance.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="ripinstance.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="ripinstance.disabled=='true'">DISABLED</td>
-
-                                         <td>
-                                            <div class="d-flex justify-content-center">
-                                               
-                                               <button class="btn btn-xs btn-light" title="Delete" @click="deleteInstancesRIP(ripinstance)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <button class="btn btn-xs btn-light" title="Edit" @click="showInstancesRIP(ripinstance)">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                               
-                                            </div>
-                                           
-                                        </td>
-                                        
-                                    </tr>
-                                </tbody>
-                            </table> 
+                                <router-link :to="{ name: 'RIPInstanceCreate'}"
+                                :title="`Create RIP Instance`">
+                                <button class="btn btn-primary">Add RIP Instance</button>
+                            </router-link>
                         </div>
                     </div>
+                    <div class="card-body pt-0">
 
-               <rip-instance-edit :ripinstance="selected_rip" v-if="selected_rip"></rip-instance-edit>
-             
+                        <table class="table table-responsive align-middle" >
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Name</th>
+                                    <th>AFI</th>
+                                    <th>Redistribute</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Actions</th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr v-if="ripinstances.length==0">
+                                    <td colspan="6" class="text-center" style="height:55px!important;">There are no RIP Instances.</td>
+                                </tr>
+                                <tr v-for="ripinstance in ripinstances">
+
+                                    <td v-if="ripinstance['.id']==undefined">-</td>
+                                    <td v-else>{{ripinstance['.id'].substring(1)}}</td>
+
+                                    <td v-if="ripinstance.name==undefined">-</td>
+                                    <td v-else>{{ripinstance.name}}</td>
+
+                                    <td v-if="ripinstance.afi==undefined">-</td>
+                                    <td v-else>{{ripinstance.afi}}</td>
+
+                                    <td v-if="ripinstance.redistribute==undefined || ripinstance.redistribute==''">-</td>
+                                    <td v-else>{{ripinstance.redistribute}}</td>
+
+                                    <td class="text-center" v-if="ripinstance.disabled==undefined">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="ripinstance.disabled=='false'">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="ripinstance.disabled=='true'">
+                                        <span class="badge badge-danger-lighten">Disabled</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+
+                                            <button class="btn btn-xs btn-light table-button" title="Edit" @click="showInstancesRIP(ripinstance)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteInstancesRIP(ripinstance)">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <rip-instance-edit :ripinstance="selected_rip" v-if="selected_rip"></rip-instance-edit>
+
+            </div>
         </div>
-     </div>
-        </div>
-        </div>
+    </div>
+</div>
 </template>

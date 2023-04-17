@@ -21,7 +21,7 @@ const ospfinstances = computed(() => { return routingStore.getInstancesOSPF() })
 
 
 const deleteInstancesOSPF = (ospfinstance) => {
-    
+
     routingStore.deleteInstancesOSPF(ospfinstance)
 
 }
@@ -34,7 +34,7 @@ const showInstancesOSPF = (ospfinstance) => {
 
 
     selected_ospf.value = ospfinstance
-    
+
 }
 
 watch(router_ospf, () => {
@@ -42,14 +42,14 @@ watch(router_ospf, () => {
 })
 
 onBeforeMount(() => {
-   
+
     loadRouters()
 
 })
 </script>
 
 <template>
-   <div class="row">
+    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
@@ -71,80 +71,86 @@ onBeforeMount(() => {
                         <div class="d-flex card-header justify-content-between align-items-center">
                             <h4 class="header-title">OSPF Instances</h4>
                             <div class="px-1">
-                               <router-link :to="{ name: 'OSPFInstanceCreate'}"
-                                                    :title="`Create OSPF Instance`">
-                                    <button class="btn btn-primary">Add OSPF Instance</button>
-                                </router-link>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0">
-                        
-                            <table class="table table-responsive align-middle" >
-                                <thead class="table-light">
-                                
-                                    <tr class="text-center">
-                                        <th>#ID</th>
-                                        <th>Name</th>
-                                        <th>Router ID</th>
-                                        <th>Redistribute</th>
-                                        <th>Version</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                      
-                                    </tr>
-                               
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr v-if="ospfinstances.length==0">
-                                        <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Instances.</td>
-                                    </tr>
-                                    <tr v-for="ospfinstance in ospfinstances">
-                                  
-                                        <td v-if="ospfinstance['.id']==undefined">-</td>
-                                        <td v-else>{{ospfinstance['.id'].substring(1)}}</td>
-
-                                        <td v-if="ospfinstance.name==undefined">-</td>
-                                        <td v-else>{{ospfinstance.name}}</td>
-
-                                        <td v-if="ospfinstance['router-id']==undefined">-</td>
-                                        <td v-else>{{ospfinstance['router-id']}}</td>
-
-                                        <td v-if="ospfinstance.redistribute==undefined">-</td>
-                                        <td v-else>{{ospfinstance.redistribute}}</td>
-
-                                        <td v-if="ospfinstance.version==undefined">-</td>
-                                        <td v-else>{{ospfinstance.version}}</td>
-
-                                        <td class="text-success" v-if="ospfinstance.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="ospfinstance.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="ospfinstance.disabled=='true'">DISABLED</td>
-
-                                         <td>
-                                            <div class="d-flex justify-content-center">
-                                               
-                                               <button class="btn btn-xs btn-light" title="Delete" @click="deleteInstancesOSPF(ospfinstance)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <button class="btn btn-xs btn-light" title="Edit" @click="showInstancesOSPF(ospfinstance)">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                               
-                                            </div>
-                                           
-                                        </td>
-                                        
-
-                                   
-                                    </tr>
-                                </tbody>
-                            </table> 
+                                <router-link :to="{ name: 'OSPFInstanceCreate'}"
+                                :title="`Create OSPF Instance`">
+                                <button class="btn btn-primary">Add OSPF Instance</button>
+                            </router-link>
                         </div>
                     </div>
+                    <div class="card-body pt-0">
 
-               <ospf-instance-edit :ospfinstance="selected_ospf" v-if="selected_ospf"></ospf-instance-edit>
-             
+                        <table class="table table-responsive align-middle" >
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Name</th>
+                                    <th>Router ID</th>
+                                    <th>Redistribute</th>
+                                    <th>Version</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Actions</th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr v-if="ospfinstances.length==0">
+                                    <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Instances.</td>
+                                </tr>
+                                <tr v-for="ospfinstance in ospfinstances">
+
+                                    <td v-if="ospfinstance['.id']==undefined">-</td>
+                                    <td v-else>{{ospfinstance['.id'].substring(1)}}</td>
+
+                                    <td v-if="ospfinstance.name==undefined">-</td>
+                                    <td v-else>{{ospfinstance.name}}</td>
+
+                                    <td v-if="ospfinstance['router-id']==undefined">-</td>
+                                    <td v-else>{{ospfinstance['router-id']}}</td>
+
+                                    <td v-if="ospfinstance.redistribute==undefined">-</td>
+                                    <td v-else>{{ospfinstance.redistribute}}</td>
+
+                                    <td v-if="ospfinstance.version==undefined">-</td>
+                                    <td v-else>{{ospfinstance.version}}</td>
+
+                                    <td class="text-center" v-if="ospfinstance.disabled==undefined">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="ospfinstance.disabled=='false'">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="ospfinstance.disabled=='true'">
+                                        <span class="badge badge-danger-lighten">Disabled</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+
+                                            <button class="btn btn-xs btn-light table-button" title="Edit" @click="showInstancesOSPF(ospfinstance)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteInstancesOSPF(ospfinstance)">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <ospf-instance-edit :ospfinstance="selected_ospf" v-if="selected_ospf"></ospf-instance-edit>
+
+            </div>
         </div>
-     </div>
-        </div>
-        </div>
+    </div>
+</div>
 </template>

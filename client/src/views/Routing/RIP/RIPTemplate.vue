@@ -30,18 +30,18 @@ const interfaces = computed(() => { return interfaceStore.getInterfaces() })
 const type_all = ref("all")
 
 const deleteTemplatesRIP = (riptemplate) => {
-    
+
     routingStore.deleteTemplatesRIP(riptemplate)
 
 }
 
 
 const showTemplatesRIP = (riptemplate) => {
-    
+
     if(riptemplate.interfaces!=undefined && riptemplate.interfaces!="" && !(riptemplate.interfaces instanceof Array)){
         riptemplate.interfaces = riptemplate.interfaces.split(',')
     }
-    
+
     if(riptemplate.interfaces==undefined ||riptemplate.interfaces=="" && !(riptemplate.interfaces instanceof Array)){
         riptemplate.interfaces = []
     }
@@ -49,7 +49,7 @@ const showTemplatesRIP = (riptemplate) => {
     loadInstancesRIP()
     loadInterfaces()
     selected_rip.value = riptemplate
-    
+
 }
 
 watch(router_rip, () => {
@@ -57,14 +57,14 @@ watch(router_rip, () => {
 })
 
 onBeforeMount(() => {
-   
+
     loadRouters()
 
 })
 </script>
 
 <template>
-   <div class="row">
+    <div class="row">
         <div class="col-12">
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
@@ -86,88 +86,89 @@ onBeforeMount(() => {
                         <div class="d-flex card-header justify-content-between align-items-center">
                             <h4 class="header-title">RIP Templates</h4>
                             <div class="px-1">
-                               <router-link :to="{ name: 'RIPTemplateCreate'}"
-                                                    :title="`Create RIP Template`">
-                                    <button class="btn btn-primary">Add RIP Interface-Template</button>
-                                </router-link>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0">
-                       
-                            <table class="table table-responsive align-middle" >
-                                <thead class="table-light">
-                                
-                                    <tr class="text-center">
-                                        <th>#ID</th>
-                                        <th>Name</th>
-                                        <th>Instance</th>
-                                        <th>Interfaces</th>
-                                        <th>Mode</th>
-                                        <th>Cost</th>
-                                        <th>About</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                      
-                                    </tr>
-                               
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr v-if="riptemplates.length==0">
-                                        <td colspan="9" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
-                                    </tr>
-                                    <tr v-for="riptemplate in riptemplates">
-
-                                        <td v-if="riptemplate['.id']==undefined">-</td>
-                                        <td v-else>{{riptemplate['.id'].substring(1)}}</td>
-
-                                        <td v-if="riptemplate.name==undefined">-</td>
-                                        <td v-else>{{riptemplate.name}}</td>
-
-                                        <td v-if="riptemplate.instance==undefined">-</td>
-                                        <td v-else>{{riptemplate.instance}}</td>
-
-                                        <td v-if="riptemplate.interfaces==undefined || riptemplate.interfaces==''">-</td>
-                                        <td v-else>{{riptemplate.interfaces}}</td>
-
-                                        <td v-if="riptemplate.mode==undefined">-</td>
-                                        <td v-else>{{riptemplate.mode}}</td>
-
-                                        <td v-if="riptemplate.cost==undefined">-</td>
-                                        <td v-else>{{riptemplate.cost}}</td>
-
-                                        <td class="text-success" v-if="riptemplate['.about']==undefined">Everything OK</td>
-                                        <td class="text-danger" v-else>{{riptemplate['.about']}}</td>
-
-                                        <td class="text-success" v-if="riptemplate.disabled==undefined">ACTIVE</td>
-                                        <td class="text-success" v-if="riptemplate.disabled=='false'">ACTIVE</td>
-                                        <td class="text-danger" v-if="riptemplate.disabled=='true'">DISABLED</td>
-
-                                         <td>
-                                            <div class="d-flex justify-content-center">
-                                               
-                                               <button class="btn btn-xs btn-light" title="Delete" @click="deleteTemplatesRIP(riptemplate)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <button class="btn btn-xs btn-light" title="Edit" @click="showTemplatesRIP(riptemplate)">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                               
-                                            </div>
-                                           
-                                        </td>
-                                        
-
-                                   
-                                    </tr>
-                                </tbody>
-                            </table> 
+                                <router-link :to="{ name: 'RIPTemplateCreate'}"
+                                :title="`Create RIP Template`">
+                                <button class="btn btn-primary">Add RIP Interface-Template</button>
+                            </router-link>
                         </div>
                     </div>
+                    <div class="card-body pt-0">
 
-               <rip-template-edit :ripinstances="ripinstances" :interfaces="interfaces" :riptemplate="selected_rip" v-if="selected_rip"></rip-template-edit>
-             
+                        <table class="table table-responsive align-middle" >
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Name</th>
+                                    <th>Instance</th>
+                                    <th>Interfaces</th>
+                                    <th>Mode</th>
+                                    <th>Cost</th>
+                                    <th class="text-center">Disabled</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr v-if="riptemplates.length==0">
+                                    <td colspan="8" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
+                                </tr>
+                                <tr v-for="riptemplate in riptemplates">
+
+                                    <td v-if="riptemplate['.id']==undefined">-</td>
+                                    <td v-else>{{riptemplate['.id'].substring(1)}}</td>
+
+                                    <td v-if="riptemplate.name==undefined">-</td>
+                                    <td v-else>{{riptemplate.name}}</td>
+
+                                    <td v-if="riptemplate.instance==undefined">-</td>
+                                    <td v-else>{{riptemplate.instance}}</td>
+
+                                    <td v-if="riptemplate.interfaces==undefined || riptemplate.interfaces==''">-</td>
+                                    <td v-else>{{riptemplate.interfaces}}</td>
+
+                                    <td v-if="riptemplate.mode==undefined">-</td>
+                                    <td v-else>{{riptemplate.mode}}</td>
+
+                                    <td v-if="riptemplate.cost==undefined">-</td>
+                                    <td v-else>{{riptemplate.cost}}</td>
+
+                                    <td class="text-center" v-if="riptemplate.disabled==undefined">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="riptemplate.disabled=='false'">
+                                        <span class="badge badge-success-lighten">Active</span>
+                                    </td>
+                                    <td class="text-center" v-if="riptemplate.disabled=='true'">
+                                        <span class="badge badge-danger-lighten">Disabled</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+
+                                            <button class="btn btn-xs btn-light table-button" title="Edit" @click="showTemplatesRIP(riptemplate)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-light table-button ms-2" title="Delete" @click="deleteTemplatesRIP(riptemplate)">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <rip-template-edit :ripinstances="ripinstances" :interfaces="interfaces" :riptemplate="selected_rip" v-if="selected_rip"></rip-template-edit>
+
+            </div>
         </div>
-     </div>
-        </div>
-        </div>
+    </div>
+</div>
 </template>
