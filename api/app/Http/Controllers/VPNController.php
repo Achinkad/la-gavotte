@@ -38,15 +38,62 @@ class VPNController extends Controller
         // Change the values for the RouterOS API
         $request['listen-port'] = $request['port'];
 
-        // Body Builder
-        $body = $request->except('router', 'port');
+        // Body Builder -> SERVER VPN
+        $bodyServerVPN = $request->except('router', 'port', 'address');
 
         try {
-            $response = Helper::httpClient('PUT', 'interface/wireguard', $router, $body);
-            return $response->getBody()->getContents(); // Return JSON Reponse -> NEW VPN SERVER
+            $responseServerVPN = Helper::httpClient('PUT', 'interface/wireguard', $router, $bodyServerVPN);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
+
+        // Change the values for the RouterOS API
+        $request['interface'] = $request['name'];
+
+        // Body Builder -> NEW ADDRESS
+        $bodyNewAddress = $request->except('router', 'port', 'mtu', 'listen-port', 'name');
+
+        try {
+            $responseAddress = Helper::httpClient('PUT', 'ip/address', $router, $bodyNewAddress);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        // -> /ip/firewall/ add action=accept chain=input dst-port=REQUEST_PORT protocol=udp place-before=1
+        // -> /ip/firewall/ add action=accept chain=input src-address=NEW_ADDR place-before=1
+
+        $bodyFirewallPort = array(
+            'action' => 'accept',
+            'chain' => 'input',
+            'dst-port' => $request['listen-port'],
+            'protocol' => 'udp',
+            'place-before' => 1,
+        );
+
+        try {
+            $responseFirewall = Helper::httpClient('PUT', 'ip/firewall/filter', $router, $bodyFirewallPort);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        $networkExploded = explode("/", $request->address);
+        $networkExploded[0] = substr($networkExploded[0], 0, -1).'0';
+        $network = $networkExploded[0] . "/" . $networkExploded[1];
+
+        $bodyFirewallAddress = array(
+            'action' => 'accept',
+            'chain' => 'input',
+            'src-address' => $network,
+            'place-before' => 1,
+        );
+
+        try {
+            $responseFirewall = Helper::httpClient('PUT', 'ip/firewall/filter', $router, $bodyFirewallAddress);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        return $responseServerVPN->getBody()->getContents(); // Return JSON Reponse -> NEW VPN SERVER
     }
 
     public function editServerVPN(Request $request)

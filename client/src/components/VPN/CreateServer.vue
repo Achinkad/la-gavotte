@@ -13,6 +13,7 @@ const routerIdentification = toRef(props, 'router')
 
 const vpnServer = ref({
     name: null,
+    address: null,
     mtu: 1420,
     port: 13231
 })
@@ -22,6 +23,7 @@ const createServerVPN = (() => {
 
     formData.append('router', props.router)
     formData.append('name', vpnServer.value.name)
+    formData.append('address', vpnServer.value.address)
     formData.append('mtu', vpnServer.value.mtu)
     formData.append('port', vpnServer.value.port)
 
@@ -37,10 +39,15 @@ const createServerVPN = (() => {
         </div>
         <div class="card-body pt-0">
             <form class="row g-3 needs-validation" @submit.prevent="createServerVPN">
-                <div class="col-12">
+                <div class="col-6">
                     <label for="name" class="form-label">VPN Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="name" placeholder="Enter a name"
                     v-model="vpnServer.name" required :disabled="isNaN(routerIdentification)">
+                </div>
+                <div class="col-6">
+                    <label for="address" class="form-label">VPN Address <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="address" placeholder="Enter an address"
+                    v-model="vpnServer.address" required :disabled="isNaN(routerIdentification)">
                 </div>
                 <div class="col-6">
                     <label for="network" class="form-label">Listen Port <span class="text-danger">*</span></label>
