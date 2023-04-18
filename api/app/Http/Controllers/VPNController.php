@@ -172,12 +172,22 @@ class VPNController extends Controller
 
     public function downloadConfigFile(Request $request)
     {
+        $router = Router::where('id', $request->router)->firstOrFail();
+
+        try {
+            $response = Helper::httpClient('GET', 'interface/wireguard?name=' . $request->vpn['interface'], $router);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        $vpnServerPublicKey = Helper::decodeResponse($response)[0]->{'public-key'};
+
         $content = '[Interface]
 PrivateKey = <YOUR_PRIVATE_KEY>
 Address = '. $request->vpn["allowed-address"] .'
 
 [Peer]
-PublicKey = '. $request->vpn["public-key"] .'
+PublicKey = '. $vpnServerPublicKey .'
 Endpoint = '. $request->vpn["endpoint-address"] .':'. $request->vpn["endpoint-port"] .'
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = '. substr($request->vpn["persistent-keepalive"], 0, -1) .'';
