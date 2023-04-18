@@ -109,6 +109,7 @@ onBeforeMount(() => {
                                     <th>Network Type</th>
                                     <th>Cost</th>
                                     <th>Priority</th>
+                                    <th>About</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -116,7 +117,7 @@ onBeforeMount(() => {
                             </thead>
                             <tbody>
                                 <tr v-if="ospftemplates.length==0">
-                                    <td colspan="9" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
+                                    <td colspan="10" class="text-center" style="height:55px!important;">There are no OSPF Interfaces-Templates.</td>
                                 </tr>
                                 <tr v-for="ospftemplate in ospftemplates">
 
@@ -140,6 +141,9 @@ onBeforeMount(() => {
 
                                     <td v-if="ospftemplate.priority==undefined">-</td>
                                     <td v-else>{{ospftemplate.priority}}</td>
+
+                                    <td v-if="ospftemplate['.about']==undefined">Everything OK</td>
+                                    <td class="text-danger" v-else>{{ospftemplate['.about']}}</td>
 
                                     <td class="text-center" v-if="ospftemplate.disabled==undefined">
                                         <span class="badge badge-success-lighten">Active</span>

@@ -92,6 +92,7 @@ onBeforeMount(() => {
                                     <th>Name</th>
                                     <th>AFI</th>
                                     <th>Redistribute</th>
+                                    <th>About</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Actions</th>
 
@@ -100,7 +101,7 @@ onBeforeMount(() => {
                             </thead>
                             <tbody>
                                 <tr v-if="ripinstances.length==0">
-                                    <td colspan="6" class="text-center" style="height:55px!important;">There are no RIP Instances.</td>
+                                    <td colspan="7" class="text-center" style="height:55px!important;">There are no RIP Instances.</td>
                                 </tr>
                                 <tr v-for="ripinstance in ripinstances">
 
@@ -115,6 +116,9 @@ onBeforeMount(() => {
 
                                     <td v-if="ripinstance.redistribute==undefined || ripinstance.redistribute==''">-</td>
                                     <td v-else>{{ripinstance.redistribute}}</td>
+
+                                    <td v-if="ripinstance['.about']==undefined">Everything OK</td>
+                                    <td class="text-danger" v-else>{{ripinstance['.about']}}</td>
 
                                     <td class="text-center" v-if="ripinstance.disabled==undefined">
                                         <span class="badge badge-success-lighten">Active</span>

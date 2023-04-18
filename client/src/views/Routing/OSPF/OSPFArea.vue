@@ -86,6 +86,7 @@ onBeforeMount(() => {
                                     <th>Instance</th>
                                     <th>Type</th>
                                     <th>Area Id</th>
+                                    <th>About</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Actions</th>
 
@@ -94,7 +95,7 @@ onBeforeMount(() => {
                             </thead>
                             <tbody>
                                 <tr v-if="ospfareas.length==0">
-                                    <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Areas.</td>
+                                    <td colspan="8" class="text-center" style="height:55px!important;">There are no OSPF Areas.</td>
                                 </tr>
                                 <tr v-for="ospfarea in ospfareas">
 
@@ -112,6 +113,9 @@ onBeforeMount(() => {
 
                                     <td v-if="ospfarea['area-id']==undefined">-</td>
                                     <td v-else>{{ospfarea['area-id']}}</td>
+
+                                    <td v-if="ospfarea['.about']==undefined">Everything OK</td>
+                                    <td class="text-danger" v-else>{{ospfarea['.about']}}</td>
 
                                     <td class="text-center" v-if="ospfarea.disabled==undefined">
                                         <span class="badge badge-success-lighten">Active</span>

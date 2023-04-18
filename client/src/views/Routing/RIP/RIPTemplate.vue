@@ -104,6 +104,7 @@ onBeforeMount(() => {
                                     <th>Interfaces</th>
                                     <th>Mode</th>
                                     <th>Cost</th>
+                                    <th>About</th>
                                     <th class="text-center">Disabled</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -111,7 +112,7 @@ onBeforeMount(() => {
                             </thead>
                             <tbody>
                                 <tr v-if="riptemplates.length==0">
-                                    <td colspan="8" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
+                                    <td colspan="9" class="text-center" style="height:55px!important;">There are no RIP Interface-Templates.</td>
                                 </tr>
                                 <tr v-for="riptemplate in riptemplates">
 
@@ -132,6 +133,9 @@ onBeforeMount(() => {
 
                                     <td v-if="riptemplate.cost==undefined">-</td>
                                     <td v-else>{{riptemplate.cost}}</td>
+
+                                     <td v-if="riptemplate['.about']==undefined">Everything OK</td>
+                                    <td class="text-danger" v-else>{{riptemplate['.about']}}</td>
 
                                     <td class="text-center" v-if="riptemplate.disabled==undefined">
                                         <span class="badge badge-success-lighten">Active</span>

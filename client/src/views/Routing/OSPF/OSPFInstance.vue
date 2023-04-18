@@ -88,6 +88,7 @@ onBeforeMount(() => {
                                     <th>Router ID</th>
                                     <th>Redistribute</th>
                                     <th>Version</th>
+                                    <th>About</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Actions</th>
 
@@ -96,7 +97,7 @@ onBeforeMount(() => {
                             </thead>
                             <tbody>
                                 <tr v-if="ospfinstances.length==0">
-                                    <td colspan="7" class="text-center" style="height:55px!important;">There are no OSPF Instances.</td>
+                                    <td colspan="8" class="text-center" style="height:55px!important;">There are no OSPF Instances.</td>
                                 </tr>
                                 <tr v-for="ospfinstance in ospfinstances">
 
@@ -114,6 +115,9 @@ onBeforeMount(() => {
 
                                     <td v-if="ospfinstance.version==undefined">-</td>
                                     <td v-else>{{ospfinstance.version}}</td>
+
+                                    <td v-if="ospfinstance['.about']==undefined">Everything OK</td>
+                                    <td class="text-danger" v-else>{{ospfinstance['.about']}}</td>
 
                                     <td class="text-center" v-if="ospfinstance.disabled==undefined">
                                         <span class="badge badge-success-lighten">Active</span>
